@@ -270,7 +270,7 @@
       <div class="stat-grid">
         <div class="stat-card"><div class="stat-value" id="totalFixtures">72</div><div class="stat-label">Group fixtures</div></div>
         <div class="stat-card"><div class="stat-value">12</div><div class="stat-label">Groups A-L</div></div>
-        <div class="stat-card"><div class="stat-value" id="biggestGap">77</div><div class="stat-label">Biggest rank gap</div></div>
+        <div class="stat-card"><div class="stat-value" id="biggestGap">77</div><div class="stat-label">Biggest rank gap</div><div class="stat-label" id="biggestGapFixture"></div></div>
         <div class="stat-card"><div class="stat-value" id="hottestTemp">33°C</div><div class="stat-label">Hottest listed fixture</div></div>
       </div>
     </section>
@@ -460,7 +460,10 @@
     [searchInput, groupFilter, matchdayFilter, sortSelect].forEach(el => el.addEventListener('input', render));
 
     document.getElementById('totalFixtures').textContent = fixtures.length;
-    document.getElementById('biggestGap').textContent = Math.max(...fixtures.map(f => f.gap));
+    const maxGap = Math.max(...fixtures.map(f => f.gap));
+    document.getElementById('biggestGap').textContent = maxGap;
+    const maxFixture = fixtures.find(f => f.gap === maxGap);
+    document.getElementById('biggestGapFixture').textContent = `${maxFixture.team1} vs ${maxFixture.team2}`;
     document.getElementById('hottestTemp').textContent = `${Math.max(...fixtures.map(f => f.temp))}°C`;
     render();
   </script>
