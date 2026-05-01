@@ -56,6 +56,9 @@
     }
 
     .hero-card { padding: 32px; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
     .eyebrow {
       color: var(--accent);
@@ -137,6 +140,13 @@
     .table-card {
       overflow: hidden;
     }
+
+    .knockout-card {
+      display: none;
+      margin-top: 28px;
+    }
+
+    
 
     .table-topbar {
       padding: 18px 20px;
@@ -264,7 +274,7 @@
     <section class="hero">
       <div class="hero-card">
         <div class="eyebrow">World Cup Fantasy Football</div>
-        <h1>Group fixtures dashboard</h1>
+        <h1>Fixtures and players to target</h1>
         <p class="subtitle">Explore every group-stage fixture by date, group, matchday, city, temperature and FIFA ranking gap. Use the filters to spot fantasy opportunities, mismatches and awkward kick-off times.</p>
       </div>
       <div class="stat-grid">
@@ -292,9 +302,13 @@
         <option value="schedule">Schedule</option>
         <option value="gap-desc">Rank gap: biggest to smallest</option>
       </select>
+      <select id="fixtureViewSelect">
+        <option value="group">Group fixtures</option>
+        <option value="knockout">Knockout fixtures</option>
+      </select>
     </section>
 
-    <section class="table-card">
+    <section class="table-card" id="groupFixtures">
       <div class="table-topbar">
         <div class="table-title">Fixtures</div>
         <div class="count"><span id="visibleCount">72</span> showing</div>
@@ -310,6 +324,60 @@
         </table>
       </div>
       <div class="no-results" id="noResults">No fixtures match those filters.</div>
+    </section>
+
+    <section class="table-card knockout-card" id="knockoutFixtures" aria-label="Knockout fixtures">
+      <div class="table-topbar">
+        <div class="table-title">Knockout fixtures</div>
+        <div class="count">32 matches · Round of 32 to Final</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Fixture</th><th>Date</th><th>Time</th><th>Stage</th><th>Match</th><th>City</th><th>Captain pick</th><th>Goalkeeper</th><th>Defenders</th><th>Midfielders</th><th>Forwards</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="fixture">A2 v B2</td><td>June 28</td><td>TBC</td><td>R32</td><td>73</td><td>Los Angeles</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">E1 v 3rd</td><td>June 29</td><td>TBC</td><td>R32</td><td>74</td><td>Boston</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">F1 v C2</td><td>June 29</td><td>TBC</td><td>R32</td><td>75</td><td>Monterrey</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">C1 v F2</td><td>June 29</td><td>TBC</td><td>R32</td><td>76</td><td>Houston</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">I1 v 3rd</td><td>June 30</td><td>TBC</td><td>R32</td><td>77</td><td>New York</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">E2 v I2</td><td>June 30</td><td>TBC</td><td>R32</td><td>78</td><td>Dallas</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">A1 v 3rd</td><td>June 30</td><td>TBC</td><td>R32</td><td>79</td><td>Mexico City</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">L1 v 3rd</td><td>July 1</td><td>TBC</td><td>R32</td><td>80</td><td>Atlanta</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">D1 v 3rd</td><td>July 1</td><td>TBC</td><td>R32</td><td>81</td><td>San Francisco</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">G1 v 3rd</td><td>July 1</td><td>TBC</td><td>R32</td><td>82</td><td>Seattle</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">K2 v L2</td><td>July 2</td><td>TBC</td><td>R32</td><td>83</td><td>Toronto</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">H1 v J2</td><td>July 2</td><td>TBC</td><td>R32</td><td>84</td><td>Los Angeles</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">B1 v 3rd</td><td>July 2</td><td>TBC</td><td>R32</td><td>85</td><td>Vancouver</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">J1 v H2</td><td>July 3</td><td>TBC</td><td>R32</td><td>86</td><td>Miami</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">K1 v 3rd</td><td>July 3</td><td>TBC</td><td>R32</td><td>87</td><td>Kansas City</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">D2 v G2</td><td>July 3</td><td>TBC</td><td>R32</td><td>88</td><td>Dallas</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+
+            <tr><td class="fixture">W74 v W77</td><td>July 4</td><td>TBC</td><td>R16</td><td>89</td><td>Philadelphia</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W73 v W75</td><td>July 4</td><td>TBC</td><td>R16</td><td>90</td><td>Houston</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W76 v W78</td><td>July 5</td><td>TBC</td><td>R16</td><td>91</td><td>New York</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W79 v W80</td><td>July 5</td><td>TBC</td><td>R16</td><td>92</td><td>Mexico City</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W83 v W84</td><td>July 6</td><td>TBC</td><td>R16</td><td>93</td><td>Dallas</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W81 v W82</td><td>July 6</td><td>TBC</td><td>R16</td><td>94</td><td>Seattle</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W86 v W88</td><td>July 7</td><td>TBC</td><td>R16</td><td>95</td><td>Atlanta</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W85 v W87</td><td>July 7</td><td>TBC</td><td>R16</td><td>96</td><td>Vancouver</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+
+            <tr><td class="fixture">W89 v W90</td><td>July 9</td><td>TBC</td><td>QF</td><td>97</td><td>Boston</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W93 v W94</td><td>July 10</td><td>TBC</td><td>QF</td><td>98</td><td>Los Angeles</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W91 v W92</td><td>July 11</td><td>TBC</td><td>QF</td><td>99</td><td>Miami</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W95 v W96</td><td>July 11</td><td>TBC</td><td>QF</td><td>100</td><td>Kansas City</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+
+            <tr><td class="fixture">W97 v W98</td><td>July 14</td><td>TBC</td><td>SF</td><td>101</td><td>Dallas</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W99 v W100</td><td>July 15</td><td>TBC</td><td>SF</td><td>102</td><td>Atlanta</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+
+            <tr><td class="fixture">L101 v L102</td><td>July 18</td><td>TBC</td><td>3rd</td><td>103</td><td>Miami</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+            <tr><td class="fixture">W101 v W102</td><td>July 19</td><td>TBC</td><td>Final</td><td>104</td><td>New York</td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
@@ -402,6 +470,9 @@
     const groupFilter = document.getElementById('groupFilter');
     const matchdayFilter = document.getElementById('matchdayFilter');
     const sortSelect = document.getElementById('sortSelect');
+    const fixtureViewSelect = document.getElementById('fixtureViewSelect');
+    const groupFixturesSection = document.getElementById('groupFixtures');
+    const knockoutFixturesSection = document.getElementById('knockoutFixtures');
 
     function unique(values) { return [...new Set(values)].sort((a, b) => String(a).localeCompare(String(b))); }
 
@@ -427,7 +498,7 @@
 
       rows.sort((a, b) => {
         if (sort === 'gap-desc') return b.gap - a.gap;
-        return a.index - b.index; // schedule
+        return a.index - b.index;
       });
 
       body.innerHTML = rows.map(f => {
@@ -436,7 +507,9 @@
         else if (f.gap <= 30) gapClass = 'midlow';
         else if (f.gap <= 45) gapClass = 'mid';
         else gapClass = 'high';
+
         const tempClass = f.temp >= 28 ? 'temp-hot' : f.temp <= 17 ? 'temp-cool' : '';
+
         return `
           <tr>
             <td class="fixture"><span class="team">${f.flag1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${f.flag2}</span></td>
@@ -460,9 +533,13 @@
       noResults.style.display = rows.length ? 'none' : 'block';
     }
 
-    
-
     [searchInput, groupFilter, matchdayFilter, sortSelect].forEach(el => el.addEventListener('input', render));
+
+    fixtureViewSelect.addEventListener('input', () => {
+      const showKnockout = fixtureViewSelect.value === 'knockout';
+      groupFixturesSection.style.display = showKnockout ? 'none' : 'block';
+      knockoutFixturesSection.style.display = showKnockout ? 'block' : 'none';
+    });
 
     document.getElementById('totalFixtures').textContent = fixtures.length;
     const maxGap = Math.max(...fixtures.map(f => f.gap));
