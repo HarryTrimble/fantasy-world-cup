@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Cup Fantasy Fixtures</title>
+  <style>
+    :root {
+      --bg: #08111f;
+      --card: #111c2e;
+      --card-2: #17253b;
+      --text: #f6f8fb;
+      --muted: #aab7c8;
+      --accent: #40e0a0;
+      --accent-2: #59a7ff;
+      --danger: #ffb86b;
+      --border: rgba(255,255,255,0.1);
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(64,224,160,0.22), transparent 34rem),
+        radial-gradient(circle at top right, rgba(89,167,255,0.18), transparent 34rem),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 48px 24px 28px;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .controls,
+    .table-card,
+    .stat-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-card { padding: 32px; }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 800;
+      font-size: 0.8rem;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 6vw, 5.6rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      min-height: 136px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .stat-value {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+
+    .stat-label { color: var(--muted); font-size: 0.9rem; }
+
+    main {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+
+    .controls {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1.6fr repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+      position: sticky;
+      top: 12px;
+      z-index: 5;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: rgba(8,17,31,0.72);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+    }
+
+    input::placeholder { color: #77869a; }
+    select option { background: #111c2e; }
+
+    .table-card {
+      overflow: hidden;
+    }
+
+    .table-topbar {
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.035);
+    }
+
+    .table-title { font-weight: 800; }
+    .count { color: var(--muted); font-size: 0.95rem; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1180px;
+    }
+
+    th, td {
+      padding: 14px 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.075);
+      white-space: nowrap;
+      font-size: 0.94rem;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(255,255,255,0.035);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tr:hover td { background: rgba(64,224,160,0.06); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-weight: 900;
+      background: rgba(89,167,255,0.15);
+      color: #b9d7ff;
+      border: 1px solid rgba(89,167,255,0.28);
+    }
+
+    .matchday {
+      background: rgba(64,224,160,0.12);
+      color: #a9ffd8;
+      border-color: rgba(64,224,160,0.28);
+    }
+
+    .fixture {
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .team {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    
+
+    .versus {
+      color: var(--muted);
+      font-weight: 700;
+      padding: 0 4px;
+    }
+
+    .rank-gap {
+      font-weight: 900;
+    }
+
+    .rank-gap.low { color: #ff9f43 !important; }      /* 0-15 orange */
+    .rank-gap.midlow { color: #ffd166 !important; }   /* 16-30 yellow */
+    .rank-gap.mid { color: #40e0a0 !important; }      /* 31-45 green */
+    .rank-gap.high { color: #59a7ff !important; }     /* 45+ blue */
+
+    .temp-hot { color: #ffcc8a; font-weight: 800; }
+    .temp-cool { color: #9bd7ff; font-weight: 800; }
+
+    .no-results {
+      display: none;
+      padding: 36px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 0 24px 42px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: 1fr 1fr; }
+      .controls input { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 560px) {
+      header { padding-top: 28px; }
+      .hero-card, .stat-card, .controls { border-radius: 20px; }
+      .stat-grid { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: 1fr; position: static; }
+      th, td { padding: 12px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">World Cup Fantasy Football</div>
+        <h1>Group fixtures dashboard</h1>
+        <p class="subtitle">Explore every group-stage fixture by date, group, matchday, city, temperature and FIFA ranking gap. Use the filters to spot fantasy opportunities, mismatches and awkward kick-off times.</p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-value" id="totalFixtures">72</div><div class="stat-label">Group fixtures</div></div>
+        <div class="stat-card"><div class="stat-value">12</div><div class="stat-label">Groups A-L</div></div>
+        <div class="stat-card"><div class="stat-value" id="biggestGap">77</div><div class="stat-label">Biggest rank gap</div></div>
+        <div class="stat-card"><div class="stat-value" id="hottestTemp">33°C</div><div class="stat-label">Hottest listed fixture</div></div>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="controls" aria-label="Fixture filters">
+      <input id="searchInput" type="search" placeholder="Search team..." />
+      <select id="matchdayFilter">
+        <option value="">All matchdays</option>
+        <option value="1">Matchday 1</option>
+        <option value="2">Matchday 2</option>
+        <option value="3">Matchday 3</option>
+      </select>
+      <select id="groupFilter">
+        <option value="">All groups</option>
+      </select>
+      <select id="sortSelect">
+        <option value="schedule">Schedule</option>
+        <option value="gap-desc">Rank gap: biggest to smallest</option>
+      </select>
+    </section>
+
+    <section class="table-card">
+      <div class="table-topbar">
+        <div class="table-title">Fixtures</div>
+        <div class="count"><span id="visibleCount">72</span> showing</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Fixture</th><th>Date</th><th>Time</th><th>FIFA Ranks</th><th>Gap</th><th>Group</th><th>MD</th><th>City</th><th>Temp</th>
+            </tr>
+          </thead>
+          <tbody id="fixtureBody"></tbody>
+        </table>
+      </div>
+      <div class="no-results" id="noResults">No fixtures match those filters.</div>
+    </section>
+  </main>
+
+  <footer>Built for fantasy planning: ranking gaps highlight potential captaincy and clean-sheet angles.</footer>
+
+  <script>
+    const fixtures = [
+      ['Thu','June 11','20:00','Mexico City 🇲🇽',22,'A',1,'🇲🇽','Mexico','South Africa','🇿🇦',15,60,45],
+      ['Thu','June 11','3:00','Monterrey 🇲🇽',27,'A',1,'🇰🇷','South Korea','Czechia','🇨🇿',25,38,13],
+      ['Fri','June 12','20:00','Toronto 🇨🇦',22,'B',1,'🇨🇦','Canada','Bosnia','🇧🇦',30,71,41],
+      ['Fri','June 12','2:00','Los Angeles 🇺🇸',17,'D',1,'🇺🇸','USA','Paraguay','🇵🇾',16,41,25],
+      ['Sat','June 13','20:00','Vancouver 🇨🇦',18,'B',1,'🇶🇦','Qatar','Switzerland','🇨🇭',56,19,37],
+      ['Sat','June 13','23:00','Miami 🇺🇸',28,'C',1,'🇧🇷','Brazil','Morocco','🇲🇦',6,8,2],
+      ['Sat','June 13','2:00','Dallas 🇺🇸',26,'C',1,'🇭🇹','Haiti','Scotland','🏴',83,43,40],
+      ['Sat','June 13','5:00','Seattle 🇺🇸',13,'D',1,'🇦🇺','Australia','Türkiye','🇹🇷',27,22,5],
+      ['Sun','June 14','18:00','New York 🇺🇸',27,'E',1,'🇩🇪','Germany','Curaçao','🇨🇼',10,81,71],
+      ['Sun','June 14','21:00','Boston 🇺🇸',24,'F',1,'🇳🇱','Netherlands','Japan','🇯🇵',7,18,11],
+      ['Sun','June 14','0:00','Houston 🇺🇸',28,'E',1,'🇨🇮','Ivory Coast','Ecuador','🇪🇨',34,23,11],
+      ['Sun','June 14','3:00','Atlanta 🇺🇸',24,'F',1,'🇸🇪','Sweden','Tunisia','🇹🇳',37,44,7],
+      ['Mon','June 15','17:00','Philadelphia 🇺🇸',28,'H',1,'🇪🇸','Spain','Cape Verde','🇨🇻',2,67,65],
+      ['Mon','June 15','20:00','Kansas City 🇺🇸',26,'G',1,'🇧🇪','Belgium','Egypt','🇪🇬',9,29,20],
+      ['Mon','June 15','23:00','Los Angeles 🇺🇸',19,'H',1,'🇸🇦','Saudi Arabia','Uruguay','🇺🇾',61,17,44],
+      ['Mon','June 15','2:00','San Francisco 🇺🇸',13,'G',1,'🇮🇷','Iran','New Zealand','🇳🇿',20,85,65],
+      ['Tue','June 16','20:00','New York 🇺🇸',27,'I',1,'🇫🇷','France','Senegal','🇸🇳',1,13,12],
+      ['Tue','June 16','23:00','Boston 🇺🇸',22,'I',1,'🇮🇶','Iraq','Norway','🇳🇴',58,31,27],
+      ['Tue','June 16','2:00','Houston 🇺🇸',27,'J',1,'🇦🇷','Argentina','Algeria','🇩🇿',3,28,25],
+      ['Tue','June 16','5:00','Dallas 🇺🇸',25,'J',1,'🇦🇹','Austria','Jordan','🇯🇴',24,64,40],
+      ['Wed','June 17','18:00','Seattle 🇺🇸',19,'K',1,'🇵🇹','Portugal','DR Congo','🇨🇩',5,46,41],
+      ['Wed','June 17','20:00','Toronto 🇨🇦',22,'L',1,'🏴','England','Croatia','🇭🇷',4,11,7],
+      ['Wed','June 17','23:00','Vancouver 🇨🇦',17,'L',1,'🇬🇭','Ghana','Panama','🇵🇦',72,33,39],
+      ['Wed','June 17','3:00','Los Angeles 🇺🇸',16,'K',1,'🇺🇿','Uzbekistan','Colombia','🇨🇴',49,12,37],
+      ['Thu','June 18','17:00','Monterrey 🇲🇽',32,'A',2,'🇨🇿','Czechia','South Africa','🇿🇦',38,60,22],
+      ['Thu','June 18','23:00','Toronto 🇨🇦',19,'B',2,'🇨🇭','Switzerland','Bosnia','🇧🇦',19,71,52],
+      ['Thu','June 18','20:00','Vancouver 🇨🇦',18,'B',2,'🇨🇦','Canada','Qatar','🇶🇦',30,56,26],
+      ['Thu','June 18','20:00','Mexico City 🇲🇽',22,'A',2,'🇲🇽','Mexico','South Korea','🇰🇷',15,25,10],
+      ['Fri','June 19','2:00','Los Angeles 🇺🇸',17,'D',2,'🇺🇸','USA','Australia','🇦🇺',16,27,11],
+      ['Fri','June 19','2:00','Dallas 🇺🇸',26,'C',2,'🏴','Scotland','Morocco','🇲🇦',43,8,35],
+      ['Fri','June 19','23:00','Miami 🇺🇸',28,'C',2,'🇧🇷','Brazil','Haiti','🇭🇹',6,83,77],
+      ['Fri','June 19','5:00','Seattle 🇺🇸',13,'D',2,'🇹🇷','Türkiye','Paraguay','🇵🇾',22,41,19],
+      ['Sat','June 20','18:00','Boston 🇺🇸',25,'F',2,'🇳🇱','Netherlands','Sweden','🇸🇪',7,37,30],
+      ['Sat','June 20','21:00','New York 🇺🇸',26,'E',2,'🇩🇪','Germany','Ivory Coast','🇨🇮',10,34,24],
+      ['Sat','June 20','1:00','Houston 🇺🇸',27,'E',2,'🇪🇨','Ecuador','Curaçao','🇨🇼',23,81,58],
+      ['Sat','June 20','5:00','Atlanta 🇺🇸',23,'F',2,'🇹🇳','Tunisia','Japan','🇯🇵',44,18,26],
+      ['Sun','June 21','23:00','Philadelphia 🇺🇸',24,'H',2,'🇪🇸','Spain','Saudi Arabia','🇸🇦',2,61,59],
+      ['Sun','June 21','20:00','Kansas City 🇺🇸',26,'G',2,'🇧🇪','Belgium','Iran','🇮🇷',9,20,11],
+      ['Sun','June 21','17:00','Los Angeles 🇺🇸',22,'H',2,'🇺🇾','Uruguay','Cape Verde','🇨🇻',17,67,50],
+      ['Sun','June 21','2:00','San Francisco 🇺🇸',13,'G',2,'🇳🇿','New Zealand','Egypt','🇪🇬',85,29,56],
+      ['Mon','June 22','18:00','Dallas 🇺🇸',33,'J',2,'🇦🇷','Argentina','Austria','🇦🇹',3,24,21],
+      ['Mon','June 22','1:00','New York 🇺🇸',25,'I',2,'🇫🇷','France','Iraq','🇮🇶',1,58,57],
+      ['Mon','June 22','22:00','Boston 🇺🇸',23,'I',2,'🇳🇴','Norway','Senegal','🇸🇳',31,13,18],
+      ['Mon','June 22','4:00','Houston 🇺🇸',26,'J',2,'🇯🇴','Jordan','Algeria','🇩🇿',64,28,36],
+      ['Tue','June 23','18:00','Seattle 🇺🇸',20,'K',2,'🇵🇹','Portugal','Uzbekistan','🇺🇿',5,49,44],
+      ['Tue','June 23','20:00','Toronto 🇨🇦',23,'L',2,'🏴','England','Ghana','🇬🇭',4,72,68],
+      ['Tue','June 23','17:00','Vancouver 🇨🇦',19,'L',2,'🇵🇦','Panama','Croatia','🇭🇷',33,11,22],
+      ['Tue','June 23','3:00','Los Angeles 🇺🇸',16,'K',2,'🇨🇴','Colombia','DR Congo','🇨🇩',12,46,34],
+      ['Wed','June 24','20:00','Toronto 🇨🇦',23,'B',3,'🇨🇭','Switzerland','Canada','🇨🇦',19,30,11],
+      ['Wed','June 24','20:00','Vancouver 🇨🇦',18,'B',3,'🇧🇦','Bosnia','Qatar','🇶🇦',71,56,15],
+      ['Wed','June 24','23:00','Miami 🇺🇸',28,'C',3,'🇲🇦','Morocco','Haiti','🇭🇹',8,83,75],
+      ['Wed','June 24','23:00','Dallas 🇺🇸',30,'C',3,'🏴','Scotland','Brazil','🇧🇷',43,6,37],
+      ['Wed','June 24','2:00','Monterrey 🇲🇽',27,'A',3,'🇿🇦','South Africa','South Korea','🇰🇷',60,25,35],
+      ['Wed','June 24','2:00','Mexico City 🇲🇽',18,'A',3,'🇨🇿','Czechia','Mexico','🇲🇽',38,15,23],
+      ['Thu','June 25','21:00','Houston 🇺🇸',28,'E',3,'🇨🇼','Curaçao','Ivory Coast','🇨🇮',81,34,47],
+      ['Thu','June 25','21:00','New York 🇺🇸',26,'E',3,'🇪🇨','Ecuador','Germany','🇩🇪',23,10,13],
+      ['Thu','June 25','19:00','Atlanta 🇺🇸',27,'F',3,'🇹🇳','Tunisia','Netherlands','🇳🇱',44,7,37],
+      ['Thu','June 25','19:00','Boston 🇺🇸',24,'F',3,'🇯🇵','Japan','Sweden','🇸🇪',18,37,19],
+      ['Thu','June 25','21:00','Los Angeles 🇺🇸',20,'D',3,'🇹🇷','Türkiye','USA','🇺🇸',22,16,6],
+      ['Thu','June 25','21:00','Seattle 🇺🇸',18,'D',3,'🇵🇾','Paraguay','Australia','🇦🇺',41,27,14],
+      ['Fri','June 26','23:00','New York 🇺🇸',24,'I',3,'🇳🇴','Norway','France','🇫🇷',31,1,30],
+      ['Fri','June 26','23:00','Boston 🇺🇸',22,'I',3,'🇸🇳','Senegal','Iraq','🇮🇶',13,58,45],
+      ['Fri','June 26','21:00','Philadelphia 🇺🇸',26,'H',3,'🇨🇻','Cape Verde','Saudi Arabia','🇸🇦',67,61,6],
+      ['Fri','June 26','21:00','Los Angeles 🇺🇸',20,'H',3,'🇺🇾','Uruguay','Spain','🇪🇸',17,2,15],
+      ['Fri','June 26','19:00','Kansas City 🇺🇸',27,'G',3,'🇳🇿','New Zealand','Belgium','🇧🇪',85,9,76],
+      ['Fri','June 26','19:00','San Francisco 🇺🇸',16,'G',3,'🇪🇬','Egypt','Iran','🇮🇷',29,20,9],
+      ['Sat','June 27','20:00','Toronto 🇨🇦',24,'L',3,'🇵🇦','Panama','England','🏴',33,4,29],
+      ['Sat','June 27','23:00','Vancouver 🇨🇦',18,'L',3,'🇭🇷','Croatia','Ghana','🇬🇭',11,72,61],
+      ['Sat','June 27','23:30','Los Angeles 🇺🇸',19,'K',3,'🇨🇴','Colombia','Portugal','🇵🇹',12,5,7],
+      ['Sat','June 27','23:30','Seattle 🇺🇸',17,'K',3,'🇨🇩','DR Congo','Uzbekistan','🇺🇿',46,49,3],
+      ['Sat','June 27','19:00','Houston 🇺🇸',30,'J',3,'🇩🇿','Algeria','Austria','🇦🇹',28,24,4],
+      ['Sat','June 27','19:00','Dallas 🇺🇸',33,'J',3,'🇯🇴','Jordan','Argentina','🇦🇷',64,3,61]
+    ].map((row, index) => ({
+      index,
+      day: row[0], date: row[1], time: row[2], city: row[3], temp: row[4], group: row[5], matchday: row[6],
+      flag1: row[7], team1: row[8], team2: row[9], flag2: row[10], rank1: row[11], rank2: row[12], gap: row[13]
+    }));
+
+    const body = document.getElementById('fixtureBody');
+    const visibleCount = document.getElementById('visibleCount');
+    const noResults = document.getElementById('noResults');
+    const searchInput = document.getElementById('searchInput');
+    const groupFilter = document.getElementById('groupFilter');
+    const matchdayFilter = document.getElementById('matchdayFilter');
+    const sortSelect = document.getElementById('sortSelect');
+
+    function unique(values) { return [...new Set(values)].sort((a, b) => String(a).localeCompare(String(b))); }
+
+    unique(fixtures.map(f => f.group)).forEach(group => {
+      groupFilter.add(new Option(`Group ${group}`, group));
+    });
+
+    function fixtureSearchText(f) {
+      return `${f.day} ${f.date} ${f.time} ${f.city} ${f.group} ${f.team1} ${f.team2}`.toLowerCase();
+    }
+
+    function render() {
+      const query = searchInput.value.toLowerCase();
+      const group = groupFilter.value;
+      const matchday = matchdayFilter.value;
+      const sort = sortSelect.value;
+
+      let rows = fixtures.filter(f => {
+        return (!group || f.group === group) &&
+          (!matchday || String(f.matchday) === matchday) &&
+          (!query || f.team1.toLowerCase().includes(query) || f.team2.toLowerCase().includes(query));
+      });
+
+      rows.sort((a, b) => {
+        if (sort === 'gap-desc') return b.gap - a.gap;
+        return a.index - b.index; // schedule
+      });
+
+      body.innerHTML = rows.map(f => {
+        let gapClass = '';
+        if (f.gap <= 15) gapClass = 'low';
+        else if (f.gap <= 30) gapClass = 'midlow';
+        else if (f.gap <= 45) gapClass = 'mid';
+        else gapClass = 'high';
+        const tempClass = f.temp >= 28 ? 'temp-hot' : f.temp <= 17 ? 'temp-cool' : '';
+        return `
+          <tr>
+            <td class="fixture"><span class="team">${f.flag1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${f.flag2}</span></td>
+            <td>${f.date}</td>
+            <td>${f.time}</td>
+            <td>${f.rank1} vs ${f.rank2}</td>
+            <td class="rank-gap ${gapClass}">${f.gap}</td>
+            <td><span class="pill">${f.group}</span></td>
+            <td><span class="pill matchday">${f.matchday}</span></td>
+            <td>${f.city}</td>
+            <td class="${tempClass}">${f.temp}°C</td>
+          </tr>`;
+      }).join('');
+
+      visibleCount.textContent = rows.length;
+      noResults.style.display = rows.length ? 'none' : 'block';
+    }
+
+    
+
+    [searchInput, groupFilter, matchdayFilter, sortSelect].forEach(el => el.addEventListener('input', render));
+
+    document.getElementById('totalFixtures').textContent = fixtures.length;
+    document.getElementById('biggestGap').textContent = Math.max(...fixtures.map(f => f.gap));
+    document.getElementById('hottestTemp').textContent = `${Math.max(...fixtures.map(f => f.temp))}°C`;
+    render();
+  </script>
+</body>
+</html>
