@@ -303,7 +303,7 @@
         <table>
           <thead>
             <tr>
-              <th>Fixture</th><th>Date</th><th>Time</th><th>FIFA Ranks</th><th>Gap</th><th>Group</th><th>MD</th><th>City</th><th>Temp</th>
+              <th>Fixture</th><th>Date</th><th>Time</th><th>FIFA Ranks</th><th>Gap</th><th>Group</th><th>MD</th><th>City</th><th>Temp</th><th>Captain pick</th><th>Goalkeeper</th><th>Defenders</th><th>Midfielders</th><th>Forwards</th>
             </tr>
           </thead>
           <tbody id="fixtureBody"></tbody>
@@ -448,6 +448,11 @@
             <td><span class="pill matchday">${f.matchday}</span></td>
             <td>${f.city}</td>
             <td class="${tempClass}">${f.temp}°C</td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
           </tr>`;
       }).join('');
 
