@@ -271,7 +271,7 @@
         <div class="stat-card"><div class="stat-value" id="totalFixtures">72</div><div class="stat-label">Group fixtures</div></div>
         <div class="stat-card"><div class="stat-value">12</div><div class="stat-label">Groups A-L</div></div>
         <div class="stat-card"><div class="stat-value" id="biggestGap">77</div><div class="stat-label">Biggest rank gap</div><div class="stat-label" id="biggestGapFixture"></div></div>
-        <div class="stat-card"><div class="stat-value" id="hottestTemp">33°C</div><div class="stat-label">Hottest listed fixture</div></div>
+        <div class="stat-card"><div class="stat-value" id="hottestTemp">33°C</div><div class="stat-label">Hottest listed fixture</div><div class="stat-label" id="hottestFixture"></div></div>
       </div>
     </section>
   </header>
@@ -463,8 +463,11 @@
     const maxGap = Math.max(...fixtures.map(f => f.gap));
     document.getElementById('biggestGap').textContent = maxGap;
     const maxFixture = fixtures.find(f => f.gap === maxGap);
-    document.getElementById('biggestGapFixture').textContent = `${maxFixture.team1} vs ${maxFixture.team2}`;
-    document.getElementById('hottestTemp').textContent = `${Math.max(...fixtures.map(f => f.temp))}°C`;
+    document.getElementById('biggestGapFixture').innerHTML = `${maxFixture.flag1} ${maxFixture.team1} vs ${maxFixture.team2} ${maxFixture.flag2}`;
+    const maxTemp = Math.max(...fixtures.map(f => f.temp));
+    document.getElementById('hottestTemp').textContent = `${maxTemp}°C`;
+    const hottestFixture = fixtures.find(f => f.temp === maxTemp);
+    document.getElementById('hottestFixture').innerHTML = `${hottestFixture.flag1} ${hottestFixture.team1} vs ${hottestFixture.team2} ${hottestFixture.flag2}`;
     render();
   </script>
 </body>
