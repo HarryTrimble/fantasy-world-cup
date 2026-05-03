@@ -233,10 +233,23 @@
       display: table-row;
     }
 
+    .fixture-row.expanded td {
+      border-bottom-color: transparent;
+      background: rgba(64,224,160,0.055);
+    }
+
+    .recommend-row.open td {
+      padding: 0 14px 16px;
+      background: rgba(64,224,160,0.055);
+      border-bottom: 1px solid rgba(255,255,255,0.075);
+    }
+
     .recommend-panel {
       padding: 20px;
-      background: rgba(18, 7, 35, 0.78);
-      border-left: 3px solid var(--accent);
+      background: rgba(8,17,31,0.5);
+      border: 1px solid rgba(64,224,160,0.18);
+      border-top: 0;
+      border-radius: 0 0 22px 22px;
       white-space: normal;
     }
 
@@ -579,6 +592,28 @@
         padding-left: 14px;
       }
     }
+  
+
+    /* Desktop: visually connect player recommendations to their fixture row */
+    @media (min-width: 561px) {
+      .fixture-row.expanded td {
+        background: rgba(64,224,160,0.055);
+        border-bottom-color: transparent;
+      }
+
+      .recommend-row.open td {
+        padding: 0 14px 16px;
+        background: rgba(64,224,160,0.055);
+        border-bottom: 1px solid rgba(255,255,255,0.075);
+      }
+
+      .recommend-row.open .recommend-panel {
+        background: rgba(8,17,31,0.5);
+        border: 1px solid rgba(64,224,160,0.18);
+        border-top: 0;
+        border-radius: 0 0 22px 22px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -769,12 +804,22 @@
         return '<div class="recommend-panel">No player recommendations added for these teams yet.</div>';
       }
 
+      function placeholderPrice(role) {
+        if (role === 'Captain') return '£10.0m';
+        if (role === 'Goalkeeper') return '£5.0m';
+        if (role === 'Defender') return '£5.5m';
+        if (role === 'Midfielder') return '£7.5m';
+        if (role === 'Forward') return '£8.5m';
+        return '£6.0m';
+      }
+
       const rows = teams.flatMap(({ team, picks }) => [
-        { name: picks.captain, team, role: 'Captain' },
-        { name: picks.gk, team, role: 'Goalkeeper' },
-        { name: picks.def, team, role: 'Defender' },
-        { name: picks.mid, team, role: 'Midfielder' },
-        { name: picks.fwd, team, role: 'Forward' }
+        { name: picks.captain, team, position: 'Captain', role: 'Captain', price: placeholderPrice('Captain') },
+        { name: picks.gk, team, position: 'GK', role: 'Goalkeeper', price: placeholderPrice('Goalkeeper') },
+        { name: picks.def, team, position: 'DEF', role: 'Defender', price: placeholderPrice('Defender') },
+        { name: picks.mid, team, position: 'MID', role: 'Midfielder', price: placeholderPrice('Midfielder') },
+        { name: picks.fwd, team, position: 'FWD', role: 'Forward', price: placeholderPrice('Forward') },
+        { name: (picks.penalty || picks.captain), team, position: 'PK', role: 'Penalty taker', price: placeholderPrice('Forward') }
       ]);
 
       return `<div class="recommend-panel">
@@ -787,7 +832,7 @@
                 <span class="recommend-icon">→</span>
                 <div>
                   <div class="recommend-player-name">${player.name}</div>
-                  <div class="recommend-player-meta">${player.team}</div>
+                  <div class="recommend-player-meta">${player.team} · ${player.position} · ${player.price}</div>
                 </div>
               </div>
               <div class="recommend-role">${player.role}</div>
