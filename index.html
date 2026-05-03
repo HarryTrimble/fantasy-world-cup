@@ -234,36 +234,91 @@
     }
 
     .recommend-panel {
-      padding: 18px;
-      background: rgba(64,224,160,0.055);
+      padding: 20px;
+      background: rgba(18, 7, 35, 0.78);
       border-left: 3px solid var(--accent);
       white-space: normal;
     }
 
-    .recommend-grid {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(160px, 1fr));
-      gap: 12px;
+    .recommend-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 1.35rem;
+      font-weight: 950;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
     }
 
-    .recommend-card {
-      background: rgba(8,17,31,0.5);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px;
-    }
-
-    .recommend-label {
+    .recommend-title span:last-child {
       color: var(--muted);
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 6px;
+      font-size: 1.4rem;
+      font-weight: 400;
     }
 
-    .recommend-player {
-      font-weight: 900;
+    .recommend-list {
+      display: grid;
+      gap: 0;
+    }
+
+    .recommend-list-head,
+    .recommend-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .recommend-list-head {
+      color: var(--muted);
+      font-weight: 850;
+      padding: 0 0 12px;
+    }
+
+    .recommend-item {
+      padding: 14px 0;
+      border-top: 1px solid rgba(255,255,255,0.16);
+    }
+
+    .recommend-player-main {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .recommend-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(64,224,160,0.12);
+      color: var(--accent);
+      font-weight: 950;
+      flex: 0 0 auto;
+    }
+
+    .recommend-player-name {
+      font-weight: 950;
+      font-size: 1.05rem;
       color: var(--text);
+    }
+
+    .recommend-player-meta {
+      color: var(--muted);
+      margin-top: 3px;
+      font-size: 0.9rem;
+    }
+
+    .recommend-role {
+      color: var(--text);
+      font-weight: 850;
+      border-left: 1px solid rgba(255,255,255,0.2);
+      padding-left: 20px;
+      white-space: nowrap;
     }
 
     .no-results {
@@ -352,7 +407,7 @@
       table {
         min-width: 100%;
         border-collapse: separate;
-        border-spacing: 0 16px;
+        border-spacing: 0 20px;
       }
 
       thead {
@@ -361,6 +416,7 @@
 
       tbody tr {
         display: grid;
+        margin-bottom: 20px;
         grid-template-columns: repeat(3, 1fr);
         gap: 0;
         background:
@@ -448,6 +504,7 @@
       td[data-label="Players"] {
         grid-column: 1 / -1;
         padding: 16px 0 0;
+        margin-bottom: 0;
       }
 
       td[data-label="Players"]::before {
@@ -466,14 +523,23 @@
 
       .recommend-row {
         display: none;
-        margin-top: -10px;
+        margin-top: -20px;
+        margin-bottom: 20px;
         border-top: 0;
         grid-template-columns: 1fr;
-        background: rgba(23,37,59,0.96);
+        background: linear-gradient(135deg, rgba(23,37,59,0.98), rgba(33,43,86,0.96));
+        border-radius: 0 0 28px 28px;
+        box-shadow: 0 18px 42px rgba(0,0,0,0.34);
       }
 
       .recommend-row.open {
         display: block;
+      }
+
+      tbody tr.fixture-row.expanded {
+        border-radius: 28px 28px 0 0;
+        margin-bottom: 0;
+        border-bottom-color: transparent;
       }
 
       .recommend-row td {
@@ -489,28 +555,28 @@
       .recommend-panel {
         margin: 0;
         border-left: 0;
-        border-top: 1px solid rgba(255,255,255,0.16);
+        border-top: 1px solid rgba(255,255,255,0.18);
         border-radius: 0 0 28px 28px;
-        padding: 16px;
-        background: rgba(8,17,31,0.36);
+        padding: 18px;
+        background: rgba(8,17,31,0.28);
       }
 
-      .recommend-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
+      .recommend-title {
+        font-size: 1.35rem;
+        margin-bottom: 14px;
       }
 
-      .recommend-card {
-        border-radius: 999px;
-        padding: 12px 16px;
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
-        align-items: center;
+      .recommend-list-head,
+      .recommend-item {
+        grid-template-columns: 1fr auto;
       }
 
-      .recommend-label {
-        margin-bottom: 0;
+      .recommend-item {
+        padding: 14px 0;
+      }
+
+      .recommend-role {
+        padding-left: 14px;
       }
     }
   </style>
@@ -703,18 +769,43 @@
         return '<div class="recommend-panel">No player recommendations added for these teams yet.</div>';
       }
 
-      return `<div class="recommend-panel"><div class="recommend-grid">${teams.map(({ team, picks }) => `
-        <div class="recommend-card"><div class="recommend-label">Captain · ${team}</div><div class="recommend-player">${picks.captain}</div></div>
-        <div class="recommend-card"><div class="recommend-label">Goalkeeper · ${team}</div><div class="recommend-player">${picks.gk}</div></div>
-        <div class="recommend-card"><div class="recommend-label">Defender · ${team}</div><div class="recommend-player">${picks.def}</div></div>
-        <div class="recommend-card"><div class="recommend-label">Midfielder · ${team}</div><div class="recommend-player">${picks.mid}</div></div>
-        <div class="recommend-card"><div class="recommend-label">Forward · ${team}</div><div class="recommend-player">${picks.fwd}</div></div>
-      `).join('')}</div></div>`;
+      const rows = teams.flatMap(({ team, picks }) => [
+        { name: picks.captain, team, role: 'Captain' },
+        { name: picks.gk, team, role: 'Goalkeeper' },
+        { name: picks.def, team, role: 'Defender' },
+        { name: picks.mid, team, role: 'Midfielder' },
+        { name: picks.fwd, team, role: 'Forward' }
+      ]);
+
+      return `<div class="recommend-panel">
+        <div class="recommend-title"><span>Recommended players</span><span>›</span></div>
+        <div class="recommend-list">
+          <div class="recommend-list-head"><span>Player</span><span>Role</span></div>
+          ${rows.map(player => `
+            <div class="recommend-item">
+              <div class="recommend-player-main">
+                <span class="recommend-icon">→</span>
+                <div>
+                  <div class="recommend-player-name">${player.name}</div>
+                  <div class="recommend-player-meta">${player.team}</div>
+                </div>
+              </div>
+              <div class="recommend-role">${player.role}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
     }
 
     function toggleRecommendation(id, button) {
       const row = document.getElementById(id);
+      const fixtureRow = row.previousElementSibling;
       const isOpen = row.classList.toggle('open');
+
+      if (fixtureRow) {
+        fixtureRow.classList.toggle('expanded', isOpen);
+      }
+
       button.textContent = isOpen ? 'Hide players' : 'Show players';
     }
 
@@ -741,7 +832,7 @@
         const tempClass = f.temp >= 28 ? 'temp-hot' : f.temp <= 17 ? 'temp-cool' : '';
         const recId = `rec-${f.index}`;
         return `
-          <tr>
+          <tr class="fixture-row">
             <td class="fixture" data-label="Fixture"><span class="team">${f.flag1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${f.flag2}</span></td>
             <td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td>
             <td data-label="Players"><button class="recommend-btn" type="button" onclick="toggleRecommendation('${recId}', this)">Show players</button></td>
@@ -758,7 +849,7 @@
       knockoutBody.innerHTML = knockoutFixtures.map(f => {
         const recId = `ko-rec-${f[4]}`;
         return `
-          <tr><td class="fixture" data-label="Fixture">${f[0]}</td><td>${f[1]}</td><td>${f[2]}</td><td data-label="Matchday"><span class="pill matchday">${f[3]}</span></td><td data-label="Group"><span class="pill">${f[4]}</span></td><td>${f[5]}</td><td data-label="Players"><button class="recommend-btn" type="button" onclick="toggleRecommendation('${recId}', this)">Show players</button></td></tr>
+          <tr class="fixture-row"><td class="fixture" data-label="Fixture">${f[0]}</td><td>${f[1]}</td><td>${f[2]}</td><td data-label="Matchday"><span class="pill matchday">${f[3]}</span></td><td data-label="Group"><span class="pill">${f[4]}</span></td><td>${f[5]}</td><td data-label="Players"><button class="recommend-btn" type="button" onclick="toggleRecommendation('${recId}', this)">Show players</button></td></tr>
           <tr class="recommend-row" id="${recId}"><td colspan="7"><div class="recommend-panel">Add teams once the bracket is known, then fill in picks here.</div></td></tr>
         `;
       }).join('');
