@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Cup Fantasy Teams</title>
+  <style>
+    :root {
+      --bg: #08111f;
+      --card: #111c2e;
+      --text: #f6f8fb;
+      --muted: #aab7c8;
+      --accent: #40e0a0;
+      --accent-2: #59a7ff;
+      --border: rgba(255,255,255,0.1);
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(64,224,160,0.22), transparent 34rem),
+        radial-gradient(circle at top right, rgba(89,167,255,0.18), transparent 34rem),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    header, main {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .hero, .controls, .team-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero {
+      padding: 32px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 800;
+      font-size: 0.8rem;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+    }
+
+    .subtitle {
+      max-width: 780px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .site-nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      width: fit-content;
+      margin-bottom: 32px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(8,17,31,0.42);
+    }
+
+    .site-nav a {
+      text-decoration: none;
+      padding: 9px 16px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-weight: 850;
+      transition: background 160ms ease, color 160ms ease;
+    }
+
+    .site-nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav a.active {
+      color: #06101d;
+      background: var(--accent);
+    }
+
+    .controls {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 22px;
+      position: sticky;
+      top: 12px;
+      z-index: 5;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: rgba(8,17,31,0.72);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+    }
+
+    select option { background: #111c2e; }
+    input::placeholder { color: #77869a; }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .team-card {
+      overflow: hidden;
+    }
+
+    .team-header {
+      padding: 22px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+      background: radial-gradient(circle at top left, rgba(64,224,160,0.12), transparent 60%);
+    }
+
+    .team-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.6rem;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .flag-img {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.1em;
+      display: inline-block;
+    }
+
+    .rank-pill, .group-pill, .result-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-weight: 900;
+      border: 1px solid rgba(89,167,255,0.28);
+      background: rgba(89,167,255,0.15);
+      color: #b9d7ff;
+      white-space: nowrap;
+    }
+
+    .group-pill {
+      background: rgba(64,224,160,0.12);
+      color: #a9ffd8;
+      border-color: rgba(64,224,160,0.28);
+    }
+
+    .team-body {
+      padding: 18px 22px 22px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-title {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.75rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .last-five {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .result-pill {
+      min-width: 42px;
+      background: rgba(255,255,255,0.055);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .games {
+      display: grid;
+      gap: 10px;
+    }
+
+    .game {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(8,17,31,0.4);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .game-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .opponent {
+      font-weight: 900;
+      font-size: 1rem;
+    }
+
+    .game-meta {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .meta-value {
+      display: block;
+      color: var(--text);
+      font-weight: 850;
+      margin-top: 3px;
+    }
+
+    .gap-low { color: #ff9f43; }
+    .gap-midlow { color: #ffd166; }
+    .gap-mid { color: #40e0a0; }
+    .gap-high { color: #59a7ff; }
+
+    .no-results {
+      display: none;
+      color: var(--muted);
+      text-align: center;
+      padding: 40px 12px;
+    }
+
+    @media (max-width: 900px) {
+      .team-grid { grid-template-columns: 1fr; }
+      .hero { flex-direction: column; }
+      .controls { grid-template-columns: 1fr; position: static; }
+    }
+
+    @media (max-width: 560px) {
+      header, main { padding: 18px 12px; }
+      .hero, .team-card, .controls { border-radius: 22px; }
+      .hero { padding: 24px; }
+      h1 { font-size: clamp(2.2rem, 13vw, 3.6rem); }
+      .game-meta { grid-template-columns: repeat(2, 1fr); }
+      .team-header { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <section class="hero">
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="index.html">Fixtures</a>
+        <a class="active" href="teams.html">Teams</a>
+        <a href="players.html">Players</a>
+      </nav>
+      <div class="eyebrow">World Cup Fantasy Football</div>
+      <h1>Team form and group games</h1>
+      <p class="subtitle">See recent form and all three group matches with FIFA rankings and matchup difficulty.</p>
+    </section>
+  </header>
+
+  <main>
+    <section class="controls" aria-label="Team filters">
+      <input id="searchInput" type="search" placeholder="Search team..." />
+      <select id="groupFilter"><option value="">All groups</option></select>
+      <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option></select>
+    </section>
+
+    <section class="team-grid" id="teamGrid"></section>
+    <div class="no-results" id="noResults">No teams match those filters.</div>
+  </main>
+
+  <script>
+    const englandFlag = '<img class="flag-img" alt="England flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg">';
+    const scotlandFlag = '<img class="flag-img" alt="Scotland flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg">';
+
+    const fixtures = [
+      ['Thu','June 11','20:00','Mexico City 🇲🇽',22,'A',1,'🇲🇽','Mexico','South Africa','🇿🇦',15,60,45],
+      ['Thu','June 11','3:00','Monterrey 🇲🇽',27,'A',1,'🇰🇷','South Korea','Czechia','🇨🇿',25,38,13],
+      ['Fri','June 12','20:00','Toronto 🇨🇦',22,'B',1,'🇨🇦','Canada','Bosnia','🇧🇦',30,71,41],
+      ['Fri','June 12','2:00','Los Angeles 🇺🇸',17,'D',1,'🇺🇸','USA','Paraguay','🇵🇾',16,41,25],
+      ['Sat','June 13','20:00','Vancouver 🇨🇦',18,'B',1,'🇶🇦','Qatar','Switzerland','🇨🇭',56,19,37],
+      ['Sat','June 13','23:00','Miami 🇺🇸',28,'C',1,'🇧🇷','Brazil','Morocco','🇲🇦',6,8,2],
+      ['Sat','June 13','2:00','Dallas 🇺🇸',26,'C',1,'🇭🇹','Haiti','Scotland',scotlandFlag,83,43,40],
+      ['Sat','June 13','5:00','Seattle 🇺🇸',13,'D',1,'🇦🇺','Australia','Türkiye','🇹🇷',27,22,5],
+      ['Sun','June 14','18:00','New York 🇺🇸',27,'E',1,'🇩🇪','Germany','Curaçao','🇨🇼',10,81,71],
+      ['Sun','June 14','21:00','Boston 🇺🇸',24,'F',1,'🇳🇱','Netherlands','Japan','🇯🇵',7,18,11],
+      ['Sun','June 14','0:00','Houston 🇺🇸',28,'E',1,'🇨🇮','Ivory Coast','Ecuador','🇪🇨',34,23,11],
+      ['Sun','June 14','3:00','Atlanta 🇺🇸',24,'F',1,'🇸🇪','Sweden','Tunisia','🇹🇳',37,44,7],
+      ['Mon','June 15','17:00','Philadelphia 🇺🇸',28,'H',1,'🇪🇸','Spain','Cape Verde','🇨🇻',2,67,65],
+      ['Mon','June 15','20:00','Kansas City 🇺🇸',26,'G',1,'🇧🇪','Belgium','Egypt','🇪🇬',9,29,20],
+      ['Mon','June 15','23:00','Los Angeles 🇺🇸',19,'H',1,'🇸🇦','Saudi Arabia','Uruguay','🇺🇾',61,17,44],
+      ['Mon','June 15','2:00','San Francisco 🇺🇸',13,'G',1,'🇮🇷','Iran','New Zealand','🇳🇿',20,85,65],
+      ['Tue','June 16','20:00','New York 🇺🇸',27,'I',1,'🇫🇷','France','Senegal','🇸🇳',1,13,12],
+      ['Tue','June 16','23:00','Boston 🇺🇸',22,'I',1,'🇮🇶','Iraq','Norway','🇳🇴',58,31,27],
+      ['Tue','June 16','2:00','Houston 🇺🇸',27,'J',1,'🇦🇷','Argentina','Algeria','🇩🇿',3,28,25],
+      ['Tue','June 16','5:00','Dallas 🇺🇸',25,'J',1,'🇦🇹','Austria','Jordan','🇯🇴',24,64,40],
+      ['Wed','June 17','18:00','Seattle 🇺🇸',19,'K',1,'🇵🇹','Portugal','DR Congo','🇨🇩',5,46,41],
+      ['Wed','June 17','20:00','Toronto 🇨🇦',22,'L',1,englandFlag,'England','Croatia','🇭🇷',4,11,7],
+      ['Wed','June 17','23:00','Vancouver 🇨🇦',17,'L',1,'🇬🇭','Ghana','Panama','🇵🇦',72,33,39],
+      ['Wed','June 17','3:00','Los Angeles 🇺🇸',16,'K',1,'🇺🇿','Uzbekistan','Colombia','🇨🇴',49,12,37],
+      ['Thu','June 18','17:00','Monterrey 🇲🇽',32,'A',2,'🇨🇿','Czechia','South Africa','🇿🇦',38,60,22],
+      ['Thu','June 18','23:00','Toronto 🇨🇦',19,'B',2,'🇨🇭','Switzerland','Bosnia','🇧🇦',19,71,52],
+      ['Thu','June 18','20:00','Vancouver 🇨🇦',18,'B',2,'🇨🇦','Canada','Qatar','🇶🇦',30,56,26],
+      ['Thu','June 18','20:00','Mexico City 🇲🇽',22,'A',2,'🇲🇽','Mexico','South Korea','🇰🇷',15,25,10],
+      ['Fri','June 19','2:00','Los Angeles 🇺🇸',17,'D',2,'🇺🇸','USA','Australia','🇦🇺',16,27,11],
+      ['Fri','June 19','2:00','Dallas 🇺🇸',26,'C',2,scotlandFlag,'Scotland','Morocco','🇲🇦',43,8,35],
+      ['Fri','June 19','23:00','Miami 🇺🇸',28,'C',2,'🇧🇷','Brazil','Haiti','🇭🇹',6,83,77],
+      ['Fri','June 19','5:00','Seattle 🇺🇸',13,'D',2,'🇹🇷','Türkiye','Paraguay','🇵🇾',22,41,19],
+      ['Sat','June 20','18:00','Boston 🇺🇸',25,'F',2,'🇳🇱','Netherlands','Sweden','🇸🇪',7,37,30],
+      ['Sat','June 20','21:00','New York 🇺🇸',26,'E',2,'🇩🇪','Germany','Ivory Coast','🇨🇮',10,34,24],
+      ['Sat','June 20','1:00','Houston 🇺🇸',27,'E',2,'🇪🇨','Ecuador','Curaçao','🇨🇼',23,81,58],
+      ['Sat','June 20','5:00','Atlanta 🇺🇸',23,'F',2,'🇹🇳','Tunisia','Japan','🇯🇵',44,18,26],
+      ['Sun','June 21','23:00','Philadelphia 🇺🇸',24,'H',2,'🇪🇸','Spain','Saudi Arabia','🇸🇦',2,61,59],
+      ['Sun','June 21','20:00','Kansas City 🇺🇸',26,'G',2,'🇧🇪','Belgium','Iran','🇮🇷',9,20,11],
+      ['Sun','June 21','17:00','Los Angeles 🇺🇸',22,'H',2,'🇺🇾','Uruguay','Cape Verde','🇨🇻',17,67,50],
+      ['Sun','June 21','2:00','San Francisco 🇺🇸',13,'G',2,'🇳🇿','New Zealand','Egypt','🇪🇬',85,29,56],
+      ['Mon','June 22','18:00','Dallas 🇺🇸',33,'J',2,'🇦🇷','Argentina','Austria','🇦🇹',3,24,21],
+      ['Mon','June 22','1:00','New York 🇺🇸',25,'I',2,'🇫🇷','France','Iraq','🇮🇶',1,58,57],
+      ['Mon','June 22','22:00','Boston 🇺🇸',23,'I',2,'🇳🇴','Norway','Senegal','🇸🇳',31,13,18],
+      ['Mon','June 22','4:00','Houston 🇺🇸',26,'J',2,'🇯🇴','Jordan','Algeria','🇩🇿',64,28,36],
+      ['Tue','June 23','18:00','Seattle 🇺🇸',20,'K',2,'🇵🇹','Portugal','Uzbekistan','🇺🇿',5,49,44],
+      ['Tue','June 23','20:00','Toronto 🇨🇦',23,'L',2,englandFlag,'England','Ghana','🇬🇭',4,72,68],
+      ['Tue','June 23','17:00','Vancouver 🇨🇦',19,'L',2,'🇵🇦','Panama','Croatia','🇭🇷',33,11,22],
+      ['Tue','June 23','3:00','Los Angeles 🇺🇸',16,'K',2,'🇨🇴','Colombia','DR Congo','🇨🇩',12,46,34],
+      ['Wed','June 24','20:00','Toronto 🇨🇦',23,'B',3,'🇨🇭','Switzerland','Canada','🇨🇦',19,30,11],
+      ['Wed','June 24','20:00','Vancouver 🇨🇦',18,'B',3,'🇧🇦','Bosnia','Qatar','🇶🇦',71,56,15],
+      ['Wed','June 24','23:00','Miami 🇺🇸',28,'C',3,'🇲🇦','Morocco','Haiti','🇭🇹',8,83,75],
+      ['Wed','June 24','23:00','Dallas 🇺🇸',30,'C',3,scotlandFlag,'Scotland','Brazil','🇧🇷',43,6,37],
+      ['Wed','June 24','2:00','Monterrey 🇲🇽',27,'A',3,'🇿🇦','South Africa','South Korea','🇰🇷',60,25,35],
+      ['Wed','June 24','2:00','Mexico City 🇲🇽',18,'A',3,'🇨🇿','Czechia','Mexico','🇲🇽',38,15,23],
+      ['Thu','June 25','21:00','Houston 🇺🇸',28,'E',3,'🇨🇼','Curaçao','Ivory Coast','🇨🇮',81,34,47],
+      ['Thu','June 25','21:00','New York 🇺🇸',26,'E',3,'🇪🇨','Ecuador','Germany','🇩🇪',23,10,13],
+      ['Thu','June 25','19:00','Atlanta 🇺🇸',27,'F',3,'🇹🇳','Tunisia','Netherlands','🇳🇱',44,7,37],
+      ['Thu','June 25','19:00','Boston 🇺🇸',24,'F',3,'🇯🇵','Japan','Sweden','🇸🇪',18,37,19],
+      ['Thu','June 25','21:00','Los Angeles 🇺🇸',20,'D',3,'🇹🇷','Türkiye','USA','🇺🇸',22,16,6],
+      ['Thu','June 25','21:00','Seattle 🇺🇸',18,'D',3,'🇵🇾','Paraguay','Australia','🇦🇺',41,27,14],
+      ['Fri','June 26','23:00','New York 🇺🇸',24,'I',3,'🇳🇴','Norway','France','🇫🇷',31,1,30],
+      ['Fri','June 26','23:00','Boston 🇺🇸',22,'I',3,'🇸🇳','Senegal','Iraq','🇮🇶',13,58,45],
+      ['Fri','June 26','21:00','Philadelphia 🇺🇸',26,'H',3,'🇨🇻','Cape Verde','Saudi Arabia','🇸🇦',67,61,6],
+      ['Fri','June 26','21:00','Los Angeles 🇺🇸',20,'H',3,'🇺🇾','Uruguay','Spain','🇪🇸',17,2,15],
+      ['Fri','June 26','19:00','Kansas City 🇺🇸',27,'G',3,'🇳🇿','New Zealand','Belgium','🇧🇪',85,9,76],
+      ['Fri','June 26','19:00','San Francisco 🇺🇸',16,'G',3,'🇪🇬','Egypt','Iran','🇮🇷',29,20,9],
+      ['Sat','June 27','20:00','Toronto 🇨🇦',24,'L',3,'🇵🇦','Panama','England',englandFlag,33,4,29],
+      ['Sat','June 27','23:00','Vancouver 🇨🇦',18,'L',3,'🇭🇷','Croatia','Ghana','🇬🇭',11,72,61],
+      ['Sat','June 27','23:30','Los Angeles 🇺🇸',19,'K',3,'🇨🇴','Colombia','Portugal','🇵🇹',12,5,7],
+      ['Sat','June 27','23:30','Seattle 🇺🇸',17,'K',3,'🇨🇩','DR Congo','Uzbekistan','🇺🇿',46,49,3],
+      ['Sat','June 27','19:00','Houston 🇺🇸',30,'J',3,'🇩🇿','Algeria','Austria','🇦🇹',28,24,4],
+      ['Sat','June 27','19:00','Dallas 🇺🇸',33,'J',3,'🇯🇴','Jordan','Argentina','🇦🇷',64,3,61]
+    ];
+
+    const lastFiveResults = {
+      Portugal: ['Portugal 3-0 Bosnia','Slovakia 0-1 Portugal','Portugal 9-0 Luxembourg','Iceland 0-1 Portugal','Portugal 5-1 Poland'],
+      Spain: ['Spain 3-1 Norway','Georgia 1-7 Spain','Spain 2-0 Scotland','Cyprus 0-3 Spain','Spain 1-0 Italy'],
+      Belgium: ['Belgium 3-0 Sweden','Austria 2-3 Belgium','Belgium 5-0 Estonia','Azerbaijan 0-1 Belgium','Belgium 2-0 Serbia'],
+      Japan: ['Japan 4-1 Germany','Japan 4-2 Türkiye','Japan 5-0 Syria','North Korea 1-2 Japan','Japan 3-1 Tunisia'],
+      USA: ['USA 2-0 Mexico','USA 3-1 Jamaica','USA 1-1 Canada','Panama 0-2 USA','USA 4-0 Cuba'],
+      France: ['France 2-0 Greece','Netherlands 1-1 France','France 4-0 Gibraltar','Republic Ireland 0-2 France','France 1-0 Germany'],
+      Iran: ['Iran 4-0 Hong Kong','Iran 2-1 Uzbekistan','Iran 1-0 Kyrgyzstan','Jordan 2-2 Iran','Iran 3-0 UAE'],
+      Argentina: ['Argentina 2-0 Peru','Paraguay 0-1 Argentina','Argentina 3-0 Chile','Brazil 0-1 Argentina','Argentina 1-1 Uruguay'],
+      Austria: ['Austria 2-0 Germany','Austria 1-1 Belgium','Austria 3-1 Sweden','Estonia 0-2 Austria','Austria 1-0 Azerbaijan'],
+      England: ['England 2-0 Ukraine','Italy 1-2 England','England 3-1 Scotland','England 2-2 Belgium','England 1-0 Australia'],
+      Mexico: ['Mexico 1-1 Belgium','Mexico 0-0 Portugal','Mexico 4-0 Iceland','Bolivia 0-1 Mexico','Panama 0-1 Mexico'],
+      Uruguay: ['Uruguay 2-0 Brazil','Argentina 1-1 Uruguay','Uruguay 3-0 Bolivia','Colombia 2-2 Uruguay','Uruguay 1-0 Chile'],
+      Morocco: ['Morocco 2-1 Paraguay','Morocco 1-1 Ecuador','Senegal 0-3 Morocco','Nigeria 0-0 Morocco','Cameroon 0-2 Morocco'],
+      Senegal: ['Senegal 1-1 Ivory Coast','Senegal 2-0 Cameroon','Senegal 3-0 Gambia','Algeria 0-1 Senegal','Senegal 1-1 DR Congo'],
+      Australia: ['Australia 2-0 Lebanon','Lebanon 0-5 Australia','Australia 1-0 New Zealand','Australia 2-2 Mexico','Argentina 2-0 Australia'],
+      Egypt: ['Egypt 2-0 Sierra Leone','Egypt 1-1 DR Congo','Egypt 2-0 Burkina Faso','Guinea 1-1 Egypt','Egypt 1-0 Ethiopia'],
+      Netherlands: ['Netherlands 2-1 Ireland','Greece 0-1 Netherlands','Netherlands 3-0 Gibraltar','France 1-1 Netherlands','Netherlands 2-2 Germany'],
+      'DR Congo': ['DR Congo 1-0 Mauritania','DR Congo 1-1 Senegal','DR Congo 2-0 Sudan','Gabon 0-0 DR Congo','DR Congo 1-0 Togo'],
+      'Türkiye': ['Türkiye 3-2 Germany','Türkiye 1-1 Wales','Croatia 0-1 Türkiye','Türkiye 4-0 Latvia','Japan 4-2 Türkiye'],
+      Algeria: ['Algeria 2-0 Somalia','Algeria 1-1 Egypt','Algeria 3-0 Uganda','Guinea 1-0 Algeria','Algeria 2-1 Mozambique'],
+      Colombia: ['Colombia 2-1 Brazil','Colombia 0-0 Ecuador','Colombia 2-1 Paraguay','Uruguay 2-2 Colombia','Colombia 1-0 Venezuela'],
+      Croatia: ['Croatia 1-0 Armenia','Croatia 2-0 Latvia','Wales 2-1 Croatia','Croatia 0-0 Türkiye','Croatia 1-0 Tunisia'],
+      Panama: ['Panama 3-0 Guatemala','Panama 2-0 Martinique','Panama 0-2 Mexico','Panama 1-1 Curaçao','Panama 2-1 Costa Rica'],
+      Uzbekistan: ['Uzbekistan 3-1 Turkmenistan','Uzbekistan 1-0 Iran','Uzbekistan 2-2 Oman','Australia 1-0 Uzbekistan','Uzbekistan 2-0 Hong Kong'],
+      Czechia: ['Czechia 2-2 Denmark','Czechia 2-2 Ireland','Czechia 6-0 Gibraltar','Poland 3-2 Czechia','Czechia 2-1 Faroe Islands'],
+      Canada: ['Canada 0-0 Tunisia','Canada 2-2 Iceland','Canada 1-0 Guatemala','Venezuela 0-2 Canada','Canada 0-0 Ecuador'],
+      Norway: ['Norway 1-1 Scotland','Norway 2-1 Georgia','Norway 0-1 Spain','Norway 2-0 Cyprus','Norway 1-0 Sweden'],
+      'New Zealand': ['New Zealand 1-0 Solomon Islands','New Zealand 2-0 Tahiti','New Zealand 0-2 Australia','New Zealand 1-1 China','New Zealand 1-0 Fiji'],
+      Sweden: ['Sweden 2-0 Estonia','Sweden 1-3 Austria','Sweden 2-1 Moldova','Belgium 1-1 Sweden','Sweden 1-0 Albania'],
+      'Saudi Arabia': ['Saudi Arabia 2-0 Jordan','Saudi Arabia 1-1 South Korea','Saudi Arabia 0-2 Mexico','Saudi Arabia 2-1 Oman','Saudi Arabia 1-0 Iraq'],
+      Bosnia: ['Bosnia 1-1 Italy','Wales 1-1 Bosnia','Austria 1-1 Bosnia','Bosnia 3-1 Romania','Malta 1-4 Bosnia'],
+      'Ivory Coast': ['Ivory Coast 2-0 Gambia','Ivory Coast 1-0 Mali','Ivory Coast 3-1 Zambia','Nigeria 1-1 Ivory Coast','Ivory Coast 0-4 South Korea'],
+      Germany: ['Germany 2-1 Netherlands','Germany 2-0 France','Germany 1-1 Spain','Austria 2-0 Germany','Germany 2-1 Ghana'],
+      Scotland: ['Scotland 2-0 Georgia','Spain 2-0 Scotland','Scotland 1-3 England','Scotland 3-0 Cyprus','Norway 1-2 Scotland'],
+      'Cape Verde': ['Cape Verde 1-0 Guyana','Angola 0-0 Cape Verde','Cape Verde 2-1 Togo','Libya 0-0 Cape Verde','Cape Verde 1-1 Algeria'],
+      Jordan: ['Jordan 2-0 Saudi Arabia','Jordan 2-2 Iraq','Jordan 1-1 South Korea','Jordan 0-2 Iran','Jordan 3-0 Tajikistan'],
+      'South Korea': ['South Korea 1-0 Ghana','South Korea 2-0 Bolivia','South Korea 2-0 Paraguay','South Korea 0-4 Ivory Coast','Austria 1-0 South Korea'],
+      Iraq: ['Iraq 1-0 Vietnam','Iraq 2-2 Jordan','Iraq 1-0 Indonesia','South Korea 1-0 Iraq','Iraq 0-0 Oman'],
+      Haiti: ['Haiti 1-1 Guatemala','Haiti 2-0 St Kitts','Haiti 0-1 Jamaica','Haiti 3-0 Suriname','Haiti 1-2 Honduras'],
+      'South Africa': ['South Africa 1-2 Cameroon','Zimbabwe 2-3 South Africa','South Africa 1-1 Panama','South Africa 0-0 Namibia','South Africa 1-0 Morocco'],
+      Ecuador: ['Ecuador 0-0 Colombia','Ecuador 1-0 Chile','Brazil 1-1 Ecuador','Ecuador 2-1 Uruguay','Argentina 1-0 Ecuador'],
+      Brazil: ['Brazil 3-1 Croatia','Brazil 1-2 France','Brazil 1-1 Tunisia','Brazil 2-0 Senegal','Japan 3-2 Brazil'],
+      Ghana: ['Ghana 2-1 Madagascar','Ghana 1-0 Central African Rep','Ghana 0-2 Mexico','USA 4-0 Ghana','Ghana 2-0 Liberia'],
+      Curaçao: ['Curaçao 1-0 Aruba','Barbados 0-1 Curaçao','Curaçao 2-2 Panama','Curaçao 0-2 Costa Rica','El Salvador 1-1 Curaçao'],
+      Switzerland: ['Norway 0-0 Switzerland','Switzerland 3-4 Germany','Kosovo 1-1 Switzerland','Switzerland 4-1 Sweden','Slovenia 0-0 Switzerland'],
+      Tunisia: ['Tunisia 1-0 Libya','Tunisia 0-1 Japan','Tunisia 1-1 South Korea','Tunisia 2-0 Malawi','Equatorial Guinea 1-0 Tunisia'],
+      Paraguay: ['Morocco 2-1 Paraguay','Greece 0-1 Paraguay','Mexico 1-2 Paraguay','USA 2-1 Paraguay','South Korea 2-0 Paraguay'],
+      Qatar: ['Qatar 2-1 UAE','Oman 0-0 Qatar','Qatar 1-4 Russia','Qatar 2-2 Bahrain','Qatar 1-2 Zimbabwe']
+    };
+
+    const teams = new Map();
+
+    fixtures.forEach((row, index) => {
+      const fixture = {
+        index,
+        day: row[0], date: row[1], time: row[2], city: row[3], temp: row[4], group: row[5], matchday: row[6],
+        flag1: row[7], team1: row[8], team2: row[9], flag2: row[10], rank1: row[11], rank2: row[12], gap: row[13]
+      };
+
+      addTeamFixture(fixture.team1, fixture.flag1, fixture.rank1, fixture.group, fixture, fixture.team2, fixture.flag2, fixture.rank2);
+      addTeamFixture(fixture.team2, fixture.flag2, fixture.rank2, fixture.group, fixture, fixture.team1, fixture.flag1, fixture.rank1);
+    });
+
+    function addTeamFixture(team, flag, rank, group, fixture, opponent, opponentFlag, opponentRank) {
+      if (!teams.has(team)) {
+        teams.set(team, { team, flag, rank, group, lastFive: lastFiveResults[team] || ['TBC','TBC','TBC','TBC','TBC'], games: [] });
+      }
+      teams.get(team).games.push({ ...fixture, opponent, opponentFlag, opponentRank });
+    }
+
+    const teamGrid = document.getElementById('teamGrid');
+    const searchInput = document.getElementById('searchInput');
+    const groupFilter = document.getElementById('groupFilter');
+    const sortSelect = document.getElementById('sortSelect');
+    const noResults = document.getElementById('noResults');
+
+    [...new Set([...teams.values()].map(t => t.group))].sort().forEach(group => {
+      groupFilter.add(new Option(`Group ${group}`, group));
+    });
+
+    function gapClass(gap) {
+      if (gap <= 15) return 'gap-low';
+      if (gap <= 30) return 'gap-midlow';
+      if (gap <= 45) return 'gap-mid';
+      return 'gap-high';
+    }
+
+    function formatResult(result) {
+      const flags = {
+        Portugal: '🇵🇹', Bosnia: '🇧🇦', Slovakia: '🇸🇰', Luxembourg: '🇱🇺', Iceland: '🇮🇸', Poland: '🇵🇱',
+        Spain: '🇪🇸', Norway: '🇳🇴', Georgia: '🇬🇪', Scotland: scotlandFlag, Cyprus: '🇨🇾', Italy: '🇮🇹',
+        Belgium: '🇧🇪', Sweden: '🇸🇪', Austria: '🇦🇹', Estonia: '🇪🇪', Azerbaijan: '🇦🇿', Serbia: '🇷🇸',
+        Japan: '🇯🇵', Germany: '🇩🇪', Türkiye: '🇹🇷', Syria: '🇸🇾', 'North Korea': '🇰🇵', Tunisia: '🇹🇳',
+        USA: '🇺🇸', Mexico: '🇲🇽', Jamaica: '🇯🇲', Canada: '🇨🇦', Panama: '🇵🇦', Cuba: '🇨🇺',
+        France: '🇫🇷', Greece: '🇬🇷', Netherlands: '🇳🇱', Gibraltar: '🇬🇮', 'Republic Ireland': '🇮🇪',
+        Iran: '🇮🇷', 'Hong Kong': '🇭🇰', Uzbekistan: '🇺🇿', Kyrgyzstan: '🇰🇬', Jordan: '🇯🇴', UAE: '🇦🇪',
+        Argentina: '🇦🇷', Peru: '🇵🇪', Paraguay: '🇵🇾', Chile: '🇨🇱', Brazil: '🇧🇷', Uruguay: '🇺🇾',
+        England: englandFlag, Ukraine: '🇺🇦', Australia: '🇦🇺', Bolivia: '🇧🇴',
+        Morocco: '🇲🇦', Ecuador: '🇪🇨', Senegal: '🇸🇳', Nigeria: '🇳🇬', Cameroon: '🇨🇲',
+        'Ivory Coast': '🇨🇮', Gambia: '🇬🇲', Algeria: '🇩🇿', 'DR Congo': '🇨🇩', Lebanon: '🇱🇧',
+        Egypt: '🇪🇬', 'Sierra Leone': '🇸🇱', 'Burkina Faso': '🇧🇫', Guinea: '🇬🇳', Ethiopia: '🇪🇹',
+        Ireland: '🇮🇪', Mauritania: '🇲🇷', Sudan: '🇸🇩', Gabon: '🇬🇦', Togo: '🇹🇬',
+        Wales: '🏴', Croatia: '🇭🇷', Latvia: '🇱🇻', Uganda: '🇺🇬', Mozambique: '🇲🇿',
+        Colombia: '🇨🇴', Venezuela: '🇻🇪', Armenia: '🇦🇲', Martinique: '🇲🇶', 'Costa Rica': '🇨🇷',
+        Turkmenistan: '🇹🇲', Oman: '🇴🇲', Denmark: '🇩🇰', 'Faroe Islands': '🇫🇴',
+        Czechia: '🇨🇿', 'New Zealand': '🇳🇿', Tahiti: '🇵🇫', China: '🇨🇳', Fiji: '🇫🇯',
+        'Saudi Arabia': '🇸🇦', 'South Korea': '🇰🇷', Iraq: '🇮🇶', Malta: '🇲🇹', Romania: '🇷🇴',
+        Ghana: '🇬🇭', 'Cape Verde': '🇨🇻', Guyana: '🇬🇾', Angola: '🇦🇴', Libya: '🇱🇾',
+        Tajikistan: '🇹🇯', Vietnam: '🇻🇳', Indonesia: '🇮🇩', Haiti: '🇭🇹', Guatemala: '🇬🇹',
+        'St Kitts': '🇰🇳', Suriname: '🇸🇷', Honduras: '🇭🇳', 'South Africa': '🇿🇦', Zimbabwe: '🇿🇼',
+        Namibia: '🇳🇦', Madagascar: '🇲🇬', 'Central African Rep': '🇨🇫', Liberia: '🇱🇷',
+        Curaçao: '🇨🇼', Aruba: '🇦🇼', Barbados: '🇧🇧', 'El Salvador': '🇸🇻', Kosovo: '🇽🇰',
+        Slovenia: '🇸🇮', Malawi: '🇲🇼', 'Equatorial Guinea': '🇬🇶', Qatar: '🇶🇦', Bahrain: '🇧🇭', Russia: '🇷🇺'
+      };
+
+      let formatted = result;
+      const countries = Object.keys(flags).sort((a, b) => b.length - a.length);
+
+      countries.forEach(country => {
+        formatted = formatted.split(country).join(flags[country]);
+      });
+
+      return formatted;
+    }
+
+    function render() {
+      const query = searchInput.value.toLowerCase();
+      const group = groupFilter.value;
+      const sort = sortSelect.value;
+
+      const rows = [...teams.values()]
+        .filter(t => (!query || t.team.toLowerCase().includes(query)) && (!group || t.group === group))
+        .sort((a, b) => {
+          if (sort === 'rank') return a.rank - b.rank;
+          if (sort === 'country') return a.team.localeCompare(b.team);
+          return a.group.localeCompare(b.group) || a.rank - b.rank;
+        });
+
+      teamGrid.innerHTML = rows.map(team => `
+        <article class="team-card">
+          <div class="team-header">
+            <div>
+              <div class="team-name"><span>${team.flag}</span><span>${team.team}</span></div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+              <span class="group-pill">Group ${team.group}</span>
+              <span class="rank-pill">Rank ${team.rank}</span>
+            </div>
+          </div>
+          <div class="team-body">
+            <section>
+              <div class="section-title">Last five results</div>
+              <div class="last-five">${team.lastFive.map(result => `<span class="result-pill" contenteditable="true">${formatResult(result)}</span>`).join('')}</div>
+            </section>
+            <section>
+              <div class="section-title">Group games</div>
+              <div class="games">
+                ${team.games.sort((a, b) => a.matchday - b.matchday).map(game => `
+                  <div class="game">
+                    <div class="game-top">
+                      <div class="opponent">v ${game.opponent} ${game.opponentFlag}</div>
+                      <span class="group-pill">MD ${game.matchday}</span>
+                    </div>
+                    <div class="game-meta">
+                      <div>Date<span class="meta-value">${game.date}</span></div>
+                      <div>Time<span class="meta-value">${game.time}</span></div>
+                      <div>Ranks<span class="meta-value">${team.rank} vs ${game.opponentRank}</span></div>
+                      <div>Gap<span class="meta-value ${gapClass(game.gap)}">${game.gap}</span></div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+          </div>
+        </article>
+      `).join('');
+
+      noResults.style.display = rows.length ? 'none' : 'block';
+    }
+
+    [searchInput, groupFilter, sortSelect].forEach(el => el.addEventListener('input', render));
+    render();
+  </script>
+</body>
+</html>

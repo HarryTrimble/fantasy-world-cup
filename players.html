@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Cup Fantasy Players</title>
+  <style>
+    :root {
+      --bg: #08111f;
+      --card: #111c2e;
+      --text: #f6f8fb;
+      --muted: #aab7c8;
+      --accent: #40e0a0;
+      --accent-2: #59a7ff;
+      --border: rgba(255,255,255,0.1);
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(64,224,160,0.22), transparent 34rem),
+        radial-gradient(circle at top right, rgba(89,167,255,0.18), transparent 34rem),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    header, main {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .hero, .controls, .player-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero {
+      padding: 32px;
+    }
+
+    .site-nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      width: fit-content;
+      margin-bottom: 32px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(8,17,31,0.42);
+    }
+
+    .site-nav a {
+      text-decoration: none;
+      padding: 9px 16px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-weight: 850;
+      transition: background 160ms ease, color 160ms ease;
+    }
+
+    .site-nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav a.active {
+      color: #06101d;
+      background: var(--accent);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 800;
+      font-size: 0.8rem;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+    }
+
+    .subtitle {
+      max-width: 820px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .controls {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 22px;
+      position: sticky;
+      top: 12px;
+      z-index: 5;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: rgba(8,17,31,0.72);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+    }
+
+    input::placeholder { color: #77869a; }
+    select option { background: #111c2e; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .player-card { overflow: hidden; }
+
+    .country-header {
+      padding: 22px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+      background: radial-gradient(circle at top left, rgba(64,224,160,0.12), transparent 62%);
+    }
+
+    .country-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.55rem;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-weight: 900;
+      font-size: 0.82rem;
+      border: 1px solid rgba(89,167,255,0.28);
+      background: rgba(89,167,255,0.15);
+      color: #b9d7ff;
+      white-space: nowrap;
+    }
+
+    .tag.good {
+      border-color: rgba(64,224,160,0.28);
+      background: rgba(64,224,160,0.12);
+      color: #a9ffd8;
+    }
+
+    .list { padding: 10px 22px 18px; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .row:last-child { border-bottom: 0; }
+
+    .shirt {
+      width: 34px;
+      height: 34px;
+      color: var(--accent-2);
+    }
+
+    .player-name {
+      font-weight: 950;
+      font-size: 1.05rem;
+    }
+
+    .player-meta {
+      color: var(--muted);
+      margin-top: 4px;
+      font-size: 0.9rem;
+    }
+
+    .why {
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.45;
+      margin-top: 5px;
+    }
+
+    .role {
+      color: var(--text);
+      font-weight: 900;
+      border-left: 1px solid rgba(255,255,255,0.18);
+      padding-left: 16px;
+      white-space: nowrap;
+    }
+
+    .no-results {
+      display: none;
+      color: var(--muted);
+      text-align: center;
+      padding: 40px 12px;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero { flex-direction: column; }
+      
+      .controls { grid-template-columns: 1fr; position: static; }
+    }
+
+    @media (max-width: 560px) {
+      header, main { padding: 18px 12px; }
+      .hero, .controls, .player-card { border-radius: 22px; }
+      .hero { padding: 24px; }
+      h1 { font-size: clamp(2.2rem, 13vw, 3.6rem); }
+      .country-header { flex-direction: column; }
+      .row { grid-template-columns: 34px 1fr; }
+      .role { grid-column: 2; border-left: 0; padding-left: 0; color: var(--accent); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <section class="hero">
+      <nav class="site-nav" aria-label="Site navigation">
+        <a href="index.html">Fixtures</a>
+        <a href="teams.html">Teams</a>
+        <a class="active" href="players.html">Players</a>
+      </nav>
+      <div class="eyebrow">World Cup Fantasy Football</div>
+      <h1>Players to target</h1>
+      <p class="subtitle">One forward, midfielder, defender, goalkeeper and penalty taker per country. Picks are provisional and weighted toward likely starters, attacking output, clean-sheet upside, penalties and set pieces.</p>
+    </section>
+  </header>
+
+  <main>
+    <section class="controls" aria-label="Player filters">
+      <input id="searchInput" type="search" placeholder="Search country or player..." />
+      <select id="groupFilter"><option value="">All groups</option></select>
+      <select id="roleFilter"><option value="">All roles</option><option>Forward</option><option>Midfielder</option><option>Defender</option><option>Goalkeeper</option><option>Penalty taker</option></select>
+      <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option></select>
+    </section>
+
+    <section class="grid" id="playerGrid"></section>
+    <div class="no-results" id="noResults">No players match those filters.</div>
+  </main>
+
+  <script>
+    const englandFlag = '<img style="width:1em;height:1em;vertical-align:-0.1em" alt="England flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg">';
+    const scotlandFlag = '<img style="width:1em;height:1em;vertical-align:-0.1em" alt="Scotland flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg">';
+
+    const teams = [
+      { group:'A', country:'Mexico', flag:'🇲🇽', picks:{ forward:['Santiago Giménez','starter/goal threat'], midfielder:['Luis Chávez','set-piece profile'], defender:['Edson Álvarez','defensive floor'], goalkeeper:['Guillermo Ochoa','save volume'], penalty:['Santiago Giménez','likely primary penalty option'] } },
+      { group:'A', country:'South Africa', flag:'🇿🇦', picks:{ forward:['Lyle Foster','best forward profile'], midfielder:['Teboho Mokoena','set pieces/long shots'], defender:['Aubrey Modiba','attacking full-back'], goalkeeper:['Ronwen Williams','save + clean-sheet upside'], penalty:['Teboho Mokoena','dead-ball route'] } },
+      { group:'A', country:'South Korea', flag:'🇰🇷', picks:{ forward:['Son Heung-min','elite scorer + pens'], midfielder:['Lee Kang-in','set pieces/creativity'], defender:['Kim Min-jae','nailed defender'], goalkeeper:['Jo Hyeon-woo','starting keeper profile'], penalty:['Son Heung-min','penalty taker'] } },
+      { group:'A', country:'Czechia', flag:'🇨🇿', picks:{ forward:['Patrik Schick','main goal threat'], midfielder:['Tomáš Souček','box threat'], defender:['Vladimír Coufal','assist route'], goalkeeper:['Jindřich Staněk','keeper option'], penalty:['Patrik Schick','penalty profile'] } },
+      { group:'B', country:'Canada', flag:'🇨🇦', picks:{ forward:['Jonathan David','goals + pens'], midfielder:['Alphonso Davies','attacking talisman'], defender:['Alistair Johnston','defensive starter'], goalkeeper:['Dayne St. Clair','keeper option'], penalty:['Jonathan David','penalty taker'] } },
+      { group:'B', country:'Bosnia', flag:'🇧🇦', picks:{ forward:['Edin Džeko','main scorer'], midfielder:['Miralem Pjanić','set pieces'], defender:['Sead Kolašinac','starter/attacking left side'], goalkeeper:['Nikola Vasilj','keeper option'], penalty:['Edin Džeko','penalty profile'] } },
+      { group:'B', country:'Qatar', flag:'🇶🇦', picks:{ forward:['Akram Afif','goals + assists + pens'], midfielder:['Hassan Al-Haydos','set pieces'], defender:['Pedro Miguel','attacking full-back'], goalkeeper:['Meshaal Barsham','keeper option'], penalty:['Akram Afif','penalty taker'] } },
+      { group:'B', country:'Switzerland', flag:'🇨🇭', picks:{ forward:['Breel Embolo','main striker'], midfielder:['Granit Xhaka','set pieces/nailed'], defender:['Manuel Akanji','clean-sheet route'], goalkeeper:['Yann Sommer','starting keeper'], penalty:['Granit Xhaka','penalty/set-piece option'] } },
+      { group:'C', country:'Brazil', flag:'🇧🇷', picks:{ forward:['Rodrygo','goals/assists'], midfielder:['Bruno Guimarães','minutes + assists'], defender:['Marquinhos','clean-sheet threat'], goalkeeper:['Alisson','elite keeper'], penalty:['Vinícius Júnior','attacking talisman'] } },
+      { group:'C', country:'Morocco', flag:'🇲🇦', picks:{ forward:['Youssef En-Nesyri','main striker'], midfielder:['Hakim Ziyech','set pieces'], defender:['Achraf Hakimi','attacking defender'], goalkeeper:['Yassine Bounou','clean-sheet upside'], penalty:['Hakim Ziyech','penalty/set-piece profile'] } },
+      { group:'C', country:'Haiti', flag:'🇭🇹', picks:{ forward:['Frantzdy Pierrot','main goal route'], midfielder:['Duckens Nazon','goals + pens'], defender:['Ricardo Adé','starter profile'], goalkeeper:['Johny Placide','save volume'], penalty:['Duckens Nazon','penalty profile'] } },
+      { group:'C', country:'Scotland', flag:scotlandFlag, picks:{ forward:['Che Adams','likely forward'], midfielder:['Scott McTominay','goals from midfield'], defender:['Andy Robertson','assist/set-piece route'], goalkeeper:['Angus Gunn','keeper option'], penalty:['John McGinn','senior set-piece route'] } },
+      { group:'D', country:'USA', flag:'🇺🇸', picks:{ forward:['Christian Pulisic','goals + pens + set pieces'], midfielder:['Weston McKennie','box threat'], defender:['Antonee Robinson','assist upside'], goalkeeper:['Matt Turner','save volume'], penalty:['Christian Pulisic','penalty taker'] } },
+      { group:'D', country:'Paraguay', flag:'🇵🇾', picks:{ forward:['Miguel Almirón','main attacking route'], midfielder:['Diego Gómez','goals from midfield'], defender:['Gustavo Gómez','set-piece threat'], goalkeeper:['Gatito Fernández','keeper option'], penalty:['Miguel Almirón','senior attacker'] } },
+      { group:'D', country:'Australia', flag:'🇦🇺', picks:{ forward:['Mitchell Duke','goal threat'], midfielder:['Jackson Irvine','minutes + box threat'], defender:['Harry Souttar','set-piece goal threat'], goalkeeper:['Mat Ryan','starting keeper'], penalty:['Craig Goodwin','set-piece/penalty profile'] } },
+      { group:'D', country:'Türkiye', flag:'🇹🇷', picks:{ forward:['Kerem Aktürkoğlu','goals/assists'], midfielder:['Hakan Çalhanoğlu','pens + set pieces'], defender:['Ferdi Kadıoğlu','attacking full-back'], goalkeeper:['Uğurcan Çakır','keeper option'], penalty:['Hakan Çalhanoğlu','penalty taker'] } },
+      { group:'E', country:'Germany', flag:'🇩🇪', picks:{ forward:['Kai Havertz','forward + pens'], midfielder:['Florian Wirtz','creator/assists'], defender:['Antonio Rüdiger','clean-sheet route'], goalkeeper:['Manuel Neuer','keeper option'], penalty:['Kai Havertz','penalty profile'] } },
+      { group:'E', country:'Curaçao', flag:'🇨🇼', picks:{ forward:['Rangelo Janga','main striker'], midfielder:['Leandro Bacuna','set pieces/experience'], defender:['Cuco Martina','defensive starter'], goalkeeper:['Eloy Room','save volume'], penalty:['Leandro Bacuna','senior set-piece option'] } },
+      { group:'E', country:'Ivory Coast', flag:'🇨🇮', picks:{ forward:['Sébastien Haller','main striker'], midfielder:['Franck Kessié','pens + box threat'], defender:['Evan Ndicka','clean-sheet route'], goalkeeper:['Yahia Fofana','keeper option'], penalty:['Franck Kessié','penalty taker'] } },
+      { group:'E', country:'Ecuador', flag:'🇪🇨', picks:{ forward:['Enner Valencia','goals + pens'], midfielder:['Kendry Páez','creator/set pieces'], defender:['Piero Hincapié','clean-sheet route'], goalkeeper:['Hernán Galíndez','keeper option'], penalty:['Enner Valencia','penalty taker'] } },
+      { group:'F', country:'Netherlands', flag:'🇳🇱', picks:{ forward:['Cody Gakpo','goals + pens'], midfielder:['Frenkie de Jong','minutes/creativity'], defender:['Virgil van Dijk','clean sheets + set pieces'], goalkeeper:['Bart Verbruggen','keeper option'], penalty:['Cody Gakpo','penalty profile'] } },
+      { group:'F', country:'Japan', flag:'🇯🇵', picks:{ forward:['Kaoru Mitoma','attacking upside'], midfielder:['Takefusa Kubo','set pieces/creator'], defender:['Takehiro Tomiyasu','clean-sheet route'], goalkeeper:['Zion Suzuki','keeper option'], penalty:['Takefusa Kubo','set-piece profile'] } },
+      { group:'F', country:'Sweden', flag:'🇸🇪', picks:{ forward:['Alexander Isak','goals + pens'], midfielder:['Dejan Kulusevski','creator'], defender:['Victor Lindelöf','clean-sheet route'], goalkeeper:['Robin Olsen','keeper option'], penalty:['Alexander Isak','penalty taker'] } },
+      { group:'F', country:'Tunisia', flag:'🇹🇳', picks:{ forward:['Seifeddine Jaziri','goal route'], midfielder:['Ellyes Skhiri','minutes + box threat'], defender:['Ali Abdi','attacking defender'], goalkeeper:['Bechir Ben Said','keeper option'], penalty:['Wahbi Khazri','set-piece/penalty profile if selected'] } },
+      { group:'G', country:'Belgium', flag:'🇧🇪', picks:{ forward:['Romelu Lukaku','goals + pens'], midfielder:['Kevin De Bruyne','assists + set pieces'], defender:['Arthur Theate','starter route'], goalkeeper:['Thibaut Courtois','elite keeper'], penalty:['Romelu Lukaku','penalty taker'] } },
+      { group:'G', country:'Egypt', flag:'🇪🇬', picks:{ forward:['Mohamed Salah','goals + pens'], midfielder:['Trézéguet','attacking midfielder'], defender:['Mohamed Abdelmonem','set-piece threat'], goalkeeper:['Mohamed El Shenawy','keeper option'], penalty:['Mohamed Salah','penalty taker'] } },
+      { group:'G', country:'Iran', flag:'🇮🇷', picks:{ forward:['Mehdi Taremi','goals + pens'], midfielder:['Alireza Jahanbakhsh','set pieces'], defender:['Majid Hosseini','defensive route'], goalkeeper:['Alireza Beiranvand','keeper option'], penalty:['Mehdi Taremi','penalty taker'] } },
+      { group:'G', country:'New Zealand', flag:'🇳🇿', picks:{ forward:['Chris Wood','main scorer + pens'], midfielder:['Matthew Garbett','creator'], defender:['Nando Pijnaker','clean-sheet route'], goalkeeper:['Max Crocombe','save volume'], penalty:['Chris Wood','penalty taker'] } },
+      { group:'H', country:'Spain', flag:'🇪🇸', picks:{ forward:['Álvaro Morata','main striker'], midfielder:['Pedri','creator'], defender:['Dani Carvajal','assist/clean-sheet route'], goalkeeper:['Unai Simón','keeper option'], penalty:['Álvaro Morata','penalty profile'] } },
+      { group:'H', country:'Cape Verde', flag:'🇨🇻', picks:{ forward:['Djaniny','attacking route'], midfielder:['Ryan Mendes','goals + pens'], defender:['Logan Costa','set-piece threat'], goalkeeper:['Vozinha','keeper option'], penalty:['Ryan Mendes','penalty profile'] } },
+      { group:'H', country:'Saudi Arabia', flag:'🇸🇦', picks:{ forward:['Salem Al-Dawsari','goals + pens'], midfielder:['Mohamed Kanno','box threat'], defender:['Saud Abdulhamid','attacking full-back'], goalkeeper:['Mohammed Al-Owais','keeper option'], penalty:['Salem Al-Dawsari','penalty taker'] } },
+      { group:'H', country:'Uruguay', flag:'🇺🇾', picks:{ forward:['Darwin Núñez','goal threat'], midfielder:['Federico Valverde','shooting/assists'], defender:['Ronald Araújo','clean-sheet route'], goalkeeper:['Sergio Rochet','keeper option'], penalty:['Darwin Núñez','attacking talisman'] } },
+      { group:'I', country:'France', flag:'🇫🇷', picks:{ forward:['Kylian Mbappé','goals + pens'], midfielder:['Antoine Griezmann','set pieces/assists'], defender:['William Saliba','clean-sheet route'], goalkeeper:['Mike Maignan','elite keeper'], penalty:['Kylian Mbappé','penalty taker'] } },
+      { group:'I', country:'Senegal', flag:'🇸🇳', picks:{ forward:['Nicolas Jackson','forward upside'], midfielder:['Sadio Mané','goals + pens'], defender:['Kalidou Koulibaly','set-piece threat'], goalkeeper:['Édouard Mendy','keeper option'], penalty:['Sadio Mané','penalty taker'] } },
+      { group:'I', country:'Iraq', flag:'🇮🇶', picks:{ forward:['Aymen Hussein','main scorer'], midfielder:['Ibrahim Bayesh','attacking route'], defender:['Saad Natiq','defensive starter'], goalkeeper:['Jalal Hassan','save volume'], penalty:['Aymen Hussein','penalty profile'] } },
+      { group:'I', country:'Norway', flag:'🇳🇴', picks:{ forward:['Erling Haaland','elite scorer + pens'], midfielder:['Martin Ødegaard','set pieces/assists'], defender:['Julian Ryerson','starter route'], goalkeeper:['Ørjan Nyland','keeper option'], penalty:['Erling Haaland','penalty taker'] } },
+      { group:'J', country:'Argentina', flag:'🇦🇷', picks:{ forward:['Julián Álvarez','goal threat'], midfielder:['Lionel Messi','pens + set pieces'], defender:['Cristian Romero','clean-sheet route'], goalkeeper:['Emiliano Martínez','elite keeper'], penalty:['Lionel Messi','penalty taker'] } },
+      { group:'J', country:'Algeria', flag:'🇩🇿', picks:{ forward:['Baghdad Bounedjah','goal route'], midfielder:['Riyad Mahrez','pens + set pieces'], defender:['Ramy Bensebaini','attacking defender'], goalkeeper:['Anthony Mandrea','keeper option'], penalty:['Riyad Mahrez','penalty taker'] } },
+      { group:'J', country:'Austria', flag:'🇦🇹', picks:{ forward:['Marko Arnautović','goal threat'], midfielder:['Marcel Sabitzer','set pieces/assists'], defender:['David Alaba','set pieces if fit'], goalkeeper:['Patrick Pentz','keeper option'], penalty:['Marko Arnautović','penalty profile'] } },
+      { group:'J', country:'Jordan', flag:'🇯🇴', picks:{ forward:['Yazan Al-Naimat','main scorer'], midfielder:['Mousa Al-Taamari','creator + goal threat'], defender:['Abdallah Nasib','defensive starter'], goalkeeper:['Yazeed Abulaila','keeper option'], penalty:['Mousa Al-Taamari','senior attacker'] } },
+      { group:'K', country:'Portugal', flag:'🇵🇹', picks:{ forward:['Cristiano Ronaldo','goals + pens'], midfielder:['Bruno Fernandes','set pieces/assists'], defender:['Rúben Dias','clean-sheet route'], goalkeeper:['Diogo Costa','keeper option'], penalty:['Cristiano Ronaldo','penalty taker'] } },
+      { group:'K', country:'DR Congo', flag:'🇨🇩', picks:{ forward:['Cédric Bakambu','goal route'], midfielder:['Yoane Wissa','attacking upside'], defender:['Chancel Mbemba','set-piece threat'], goalkeeper:['Lionel Mpasi','keeper option'], penalty:['Cédric Bakambu','penalty profile'] } },
+      { group:'K', country:'Uzbekistan', flag:'🇺🇿', picks:{ forward:['Eldor Shomurodov','main scorer'], midfielder:['Jaloliddin Masharipov','set pieces'], defender:['Abdukodir Khusanov','clean-sheet route'], goalkeeper:['Utkir Yusupov','keeper option'], penalty:['Eldor Shomurodov','penalty profile'] } },
+      { group:'K', country:'Colombia', flag:'🇨🇴', picks:{ forward:['Luis Díaz','goal threat'], midfielder:['James Rodríguez','set pieces/assists'], defender:['Daniel Muñoz','attacking defender'], goalkeeper:['Camilo Vargas','keeper option'], penalty:['James Rodríguez','penalty taker'] } },
+      { group:'L', country:'England', flag:englandFlag, picks:{ forward:['Harry Kane','goals + pens'], midfielder:['Jude Bellingham','goal threat'], defender:['John Stones','clean-sheet route'], goalkeeper:['Jordan Pickford','keeper option'], penalty:['Harry Kane','penalty taker'] } },
+      { group:'L', country:'Croatia', flag:'🇭🇷', picks:{ forward:['Andrej Kramarić','goals + pens'], midfielder:['Luka Modrić','set pieces'], defender:['Joško Gvardiol','attacking defender'], goalkeeper:['Dominik Livaković','keeper option'], penalty:['Andrej Kramarić','penalty profile'] } },
+      { group:'L', country:'Ghana', flag:'🇬🇭', picks:{ forward:['Iñaki Williams','forward upside'], midfielder:['Mohammed Kudus','goals/assists'], defender:['Mohammed Salisu','clean-sheet route'], goalkeeper:['Lawrence Ati-Zigi','keeper option'], penalty:['Jordan Ayew','penalty profile'] } },
+      { group:'L', country:'Panama', flag:'🇵🇦', picks:{ forward:['José Fajardo','main goal route'], midfielder:['Adalberto Carrasquilla','set pieces/creativity'], defender:['Michael Murillo','attacking defender'], goalkeeper:['Orlando Mosquera','keeper option'], penalty:['Adalberto Carrasquilla','penalty/set-piece profile'] } }
+    ];
+
+    const fifaRanks = {
+      France: 1, Spain: 2, Argentina: 3, England: 4, Portugal: 5, Brazil: 6, Netherlands: 7, Morocco: 8, Belgium: 9, Germany: 10, Croatia: 11, Colombia: 12, Senegal: 13, Mexico: 15, USA: 16, Uruguay: 17, Japan: 18, Switzerland: 19, Iran: 20, Türkiye: 22, Ecuador: 23, Austria: 24, 'South Korea': 25, Australia: 27, Algeria: 28, Egypt: 29, Canada: 30, Norway: 31, Panama: 33, 'Ivory Coast': 34, Sweden: 37, Czechia: 38, Paraguay: 41, Scotland: 43, Tunisia: 44, 'DR Congo': 46, Uzbekistan: 49, Qatar: 56, Iraq: 58, 'South Africa': 60, 'Saudi Arabia': 61, Jordan: 64, 'Cape Verde': 67, Bosnia: 71, Ghana: 72, Curaçao: 81, Haiti: 83, 'New Zealand': 85
+    };
+
+    teams.forEach(team => { team.rank = fifaRanks[team.country] || 999; });
+
+    const playerGrid = document.getElementById('playerGrid');
+    const searchInput = document.getElementById('searchInput');
+    const groupFilter = document.getElementById('groupFilter');
+    const roleFilter = document.getElementById('roleFilter');
+    const sortSelect = document.getElementById('sortSelect');
+    const noResults = document.getElementById('noResults');
+
+    [...new Set(teams.map(t => t.group))].sort().forEach(group => groupFilter.add(new Option(`Group ${group}`, group)));
+
+    function countryKit(country) {
+      const kits = {
+        Argentina: ['#75aadb', '#ffffff'], Australia: ['#f6c542', '#006b3f'], Austria: ['#ef4444', '#ffffff'], Belgium: ['#ef4444', '#111827'], Bosnia: ['#2563eb', '#facc15'], Brazil: ['#facc15', '#16a34a'], Canada: ['#ef4444', '#ffffff'], Colombia: ['#facc15', '#2563eb'], Croatia: ['#ffffff', '#ef4444'], Czechia: ['#ef4444', '#2563eb'], Ecuador: ['#facc15', '#2563eb'], Egypt: ['#ef4444', '#ffffff'], England: ['#ffffff', '#2563eb'], France: ['#2563eb', '#ffffff'], Germany: ['#ffffff', '#111827'], Ghana: ['#ffffff', '#ef4444'], Japan: ['#2563eb', '#ffffff'], Mexico: ['#16a34a', '#ef4444'], Morocco: ['#ef4444', '#16a34a'], Netherlands: ['#f97316', '#ffffff'], Norway: ['#ef4444', '#2563eb'], Portugal: ['#ef4444', '#16a34a'], Qatar: ['#7f1d1d', '#ffffff'], Scotland: ['#2563eb', '#ffffff'], Senegal: ['#ffffff', '#16a34a'], Spain: ['#ef4444', '#facc15'], Switzerland: ['#ef4444', '#ffffff'], Tunisia: ['#ffffff', '#ef4444'], Türkiye: ['#ef4444', '#ffffff'], Uruguay: ['#75aadb', '#111827'], USA: ['#ffffff', '#ef4444']
+      };
+      return kits[country] || ['#59a7ff', '#ffffff'];
+    }
+
+    function shirtNumber(playerName) {
+      const numbers = {
+        'Lionel Messi': 10, 'Kylian Mbappé': 10, 'Vinícius Júnior': 7, 'Harry Kane': 9, 'Cristiano Ronaldo': 7,
+        'Bruno Fernandes': 8, 'Álvaro Morata': 7, 'Jamal Musiala': 10, 'Kai Havertz': 7, 'Kevin De Bruyne': 7,
+        'Romelu Lukaku': 10, 'Cody Gakpo': 11, 'Darwin Núñez': 9, 'Luis Díaz': 7, 'Luka Modrić': 10,
+        'Christian Pulisic': 10, 'Santiago Giménez': 11, 'Achraf Hakimi': 2, 'Hakim Ziyech': 7, 'Youssef En-Nesyri': 19,
+        'Granit Xhaka': 10, 'Kaoru Mitoma': 7, 'Takefusa Kubo': 20, 'Sadio Mané': 10, 'Nicolas Jackson': 7,
+        'Mohamed Salah': 10, 'Erling Haaland': 9, 'Martin Ødegaard': 10, 'Riyad Mahrez': 7, 'Son Heung-min': 7,
+        'Lee Kang-in': 18, 'Patrik Schick': 10, 'Jonathan David': 20, 'Akram Afif': 11, 'Enner Valencia': 13,
+        'Alexander Isak': 9, 'Hakan Çalhanoğlu': 10, 'Mehdi Taremi': 9, 'Chris Wood': 9, 'Salem Al-Dawsari': 10,
+        'Federico Valverde': 15, 'James Rodríguez': 10, 'Jude Bellingham': 10, 'Andrej Kramarić': 9, 'Mohammed Kudus': 20
+      };
+      return numbers[playerName] || 10;
+    }
+
+    function shirtSvg(country, number) {
+      const [main, trim] = countryKit(country);
+      const gradientId = `kitGrad-${country.replace(/[^a-zA-Z0-9]/g, '')}-${number}`;
+      return `<svg class="shirt" viewBox="0 0 512 512" aria-hidden="true">
+        <defs>
+          <linearGradient id="${gradientId}" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stop-color="${main}"/>
+            <stop offset="55%" stop-color="${trim}"/>
+            <stop offset="100%" stop-color="${main}"/>
+          </linearGradient>
+        </defs>
+        <path d="M160 0c18 16 50 24 96 24s78-8 96-24l88 52 48 52v130h-82v216H106V234H24V104l48-52 88-52z" fill="url(#${gradientId})"/>
+        <path d="M160 0c18 16 50 24 96 24s78-8 96-24v0c-9 52-48 88-96 104-48-16-87-52-96-104z" fill="rgba(255,255,255,0.28)"/>
+        <path d="M106 450h300v62H106v-62z" fill="rgba(255,255,255,0.22)"/>
+        <text x="256" y="350" text-anchor="middle" font-size="190" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="rgba(8,17,31,0.72)">${number || 10}</text>
+      </svg>`;
+    }
+
+    function render() {
+      const query = searchInput.value.toLowerCase();
+      const group = groupFilter.value;
+      const role = roleFilter.value;
+      const sort = sortSelect.value;
+
+      let rows = teams.filter(team => {
+        const names = Object.values(team.picks).flat().join(' ').toLowerCase();
+        return (!group || team.group === group) &&
+          (!query || team.country.toLowerCase().includes(query) || names.includes(query));
+      });
+
+      rows.sort((a, b) => {
+        if (sort === 'rank') return a.rank - b.rank;
+        if (sort === 'country') return a.country.localeCompare(b.country);
+        return a.group.localeCompare(b.group) || a.rank - b.rank;
+      });
+
+      playerGrid.innerHTML = rows.map(team => {
+        const pickRows = [
+          ['Forward', team.picks.forward],
+          ['Midfielder', team.picks.midfielder],
+          ['Defender', team.picks.defender],
+          ['Goalkeeper', team.picks.goalkeeper],
+          ['Penalty taker', team.picks.penalty]
+        ].filter(([label]) => !role || label === role);
+
+        return `<article class="player-card">
+          <div class="country-header">
+            <div class="country-name"><span>${team.flag}</span><span>${team.country}</span></div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+              <span class="tag good">Group ${team.group}</span>
+              <span class="tag">Rank ${team.rank}</span>
+            </div>
+          </div>
+          <div class="list">
+            ${pickRows.map(([label, pick]) => `<div class="row">
+              <div>${shirtSvg(team.country, shirtNumber(pick[0]))}</div>
+              <div>
+                <div class="player-name">${pick[0]}</div>
+                <div class="player-meta">${team.country} · ${label}</div>
+                <div class="why">${pick[1]}</div>
+              </div>
+              <div class="role">${label}</div>
+            </div>`).join('')}
+          </div>
+        </article>`;
+      }).join('');
+
+      noResults.style.display = rows.length ? 'none' : 'block';
+    }
+
+    [searchInput, groupFilter, roleFilter, sortSelect].forEach(el => el.addEventListener('input', render));
+    render();
+  </script>
+</body>
+</html>

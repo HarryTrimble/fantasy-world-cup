@@ -7,8 +7,6 @@
   <style>
     :root {
       --bg: #08111f;
-      --card: #111c2e;
-      --card-2: #17253b;
       --text: #f6f8fb;
       --muted: #aab7c8;
       --accent: #40e0a0;
@@ -30,17 +28,16 @@
       min-height: 100vh;
     }
 
-    header {
-      padding: 48px 24px 28px;
+    header, main {
       max-width: 1320px;
       margin: 0 auto;
+      padding: 32px 24px;
     }
 
     .hero {
       display: grid;
       grid-template-columns: 1.5fr 1fr;
       gap: 24px;
-      align-items: stretch;
     }
 
     .hero-card,
@@ -56,20 +53,51 @@
 
     .hero-card { padding: 32px; }
 
+    .site-nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      padding: 6px;
+      width: fit-content;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(8,17,31,0.42);
+    }
+
+    .site-nav a {
+      text-decoration: none;
+      padding: 9px 16px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-weight: 850;
+      transition: background 160ms ease, color 160ms ease;
+    }
+
+    .site-nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav a.active {
+      color: #06101d;
+      background: var(--accent);
+    }
+
     .eyebrow {
       color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 0.16em;
+      letter-spacing: .16em;
       font-weight: 800;
-      font-size: 0.8rem;
+      font-size: .8rem;
       margin-bottom: 14px;
     }
 
     h1 {
       margin: 0;
       font-size: clamp(2.4rem, 6vw, 5.6rem);
-      line-height: 0.95;
-      letter-spacing: -0.06em;
+      line-height: .95;
+      letter-spacing: -.06em;
     }
 
     .subtitle {
@@ -97,16 +125,10 @@
     .stat-value {
       font-size: 2.4rem;
       font-weight: 900;
-      letter-spacing: -0.05em;
+      letter-spacing: -.05em;
     }
 
-    .stat-label { color: var(--muted); font-size: 0.9rem; }
-
-    main {
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 0 24px 56px;
-    }
+    .stat-label { color: var(--muted); font-size: .9rem; }
 
     .controls {
       padding: 18px;
@@ -122,7 +144,7 @@
     input, select {
       width: 100%;
       border: 1px solid var(--border);
-      background: rgba(8,17,31,0.72);
+      background: rgba(8,17,31,.72);
       color: var(--text);
       border-radius: 16px;
       padding: 13px 14px;
@@ -143,39 +165,41 @@
       gap: 16px;
       align-items: center;
       border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,0.035);
+      background: rgba(255,255,255,.035);
     }
 
     .table-title { font-weight: 800; }
-    .count { color: var(--muted); font-size: 0.95rem; }
+    .count { color: var(--muted); font-size: .95rem; }
     .table-wrap { overflow-x: auto; }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1180px;
+      min-width: 1080px;
     }
 
     th, td {
-      padding: 14px 14px;
+      padding: 14px;
       text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,0.075);
+      border-bottom: 1px solid rgba(255,255,255,.075);
       white-space: nowrap;
-      font-size: 0.94rem;
+      font-size: .94rem;
     }
 
     th {
       color: var(--muted);
-      font-size: 0.78rem;
+      font-size: .78rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      background: rgba(255,255,255,0.035);
-      position: sticky;
-      top: 0;
-      z-index: 1;
+      letter-spacing: .08em;
+      background: rgba(255,255,255,.035);
     }
 
-    tr:hover td { background: rgba(64,224,160,0.06); }
+    tr:hover td { background: rgba(64,224,160,.06); }
+
+    .fixture { font-weight: 800; color: #fff; }
+    .team { display: inline-flex; gap: 8px; align-items: center; }
+    .flag-img { width: 1em; height: 1em; vertical-align: -.1em; display: inline-block; }
+    .versus { color: var(--muted); font-weight: 700; padding: 0 4px; }
 
     .pill {
       display: inline-flex;
@@ -185,21 +209,17 @@
       border-radius: 999px;
       padding: 4px 10px;
       font-weight: 900;
-      background: rgba(89,167,255,0.15);
+      background: rgba(89,167,255,.15);
       color: #b9d7ff;
-      border: 1px solid rgba(89,167,255,0.28);
+      border: 1px solid rgba(89,167,255,.28);
     }
 
     .matchday {
-      background: rgba(64,224,160,0.12);
+      background: rgba(64,224,160,.12);
       color: #a9ffd8;
-      border-color: rgba(64,224,160,0.28);
+      border-color: rgba(64,224,160,.28);
     }
 
-    .fixture { font-weight: 800; color: #fff; }
-    .team { display: inline-flex; gap: 8px; align-items: center; }
-    .flag-img { width: 1em; height: 1em; vertical-align: -0.1em; display: inline-block; }
-    .versus { color: var(--muted); font-weight: 700; padding: 0 4px; }
     .rank-gap { font-weight: 900; }
     .rank-gap.low { color: #ff9f43 !important; }
     .rank-gap.midlow { color: #ffd166 !important; }
@@ -207,146 +227,8 @@
     .rank-gap.high { color: #59a7ff !important; }
     .temp-hot { color: #ffcc8a; font-weight: 800; }
     .temp-cool { color: #9bd7ff; font-weight: 800; }
-
-    .recommend-btn {
-      border: 1px solid rgba(64,224,160,0.32);
-      background: rgba(64,224,160,0.12);
-      color: #a9ffd8;
-      border-radius: 999px;
-      padding: 7px 12px;
-      font: inherit;
-      font-size: 0.84rem;
-      font-weight: 800;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .recommend-btn:hover {
-      background: rgba(64,224,160,0.2);
-    }
-
-    .recommend-row {
-      display: none;
-    }
-
-    .recommend-row.open {
-      display: table-row;
-    }
-
-    .fixture-row.expanded td {
-      border-bottom-color: transparent;
-      background: rgba(64,224,160,0.055);
-    }
-
-    .recommend-row.open td {
-      padding: 0 14px 16px;
-      background: rgba(64,224,160,0.055);
-      border-bottom: 1px solid rgba(255,255,255,0.075);
-    }
-
-    .recommend-panel {
-      padding: 20px;
-      background: rgba(8,17,31,0.5);
-      border: 1px solid rgba(64,224,160,0.18);
-      border-top: 0;
-      border-radius: 0 0 22px 22px;
-      white-space: normal;
-    }
-
-    .recommend-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      font-size: 1.35rem;
-      font-weight: 950;
-      letter-spacing: -0.03em;
-      margin-bottom: 16px;
-    }
-
-    .recommend-title span:last-child {
-      color: var(--muted);
-      font-size: 1.4rem;
-      font-weight: 400;
-    }
-
-    .recommend-list {
-      display: grid;
-      gap: 0;
-    }
-
-    .recommend-list-head,
-    .recommend-item {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 20px;
-      align-items: center;
-    }
-
-    .recommend-list-head {
-      color: var(--muted);
-      font-weight: 850;
-      padding: 0 0 12px;
-    }
-
-    .recommend-item {
-      padding: 14px 0;
-      border-top: 1px solid rgba(255,255,255,0.16);
-    }
-
-    .recommend-player-main {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      min-width: 0;
-    }
-
-    .recommend-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(64,224,160,0.12);
-      color: var(--accent);
-      font-weight: 950;
-      flex: 0 0 auto;
-    }
-
-    .recommend-player-name {
-      font-weight: 950;
-      font-size: 1.05rem;
-      color: var(--text);
-    }
-
-    .recommend-player-meta {
-      color: var(--muted);
-      margin-top: 3px;
-      font-size: 0.9rem;
-    }
-
-    .recommend-role {
-      color: var(--text);
-      font-weight: 850;
-      border-left: 1px solid rgba(255,255,255,0.2);
-      padding-left: 20px;
-      white-space: nowrap;
-    }
-
-    .no-results {
-      display: none;
-      padding: 36px 20px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    footer {
-      color: var(--muted);
-      text-align: center;
-      padding: 0 24px 42px;
-      font-size: 0.9rem;
-    }
+    .no-results { display: none; padding: 36px 20px; text-align: center; color: var(--muted); }
+    footer { color: var(--muted); text-align: center; padding: 0 24px 42px; font-size: .9rem; }
 
     @media (max-width: 920px) {
       .hero { grid-template-columns: 1fr; }
@@ -355,264 +237,34 @@
     }
 
     @media (max-width: 560px) {
-      header {
-        padding: 20px 14px 18px;
-      }
-
-      main {
-        padding: 0 12px 40px;
-      }
-
-      .hero {
-        gap: 14px;
-      }
-
-      .hero-card {
-        border-radius: 28px;
-        padding: 26px;
-      }
-
-      h1 {
-        font-size: clamp(2.2rem, 13vw, 3.7rem);
-      }
-
-      .subtitle {
-        font-size: 0.96rem;
-      }
-
-      .stat-grid {
-        display: none;
-      }
-
-      .controls {
-        grid-template-columns: 1fr;
-        position: static;
-        gap: 10px;
-        padding: 12px;
-        border-radius: 22px;
-      }
-
-      input,
-      select {
-        border-radius: 999px;
-        padding: 13px 16px;
-      }
-
-      .table-card {
-        overflow: visible;
-        background: transparent;
-        border: 0;
-        box-shadow: none;
-        backdrop-filter: none;
-      }
-
-      .table-topbar {
-        border: 1px solid var(--border);
-        border-radius: 22px;
-        margin-bottom: 14px;
-        background: rgba(255,255,255,0.06);
-      }
-
-      .table-wrap {
-        overflow-x: visible;
-      }
-
-      table {
-        min-width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 20px;
-      }
-
-      thead {
-        display: none;
-      }
-
-      tbody tr {
-        display: grid;
-        margin-bottom: 20px;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0;
-        background:
-          radial-gradient(circle at top left, rgba(64,224,160,0.18), transparent 48%),
-          linear-gradient(135deg, rgba(23,37,59,0.98), rgba(33,43,86,0.96));
-        border: 1px solid rgba(255,255,255,0.13);
-        border-radius: 28px;
-        box-shadow: 0 18px 42px rgba(0,0,0,0.34);
-        overflow: hidden;
-        padding: 18px;
-      }
-
-      tbody tr:hover td {
-        background: transparent;
-      }
-
-      tbody td {
-        display: block;
-        border: 0;
-        padding: 8px 6px;
-        white-space: normal;
-        text-align: center;
-        font-size: 0.94rem;
-      }
-
-      tbody td::before {
-        content: attr(data-label);
-        display: block;
-        color: var(--muted);
-        font-size: 0.72rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        margin-bottom: 4px;
-      }
-
-      tbody td.fixture {
-        grid-column: 1 / -1;
-        padding: 4px 4px 18px;
-        margin-bottom: 12px;
-        border-bottom: 2px solid rgba(255,255,255,0.55);
-        font-size: 1.38rem;
-        line-height: 1.25;
-        text-align: left;
-      }
-
-      tbody td.fixture::before {
-        color: var(--accent);
-        margin-bottom: 8px;
-      }
-
-      .team {
-        font-weight: 950;
-      }
-
-      .versus {
-        display: inline-flex;
-        margin: 0 8px;
-        color: var(--accent);
-      }
-
-      .pill {
-        min-width: auto;
-        padding: 5px 10px;
-      }
-
-      .rank-gap,
-      td[data-label="Date"],
-      td[data-label="Time"],
-      td[data-label="Stage"],
-      td[data-label="Match"] {
-        font-size: 1.45rem;
-        font-weight: 950;
-        letter-spacing: -0.04em;
-      }
-
-      td[data-label="Ranks"],
-      td[data-label="Group"],
-      td[data-label="MD"],
-      td[data-label="City"],
-      td[data-label="Temp"] {
-        font-weight: 850;
-      }
-
-      td[data-label="Players"] {
-        grid-column: 1 / -1;
-        padding: 16px 0 0;
-        margin-bottom: 0;
-      }
-
-      td[data-label="Players"]::before {
-        content: none;
-      }
-
-      .recommend-btn {
-        width: 100%;
-        border-radius: 999px;
-        padding: 14px 16px;
-        background: rgba(8,17,31,0.34);
-        border-color: rgba(255,255,255,0.12);
-        color: var(--text);
-        font-size: 1rem;
-      }
-
-      .recommend-row {
-        display: none;
-        margin-top: -20px;
-        margin-bottom: 20px;
-        border-top: 0;
-        grid-template-columns: 1fr;
-        background: linear-gradient(135deg, rgba(23,37,59,0.98), rgba(33,43,86,0.96));
-        border-radius: 0 0 28px 28px;
-        box-shadow: 0 18px 42px rgba(0,0,0,0.34);
-      }
-
-      .recommend-row.open {
-        display: block;
-      }
-
-      tbody tr.fixture-row.expanded {
-        border-radius: 28px 28px 0 0;
-        margin-bottom: 0;
-        border-bottom-color: transparent;
-      }
-
-      .recommend-row td {
-        display: block;
-        padding: 0;
-        text-align: left;
-      }
-
-      .recommend-row td::before {
-        content: none;
-      }
-
-      .recommend-panel {
-        margin: 0;
-        border-left: 0;
-        border-top: 1px solid rgba(255,255,255,0.18);
-        border-radius: 0 0 28px 28px;
-        padding: 18px;
-        background: rgba(8,17,31,0.28);
-      }
-
-      .recommend-title {
-        font-size: 1.35rem;
-        margin-bottom: 14px;
-      }
-
-      .recommend-list-head,
-      .recommend-item {
-        grid-template-columns: 1fr auto;
-      }
-
-      .recommend-item {
-        padding: 14px 0;
-      }
-
-      .recommend-role {
-        padding-left: 14px;
-      }
-    }
-  
-
-    /* Desktop: visually connect player recommendations to their fixture row */
-    @media (min-width: 561px) {
-      .fixture-row.expanded td {
-        background: rgba(64,224,160,0.055);
-        border-bottom-color: transparent;
-      }
-
-      .recommend-row.open td {
-        padding: 0 14px 16px;
-        background: rgba(64,224,160,0.055);
-        border-bottom: 1px solid rgba(255,255,255,0.075);
-      }
-
-      .recommend-row.open .recommend-panel {
-        background: rgba(8,17,31,0.5);
-        border: 1px solid rgba(64,224,160,0.18);
-        border-top: 0;
-        border-radius: 0 0 22px 22px;
-      }
+      header, main { padding: 20px 12px; }
+      .hero-card { border-radius: 28px; padding: 26px; }
+      h1 { font-size: clamp(2.2rem, 13vw, 3.7rem); }
+      .subtitle { font-size: .96rem; }
+      .stat-grid { display: none; }
+      .controls { grid-template-columns: 1fr; position: static; gap: 10px; padding: 12px; border-radius: 22px; }
+      input, select { border-radius: 999px; padding: 13px 16px; }
+      .table-card { overflow: visible; background: transparent; border: 0; box-shadow: none; backdrop-filter: none; }
+      .table-topbar { border: 1px solid var(--border); border-radius: 22px; margin-bottom: 14px; background: rgba(255,255,255,.06); }
+      .table-wrap { overflow-x: visible; }
+      table { min-width: 100%; border-collapse: separate; border-spacing: 0 20px; }
+      thead { display: none; }
+      tbody tr { display: grid; margin-bottom: 20px; grid-template-columns: repeat(3, 1fr); background: radial-gradient(circle at top left, rgba(64,224,160,.18), transparent 48%), linear-gradient(135deg, rgba(23,37,59,.98), rgba(33,43,86,.96)); border: 1px solid rgba(255,255,255,.13); border-radius: 28px; box-shadow: 0 18px 42px rgba(0,0,0,.34); overflow: hidden; padding: 18px; }
+      tbody td { display: block; border: 0; padding: 8px 6px; white-space: normal; text-align: center; font-size: .94rem; }
+      tbody td::before { content: attr(data-label); display: block; color: var(--muted); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+      tbody td.fixture { grid-column: 1 / -1; padding: 4px 4px 18px; margin-bottom: 12px; border-bottom: 2px solid rgba(255,255,255,.55); font-size: 1.38rem; line-height: 1.25; text-align: left; }
+      tbody td.fixture::before { color: var(--accent); margin-bottom: 8px; }
+      .rank-gap, td[data-label="Date"], td[data-label="Time"], td[data-label="Stage"], td[data-label="Match"] { font-size: 1.45rem; font-weight: 950; letter-spacing: -.04em; }
+      td[data-label="Players"] { grid-column: 1 / -1; padding: 16px 0 0; }
+      td[data-label="Players"]::before { content: none; }
+      .recommend-btn { width: 100%; padding: 14px 16px; background: rgba(8,17,31,.34); border-color: rgba(255,255,255,.12); color: var(--text); font-size: 1rem; }
+      .recommend-row { display: none; margin-top: -20px; margin-bottom: 20px; grid-template-columns: 1fr; background: linear-gradient(135deg, rgba(23,37,59,.98), rgba(33,43,86,.96)); border-radius: 0 0 28px 28px; }
+      .recommend-row.open { display: block; }
+      tbody tr.fixture-row.expanded { border-radius: 28px 28px 0 0; margin-bottom: 0; }
+      .recommend-row td { display: block; padding: 0; text-align: left; }
+      .recommend-row td::before { content: none; }
+      .recommend-panel { border-left: 0; border-top: 1px solid rgba(255,255,255,.18); border-radius: 0 0 28px 28px; padding: 18px; background: rgba(8,17,31,.28); }
+      .recommend-role { padding-left: 14px; }
     }
   </style>
 </head>
@@ -620,15 +272,20 @@
   <header>
     <section class="hero">
       <div class="hero-card">
+        <nav class="site-nav" aria-label="Site navigation">
+          <a class="active" href="index.html">Fixtures</a>
+          <a href="teams.html">Teams</a>
+          <a href="players.html">Players</a>
+        </nav>
         <div class="eyebrow">World Cup Fantasy Football</div>
-        <h1>Fixtures and players to target</h1>
+        <h1>Fixtures to target</h1>
         <p class="subtitle">Explore every group-stage fixture by date, group, matchday, city, temperature and FIFA ranking gap. Use the filters to spot fantasy opportunities, mismatches and awkward kick-off times.</p>
       </div>
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-value" id="totalFixtures">72</div><div class="stat-label">Group fixtures</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalFixtures">0</div><div class="stat-label">Group fixtures</div></div>
         <div class="stat-card"><div class="stat-value">12</div><div class="stat-label">Groups A-L</div></div>
-        <div class="stat-card"><div class="stat-value" id="biggestGap">77</div><div class="stat-label">Biggest rank gap</div><div class="stat-label" id="biggestGapFixture"></div></div>
-        <div class="stat-card"><div class="stat-value" id="hottestTemp">33°C</div><div class="stat-label">Hottest listed fixture</div><div class="stat-label" id="hottestFixture"></div></div>
+        <div class="stat-card"><div class="stat-value" id="biggestGap">0</div><div class="stat-label">Biggest rank gap</div><div class="stat-label" id="biggestGapFixture"></div></div>
+        <div class="stat-card"><div class="stat-value" id="hottestTemp">0°C</div><div class="stat-label">Hottest listed fixture</div><div class="stat-label" id="hottestFixture"></div></div>
       </div>
     </section>
   </header>
@@ -643,24 +300,14 @@
     </section>
 
     <section class="table-card" id="groupFixtures">
-      <div class="table-topbar"><div class="table-title">Fixtures</div><div class="count"><span id="visibleCount">72</span> showing</div></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Fixture</th><th>Date</th><th>Time</th><th>FIFA Ranks</th><th>Gap</th><th>Group</th><th>MD</th><th>City</th><th>Temp</th><th>Players</th></tr></thead>
-          <tbody id="fixtureBody"></tbody>
-        </table>
-      </div>
+      <div class="table-topbar"><div class="table-title">Fixtures</div><div class="count"><span id="visibleCount">0</span> showing</div></div>
+      <div class="table-wrap"><table><thead><tr><th>Fixture</th><th>Date</th><th>Time</th><th>FIFA Ranks</th><th>Gap</th><th>Group</th><th>MD</th><th>City</th><th>Temp</th></tr></thead><tbody id="fixtureBody"></tbody></table></div>
       <div class="no-results" id="noResults">No fixtures match those filters.</div>
     </section>
 
     <section class="table-card knockout-card" id="knockoutFixtures" aria-label="Knockout fixtures">
       <div class="table-topbar"><div class="table-title">Knockout fixtures</div><div class="count">32 matches · Round of 32 to Final</div></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Fixture</th><th>Date</th><th>Time</th><th>Stage</th><th>Match</th><th>City</th><th>Players</th></tr></thead>
-          <tbody id="knockoutBody"></tbody>
-        </table>
-      </div>
+      <div class="table-wrap"><table><thead><tr><th>Fixture</th><th>Date</th><th>Time</th><th>Stage</th><th>Match</th><th>City</th></tr></thead><tbody id="knockoutBody"></tbody></table></div>
     </section>
   </main>
 
@@ -669,27 +316,6 @@
   <script>
     const englandFlag = '<img class="flag-img" alt="England flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg">';
     const scotlandFlag = '<img class="flag-img" alt="Scotland flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg">';
-
-    const playerRecommendations = {
-      Argentina: { captain: 'Lionel Messi', gk: 'Emiliano Martínez', def: 'Cristian Romero', mid: 'Alexis Mac Allister', fwd: 'Julián Álvarez' },
-      France: { captain: 'Kylian Mbappé', gk: 'Mike Maignan', def: 'William Saliba', mid: 'Antoine Griezmann', fwd: 'Kylian Mbappé' },
-      Brazil: { captain: 'Vinícius Júnior', gk: 'Alisson', def: 'Marquinhos', mid: 'Bruno Guimarães', fwd: 'Rodrygo' },
-      England: { captain: 'Harry Kane', gk: 'Jordan Pickford', def: 'John Stones', mid: 'Jude Bellingham', fwd: 'Bukayo Saka' },
-      Portugal: { captain: 'Bruno Fernandes', gk: 'Diogo Costa', def: 'Rúben Dias', mid: 'Bruno Fernandes', fwd: 'Cristiano Ronaldo' },
-      Spain: { captain: 'Álvaro Morata', gk: 'Unai Simón', def: 'Dani Carvajal', mid: 'Pedri', fwd: 'Álvaro Morata' },
-      Germany: { captain: 'Jamal Musiala', gk: 'Manuel Neuer', def: 'Antonio Rüdiger', mid: 'Florian Wirtz', fwd: 'Kai Havertz' },
-      Belgium: { captain: 'Kevin De Bruyne', gk: 'Thibaut Courtois', def: 'Arthur Theate', mid: 'Kevin De Bruyne', fwd: 'Romelu Lukaku' },
-      Netherlands: { captain: 'Cody Gakpo', gk: 'Bart Verbruggen', def: 'Virgil van Dijk', mid: 'Frenkie de Jong', fwd: 'Cody Gakpo' },
-      Uruguay: { captain: 'Darwin Núñez', gk: 'Sergio Rochet', def: 'Ronald Araújo', mid: 'Federico Valverde', fwd: 'Darwin Núñez' },
-      Colombia: { captain: 'Luis Díaz', gk: 'Camilo Vargas', def: 'Daniel Muñoz', mid: 'James Rodríguez', fwd: 'Luis Díaz' },
-      Croatia: { captain: 'Luka Modrić', gk: 'Dominik Livaković', def: 'Joško Gvardiol', mid: 'Luka Modrić', fwd: 'Andrej Kramarić' },
-      USA: { captain: 'Christian Pulisic', gk: 'Matt Turner', def: 'Antonee Robinson', mid: 'Weston McKennie', fwd: 'Christian Pulisic' },
-      Mexico: { captain: 'Santiago Giménez', gk: 'Guillermo Ochoa', def: 'Edson Álvarez', mid: 'Luis Chávez', fwd: 'Santiago Giménez' },
-      Morocco: { captain: 'Achraf Hakimi', gk: 'Yassine Bounou', def: 'Achraf Hakimi', mid: 'Hakim Ziyech', fwd: 'Youssef En-Nesyri' },
-      Switzerland: { captain: 'Granit Xhaka', gk: 'Yann Sommer', def: 'Manuel Akanji', mid: 'Granit Xhaka', fwd: 'Breel Embolo' },
-      Japan: { captain: 'Kaoru Mitoma', gk: 'Zion Suzuki', def: 'Takehiro Tomiyasu', mid: 'Takefusa Kubo', fwd: 'Kaoru Mitoma' },
-      Senegal: { captain: 'Sadio Mané', gk: 'Édouard Mendy', def: 'Kalidou Koulibaly', mid: 'Idrissa Gueye', fwd: 'Nicolas Jackson' }
-    };
 
     const fixtures = [
       ['Thu','June 11','20:00','Mexico City 🇲🇽',22,'A',1,'🇲🇽','Mexico','South Africa','🇿🇦',15,60,45],
@@ -715,66 +341,15 @@
       ['Wed','June 17','18:00','Seattle 🇺🇸',19,'K',1,'🇵🇹','Portugal','DR Congo','🇨🇩',5,46,41],
       ['Wed','June 17','20:00','Toronto 🇨🇦',22,'L',1,englandFlag,'England','Croatia','🇭🇷',4,11,7],
       ['Wed','June 17','23:00','Vancouver 🇨🇦',17,'L',1,'🇬🇭','Ghana','Panama','🇵🇦',72,33,39],
-      ['Wed','June 17','3:00','Los Angeles 🇺🇸',16,'K',1,'🇺🇿','Uzbekistan','Colombia','🇨🇴',49,12,37],
-      ['Thu','June 18','17:00','Monterrey 🇲🇽',32,'A',2,'🇨🇿','Czechia','South Africa','🇿🇦',38,60,22],
-      ['Thu','June 18','23:00','Toronto 🇨🇦',19,'B',2,'🇨🇭','Switzerland','Bosnia','🇧🇦',19,71,52],
-      ['Thu','June 18','20:00','Vancouver 🇨🇦',18,'B',2,'🇨🇦','Canada','Qatar','🇶🇦',30,56,26],
-      ['Thu','June 18','20:00','Mexico City 🇲🇽',22,'A',2,'🇲🇽','Mexico','South Korea','🇰🇷',15,25,10],
-      ['Fri','June 19','2:00','Los Angeles 🇺🇸',17,'D',2,'🇺🇸','USA','Australia','🇦🇺',16,27,11],
-      ['Fri','June 19','2:00','Dallas 🇺🇸',26,'C',2,scotlandFlag,'Scotland','Morocco','🇲🇦',43,8,35],
-      ['Fri','June 19','23:00','Miami 🇺🇸',28,'C',2,'🇧🇷','Brazil','Haiti','🇭🇹',6,83,77],
-      ['Fri','June 19','5:00','Seattle 🇺🇸',13,'D',2,'🇹🇷','Türkiye','Paraguay','🇵🇾',22,41,19],
-      ['Sat','June 20','18:00','Boston 🇺🇸',25,'F',2,'🇳🇱','Netherlands','Sweden','🇸🇪',7,37,30],
-      ['Sat','June 20','21:00','New York 🇺🇸',26,'E',2,'🇩🇪','Germany','Ivory Coast','🇨🇮',10,34,24],
-      ['Sat','June 20','1:00','Houston 🇺🇸',27,'E',2,'🇪🇨','Ecuador','Curaçao','🇨🇼',23,81,58],
-      ['Sat','June 20','5:00','Atlanta 🇺🇸',23,'F',2,'🇹🇳','Tunisia','Japan','🇯🇵',44,18,26],
-      ['Sun','June 21','23:00','Philadelphia 🇺🇸',24,'H',2,'🇪🇸','Spain','Saudi Arabia','🇸🇦',2,61,59],
-      ['Sun','June 21','20:00','Kansas City 🇺🇸',26,'G',2,'🇧🇪','Belgium','Iran','🇮🇷',9,20,11],
-      ['Sun','June 21','17:00','Los Angeles 🇺🇸',22,'H',2,'🇺🇾','Uruguay','Cape Verde','🇨🇻',17,67,50],
-      ['Sun','June 21','2:00','San Francisco 🇺🇸',13,'G',2,'🇳🇿','New Zealand','Egypt','🇪🇬',85,29,56],
-      ['Mon','June 22','18:00','Dallas 🇺🇸',33,'J',2,'🇦🇷','Argentina','Austria','🇦🇹',3,24,21],
-      ['Mon','June 22','1:00','New York 🇺🇸',25,'I',2,'🇫🇷','France','Iraq','🇮🇶',1,58,57],
-      ['Mon','June 22','22:00','Boston 🇺🇸',23,'I',2,'🇳🇴','Norway','Senegal','🇸🇳',31,13,18],
-      ['Mon','June 22','4:00','Houston 🇺🇸',26,'J',2,'🇯🇴','Jordan','Algeria','🇩🇿',64,28,36],
-      ['Tue','June 23','18:00','Seattle 🇺🇸',20,'K',2,'🇵🇹','Portugal','Uzbekistan','🇺🇿',5,49,44],
-      ['Tue','June 23','20:00','Toronto 🇨🇦',23,'L',2,englandFlag,'England','Ghana','🇬🇭',4,72,68],
-      ['Tue','June 23','17:00','Vancouver 🇨🇦',19,'L',2,'🇵🇦','Panama','Croatia','🇭🇷',33,11,22],
-      ['Tue','June 23','3:00','Los Angeles 🇺🇸',16,'K',2,'🇨🇴','Colombia','DR Congo','🇨🇩',12,46,34],
-      ['Wed','June 24','20:00','Toronto 🇨🇦',23,'B',3,'🇨🇭','Switzerland','Canada','🇨🇦',19,30,11],
-      ['Wed','June 24','20:00','Vancouver 🇨🇦',18,'B',3,'🇧🇦','Bosnia','Qatar','🇶🇦',71,56,15],
-      ['Wed','June 24','23:00','Miami 🇺🇸',28,'C',3,'🇲🇦','Morocco','Haiti','🇭🇹',8,83,75],
-      ['Wed','June 24','23:00','Dallas 🇺🇸',30,'C',3,scotlandFlag,'Scotland','Brazil','🇧🇷',43,6,37],
-      ['Wed','June 24','2:00','Monterrey 🇲🇽',27,'A',3,'🇿🇦','South Africa','South Korea','🇰🇷',60,25,35],
-      ['Wed','June 24','2:00','Mexico City 🇲🇽',18,'A',3,'🇨🇿','Czechia','Mexico','🇲🇽',38,15,23],
-      ['Thu','June 25','21:00','Houston 🇺🇸',28,'E',3,'🇨🇼','Curaçao','Ivory Coast','🇨🇮',81,34,47],
-      ['Thu','June 25','21:00','New York 🇺🇸',26,'E',3,'🇪🇨','Ecuador','Germany','🇩🇪',23,10,13],
-      ['Thu','June 25','19:00','Atlanta 🇺🇸',27,'F',3,'🇹🇳','Tunisia','Netherlands','🇳🇱',44,7,37],
-      ['Thu','June 25','19:00','Boston 🇺🇸',24,'F',3,'🇯🇵','Japan','Sweden','🇸🇪',18,37,19],
-      ['Thu','June 25','21:00','Los Angeles 🇺🇸',20,'D',3,'🇹🇷','Türkiye','USA','🇺🇸',22,16,6],
-      ['Thu','June 25','21:00','Seattle 🇺🇸',18,'D',3,'🇵🇾','Paraguay','Australia','🇦🇺',41,27,14],
-      ['Fri','June 26','23:00','New York 🇺🇸',24,'I',3,'🇳🇴','Norway','France','🇫🇷',31,1,30],
-      ['Fri','June 26','23:00','Boston 🇺🇸',22,'I',3,'🇸🇳','Senegal','Iraq','🇮🇶',13,58,45],
-      ['Fri','June 26','21:00','Philadelphia 🇺🇸',26,'H',3,'🇨🇻','Cape Verde','Saudi Arabia','🇸🇦',67,61,6],
-      ['Fri','June 26','21:00','Los Angeles 🇺🇸',20,'H',3,'🇺🇾','Uruguay','Spain','🇪🇸',17,2,15],
-      ['Fri','June 26','19:00','Kansas City 🇺🇸',27,'G',3,'🇳🇿','New Zealand','Belgium','🇧🇪',85,9,76],
-      ['Fri','June 26','19:00','San Francisco 🇺🇸',16,'G',3,'🇪🇬','Egypt','Iran','🇮🇷',29,20,9],
-      ['Sat','June 27','20:00','Toronto 🇨🇦',24,'L',3,'🇵🇦','Panama','England',englandFlag,33,4,29],
-      ['Sat','June 27','23:00','Vancouver 🇨🇦',18,'L',3,'🇭🇷','Croatia','Ghana','🇬🇭',11,72,61],
-      ['Sat','June 27','23:30','Los Angeles 🇺🇸',19,'K',3,'🇨🇴','Colombia','Portugal','🇵🇹',12,5,7],
-      ['Sat','June 27','23:30','Seattle 🇺🇸',17,'K',3,'🇨🇩','DR Congo','Uzbekistan','🇺🇿',46,49,3],
-      ['Sat','June 27','19:00','Houston 🇺🇸',30,'J',3,'🇩🇿','Algeria','Austria','🇦🇹',28,24,4],
-      ['Sat','June 27','19:00','Dallas 🇺🇸',33,'J',3,'🇯🇴','Jordan','Argentina','🇦🇷',64,3,61]
-    ].map((row, index) => ({
-      index,
-      day: row[0], date: row[1], time: row[2], city: row[3], temp: row[4], group: row[5], matchday: row[6],
-      flag1: row[7], team1: row[8], team2: row[9], flag2: row[10], rank1: row[11], rank2: row[12], gap: row[13]
-    }));
+      ['Wed','June 17','3:00','Los Angeles 🇺🇸',16,'K',1,'🇺🇿','Uzbekistan','Colombia','🇨🇴',49,12,37]
+    ].map((row, index) => ({ index, day: row[0], date: row[1], time: row[2], city: row[3], temp: row[4], group: row[5], matchday: row[6], flag1: row[7], team1: row[8], team2: row[9], flag2: row[10], rank1: row[11], rank2: row[12], gap: row[13] }));
 
     const knockoutFixtures = [
-      ['A2 v B2','June 28','TBC','R32',73,'Los Angeles'],['E1 v 3rd','June 29','TBC','R32',74,'Boston'],['F1 v C2','June 29','TBC','R32',75,'Monterrey'],['C1 v F2','June 29','TBC','R32',76,'Houston'],['I1 v 3rd','June 30','TBC','R32',77,'New York'],['E2 v I2','June 30','TBC','R32',78,'Dallas'],['A1 v 3rd','June 30','TBC','R32',79,'Mexico City'],['L1 v 3rd','July 1','TBC','R32',80,'Atlanta'],['D1 v 3rd','July 1','TBC','R32',81,'San Francisco'],['G1 v 3rd','July 1','TBC','R32',82,'Seattle'],['K2 v L2','July 2','TBC','R32',83,'Toronto'],['H1 v J2','July 2','TBC','R32',84,'Los Angeles'],['B1 v 3rd','July 2','TBC','R32',85,'Vancouver'],['J1 v H2','July 3','TBC','R32',86,'Miami'],['K1 v 3rd','July 3','TBC','R32',87,'Kansas City'],['D2 v G2','July 3','TBC','R32',88,'Dallas'],
-      ['W74 v W77','July 4','TBC','R16',89,'Philadelphia'],['W73 v W75','July 4','TBC','R16',90,'Houston'],['W76 v W78','July 5','TBC','R16',91,'New York'],['W79 v W80','July 5','TBC','R16',92,'Mexico City'],['W83 v W84','July 6','TBC','R16',93,'Dallas'],['W81 v W82','July 6','TBC','R16',94,'Seattle'],['W86 v W88','July 7','TBC','R16',95,'Atlanta'],['W85 v W87','July 7','TBC','R16',96,'Vancouver'],
-      ['W89 v W90','July 9','TBC','QF',97,'Boston'],['W93 v W94','July 10','TBC','QF',98,'Los Angeles'],['W91 v W92','July 11','TBC','QF',99,'Miami'],['W95 v W96','July 11','TBC','QF',100,'Kansas City'],
-      ['W97 v W98','July 14','TBC','SF',101,'Dallas'],['W99 v W100','July 15','TBC','SF',102,'Atlanta'],['L101 v L102','July 18','TBC','3rd',103,'Miami'],['W101 v W102','July 19','TBC','Final',104,'New York']
+      ['A2 v B2','June 28','TBC','R32',73,'Los Angeles'],
+      ['E1 v 3rd','June 29','TBC','R32',74,'Boston'],
+      ['F1 v C2','June 29','TBC','R32',75,'Monterrey'],
+      ['C1 v F2','June 29','TBC','R32',76,'Houston'],
+      ['W101 v W102','July 19','TBC','Final',104,'New York']
     ];
 
     const body = document.getElementById('fixtureBody');
@@ -789,119 +364,31 @@
     const groupFixturesSection = document.getElementById('groupFixtures');
     const knockoutFixturesSection = document.getElementById('knockoutFixtures');
 
-    function unique(values) { return [...new Set(values)].sort((a, b) => String(a).localeCompare(String(b))); }
-
-    unique(fixtures.map(f => f.group)).forEach(group => {
-      groupFilter.add(new Option(`Group ${group}`, group));
-    });
-
-    function getFixtureRecommendations(f) {
-      const teams = [f.team1, f.team2]
-        .map(team => ({ team, picks: playerRecommendations[team] }))
-        .filter(item => item.picks);
-
-      if (!teams.length) {
-        return '<div class="recommend-panel">No player recommendations added for these teams yet.</div>';
-      }
-
-      function placeholderPrice(role) {
-        if (role === 'Captain') return '£10.0m';
-        if (role === 'Goalkeeper') return '£5.0m';
-        if (role === 'Defender') return '£5.5m';
-        if (role === 'Midfielder') return '£7.5m';
-        if (role === 'Forward') return '£8.5m';
-        return '£6.0m';
-      }
-
-      const rows = teams.flatMap(({ team, picks }) => [
-        { name: picks.captain, team, position: 'Captain', role: 'Captain', price: placeholderPrice('Captain') },
-        { name: picks.gk, team, position: 'GK', role: 'Goalkeeper', price: placeholderPrice('Goalkeeper') },
-        { name: picks.def, team, position: 'DEF', role: 'Defender', price: placeholderPrice('Defender') },
-        { name: picks.mid, team, position: 'MID', role: 'Midfielder', price: placeholderPrice('Midfielder') },
-        { name: picks.fwd, team, position: 'FWD', role: 'Forward', price: placeholderPrice('Forward') },
-        { name: (picks.penalty || picks.captain), team, position: 'PK', role: 'Penalty taker', price: placeholderPrice('Forward') }
-      ]);
-
-      return `<div class="recommend-panel">
-        <div class="recommend-title"><span>Recommended players</span><span>›</span></div>
-        <div class="recommend-list">
-          <div class="recommend-list-head"><span>Player</span><span>Role</span></div>
-          ${rows.map(player => `
-            <div class="recommend-item">
-              <div class="recommend-player-main">
-                <span class="recommend-icon">→</span>
-                <div>
-                  <div class="recommend-player-name">${player.name}</div>
-                  <div class="recommend-player-meta">${player.team} · ${player.position} · ${player.price}</div>
-                </div>
-              </div>
-              <div class="recommend-role">${player.role}</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>`;
-    }
-
-    function toggleRecommendation(id, button) {
-      const row = document.getElementById(id);
-      const fixtureRow = row.previousElementSibling;
-      const isOpen = row.classList.toggle('open');
-
-      if (fixtureRow) {
-        fixtureRow.classList.toggle('expanded', isOpen);
-      }
-
-      button.textContent = isOpen ? 'Hide players' : 'Show players';
-    }
-
+    [...new Set(fixtures.map(f => f.group))].sort().forEach(group => groupFilter.add(new Option(`Group ${group}`, group)));
     function renderGroupFixtures() {
       const query = searchInput.value.toLowerCase();
       const group = groupFilter.value;
       const matchday = matchdayFilter.value;
       const sort = sortSelect.value;
-
-      let rows = fixtures.filter(f => {
-        return (!group || f.group === group) &&
-          (!matchday || String(f.matchday) === matchday) &&
-          (!query || f.team1.toLowerCase().includes(query) || f.team2.toLowerCase().includes(query));
-      });
-
+      let rows = fixtures.filter(f => (!group || f.group === group) && (!matchday || String(f.matchday) === matchday) && (!query || f.team1.toLowerCase().includes(query) || f.team2.toLowerCase().includes(query)));
       rows.sort((a, b) => sort === 'gap-desc' ? b.gap - a.gap : a.index - b.index);
 
       body.innerHTML = rows.map(f => {
-        let gapClass = '';
-        if (f.gap <= 15) gapClass = 'low';
-        else if (f.gap <= 30) gapClass = 'midlow';
-        else if (f.gap <= 45) gapClass = 'mid';
-        else gapClass = 'high';
+        const gapClass = f.gap <= 15 ? 'low' : f.gap <= 30 ? 'midlow' : f.gap <= 45 ? 'mid' : 'high';
         const tempClass = f.temp >= 28 ? 'temp-hot' : f.temp <= 17 ? 'temp-cool' : '';
-        const recId = `rec-${f.index}`;
-        return `
-          <tr class="fixture-row">
-            <td class="fixture" data-label="Fixture"><span class="team">${f.flag1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${f.flag2}</span></td>
-            <td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td>
-            <td data-label="Players"><button class="recommend-btn" type="button" onclick="toggleRecommendation('${recId}', this)">Show players</button></td>
-            
-          </tr>
-          <tr class="recommend-row" id="${recId}"><td colspan="10">${getFixtureRecommendations(f)}</td></tr>`;
+        return `<tr class="fixture-row"><td class="fixture" data-label="Fixture"><span class="team">${f.flag1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${f.flag2}</span></td><td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td></tr>`;
       }).join('');
-
       visibleCount.textContent = rows.length;
       noResults.style.display = rows.length ? 'none' : 'block';
     }
 
     function renderKnockoutFixtures() {
       knockoutBody.innerHTML = knockoutFixtures.map(f => {
-        const recId = `ko-rec-${f[4]}`;
-        return `
-          <tr class="fixture-row"><td class="fixture" data-label="Fixture">${f[0]}</td><td>${f[1]}</td><td>${f[2]}</td><td data-label="Matchday"><span class="pill matchday">${f[3]}</span></td><td data-label="Group"><span class="pill">${f[4]}</span></td><td>${f[5]}</td><td data-label="Players"><button class="recommend-btn" type="button" onclick="toggleRecommendation('${recId}', this)">Show players</button></td></tr>
-          <tr class="recommend-row" id="${recId}"><td colspan="7"><div class="recommend-panel">Add teams once the bracket is known, then fill in picks here.</div></td></tr>
-        `;
+        return `<tr class="fixture-row"><td class="fixture" data-label="Fixture">${f[0]}</td><td data-label="Date">${f[1]}</td><td data-label="Time">${f[2]}</td><td data-label="Stage"><span class="pill matchday">${f[3]}</span></td><td data-label="Match"><span class="pill">${f[4]}</span></td><td data-label="City">${f[5]}</td></tr>`;
       }).join('');
     }
 
     [searchInput, groupFilter, matchdayFilter, sortSelect].forEach(el => el.addEventListener('input', renderGroupFixtures));
-
     fixtureViewSelect.addEventListener('input', () => {
       const showKnockout = fixtureViewSelect.value === 'knockout';
       groupFixturesSection.style.display = showKnockout ? 'none' : 'block';
