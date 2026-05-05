@@ -282,9 +282,9 @@
   <header>
     <section class="hero">
       <nav class="site-nav" aria-label="Site navigation">
-        <a href="/index.html">Fixtures</a>
-        <a class="active" href="/teams.html">Teams</a>
-        <a href="/players.html">Players</a>
+        <a href="/">Fixtures</a>
+        <a class="active" href="/teams">Teams</a>
+        <a href="/players">Players</a>
       </nav>
       <div class="eyebrow">World Cup Fantasy Football</div>
       <h1>Team to target</h1>
@@ -302,6 +302,12 @@
     <section class="team-grid" id="teamGrid"></section>
     <div class="no-results" id="noResults">No teams match those filters.</div>
   </main>
+
+  <script type="text/javascript">
+    app.get("/", (req, res) => res.sendFile(path.join(__dirname, "index.html")));
+    app.get("/teams", (req, res) => res.sendFile(path.join(__dirname, "teams.html")));
+    app.get("/players", (req, res) => res.sendFile(path.join(__dirname, "players.html")));
+  </script>
 
   <script>
     const englandFlag = '<img class="flag-img" alt="England flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg">';
