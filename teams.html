@@ -232,7 +232,7 @@
 
     .opponent {
       font-weight: 900;
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
 
     .game-meta {
@@ -274,11 +274,42 @@
       .hero { padding: 24px; }
       h1 { font-size: clamp(2.2rem, 13vw, 3.6rem); }
       .game-meta { grid-template-columns: repeat(2, 1fr); }
+
       .team-header {
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr;
+        gap: 12px;
         align-items: start;
-        gap: 14px;
       }
+
+      .team-name {
+        min-width: 0;
+        font-size: 2.25rem;
+        line-height: 1;
+        gap: 12px;
+      }
+
+      .team-name span:last-child {
+        display: inline;
+        word-break: normal;
+      }
+
+      .team-header > div:last-child {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex-wrap: wrap;
+      }
+
+      .team-header .group-pill,
+      .team-header .rank-pill {
+        width: fit-content;
+        font-size: 0.95rem;
+        padding: 7px 12px;
+        line-height: 1;
+      }
+    }
 
       .team-name {
         min-width: 0;
@@ -304,7 +335,229 @@
         width: fit-content;
       }
     }
-  </style>
+
+
+    /* Keep Group + Rank side-by-side on desktop/tablet team cards */
+    @media (min-width: 561px) {
+      .team-header {
+        grid-template-columns: minmax(0, 1fr) max-content;
+      }
+
+      .team-header > div:last-child {
+        display: inline-flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 8px !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+        min-width: max-content;
+      }
+
+      .team-header .group-pill,
+      .team-header .rank-pill {
+        flex: 0 0 auto;
+        white-space: nowrap;
+      }
+    }
+
+
+    .team-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 560px) {
+      .team-pills {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+
+
+    /* FINAL FIX: desktop team-card header layout */
+    .team-title-wrap {
+      min-width: 0;
+    }
+
+    .team-pills {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      gap: 8px !important;
+      min-width: max-content !important;
+      white-space: nowrap !important;
+    }
+
+    .team-pills .group-pill,
+    .team-pills .rank-pill {
+      flex: 0 0 auto !important;
+      white-space: nowrap !important;
+    }
+
+    @media (min-width: 561px) {
+      .team-header {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) max-content !important;
+        align-items: start !important;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .team-header {
+        grid-template-columns: 1fr !important;
+      }
+
+      .team-name {
+        font-size: 1.9rem !important;
+        line-height: 1.02 !important;
+      }
+
+      .team-pills {
+        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+        min-width: 0 !important;
+      }
+
+      .team-pills .group-pill,
+      .team-pills .rank-pill {
+        font-size: 0.9rem;
+        padding: 7px 13px;
+      }
+    }
+
+</style>
+
+<style id="tiny-pill-override">
+.team-pills .group-pill,
+.team-pills .rank-pill {
+  padding: 5px 10px !important;
+  font-size: 0.78rem !important;
+  border-radius: 999px !important;
+  line-height: 1 !important;
+  min-height: unset !important;
+}
+
+@media (max-width: 560px) {
+  .team-pills .group-pill,
+  .team-pills .rank-pill {
+    padding: 5px 10px !important;
+    font-size: 0.78rem !important;
+  }
+}
+</style>
+
+
+<style id="matchday-pill-size-fix">
+.matchday-pill,
+.game-pill,
+.md-pill,
+[class*="matchday"] {
+  padding: 5px 10px !important;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  border-radius: 999px !important;
+  min-height: unset !important;
+}
+</style>
+
+
+<style id="force-md-pill-size">
+.matchday-pill,
+.match-pill,
+.md-pill,
+.fixture-pill,
+[class*="md-pill"],
+[class*="matchday-pill"],
+[class*="match-pill"] {
+  padding: 5px 10px !important;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  border-radius: 999px !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+</style>
+
+
+<style id="actual-md-pill-fix">
+.md-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 5px 10px !important;
+  font-weight: 900;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  border: 1px solid rgba(64,224,160,0.28);
+  background: rgba(64,224,160,0.12);
+  color: #a9ffd8;
+  white-space: nowrap;
+  min-height: unset !important;
+}
+
+    /* iPhone/mobile nav fix */
+    @media (max-width: 560px) {
+      .nav-tabs {
+        display: flex !important;
+        width: 100%;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .nav-tabs a {
+        flex: 1 1 0;
+        min-width: 0;
+        text-align: center;
+        font-size: 1rem;
+        padding: 14px 10px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+    }
+
+</style>
+
+
+<style id="iphone-se-site-nav-fix">
+@media (max-width: 560px) {
+  .site-nav {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 4px !important;
+    padding: 6px !important;
+    margin-bottom: 28px !important;
+    border-radius: 999px !important;
+    overflow: hidden !important;
+  }
+
+  .site-nav a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    padding: 11px 4px !important;
+    font-size: 0.82rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    border-radius: 999px !important;
+  }
+}
+</style>
+
 </head>
 <body>
   <header>
@@ -506,38 +759,39 @@
 
     function formatResult(result) {
       const flags = {
-        Portugal: '🇵🇹', Bosnia: '🇧🇦', Slovakia: '🇸🇰', Luxembourg: '🇱🇺', Iceland: '🇮🇸', Poland: '🇵🇱',
-        Spain: '🇪🇸', Norway: '🇳🇴', Georgia: '🇬🇪', Scotland: scotlandFlag, Cyprus: '🇨🇾', Italy: '🇮🇹',
-        Belgium: '🇧🇪', Sweden: '🇸🇪', Austria: '🇦🇹', Estonia: '🇪🇪', Azerbaijan: '🇦🇿', Serbia: '🇷🇸',
-        Japan: '🇯🇵', Germany: '🇩🇪', Türkiye: '🇹🇷', Syria: '🇸🇾', 'North Korea': '🇰🇵', Tunisia: '🇹🇳',
-        USA: '🇺🇸', Mexico: '🇲🇽', Jamaica: '🇯🇲', Canada: '🇨🇦', Panama: '🇵🇦', Cuba: '🇨🇺',
-        France: '🇫🇷', Greece: '🇬🇷', Netherlands: '🇳🇱', Gibraltar: '🇬🇮', 'Republic Ireland': '🇮🇪',
-        Iran: '🇮🇷', 'Hong Kong': '🇭🇰', Uzbekistan: '🇺🇿', Kyrgyzstan: '🇰🇬', Jordan: '🇯🇴', UAE: '🇦🇪',
-        Argentina: '🇦🇷', Peru: '🇵🇪', Paraguay: '🇵🇾', Chile: '🇨🇱', Brazil: '🇧🇷', Uruguay: '🇺🇾',
-        England: englandFlag, Ukraine: '🇺🇦', Australia: '🇦🇺', Bolivia: '🇧🇴',
-        Morocco: '🇲🇦', Ecuador: '🇪🇨', Senegal: '🇸🇳', Nigeria: '🇳🇬', Cameroon: '🇨🇲',
-        'Ivory Coast': '🇨🇮', Gambia: '🇬🇲', Algeria: '🇩🇿', 'DR Congo': '🇨🇩', Lebanon: '🇱🇧',
-        Egypt: '🇪🇬', 'Sierra Leone': '🇸🇱', 'Burkina Faso': '🇧🇫', Guinea: '🇬🇳', Ethiopia: '🇪🇹',
-        Ireland: '🇮🇪', Mauritania: '🇲🇷', Sudan: '🇸🇩', Gabon: '🇬🇦', Togo: '🇹🇬',
-        Wales: '🏴', Croatia: '🇭🇷', Latvia: '🇱🇻', Uganda: '🇺🇬', Mozambique: '🇲🇿',
-        Colombia: '🇨🇴', Venezuela: '🇻🇪', Armenia: '🇦🇲', Martinique: '🇲🇶', 'Costa Rica': '🇨🇷',
-        Turkmenistan: '🇹🇲', Oman: '🇴🇲', Denmark: '🇩🇰', 'Faroe Islands': '🇫🇴',
-        Czechia: '🇨🇿', 'New Zealand': '🇳🇿', Tahiti: '🇵🇫', China: '🇨🇳', Fiji: '🇫🇯',
-        'Saudi Arabia': '🇸🇦', 'South Korea': '🇰🇷', Iraq: '🇮🇶', Malta: '🇲🇹', Romania: '🇷🇴',
-        Ghana: '🇬🇭', 'Cape Verde': '🇨🇻', Guyana: '🇬🇾', Angola: '🇦🇴', Libya: '🇱🇾',
-        Tajikistan: '🇹🇯', Vietnam: '🇻🇳', Indonesia: '🇮🇩', Haiti: '🇭🇹', Guatemala: '🇬🇹',
-        'St Kitts': '🇰🇳', Suriname: '🇸🇷', Honduras: '🇭🇳', 'South Africa': '🇿🇦', Zimbabwe: '🇿🇼',
-        Namibia: '🇳🇦', Madagascar: '🇲🇬', 'Central African Rep': '🇨🇫', Liberia: '🇱🇷',
-        Curaçao: '🇨🇼', Aruba: '🇦🇼', Barbados: '🇧🇧', 'El Salvador': '🇸🇻', Kosovo: '🇽🇰',
-        Slovenia: '🇸🇮', Malawi: '🇲🇼', 'Equatorial Guinea': '🇬🇶', Qatar: '🇶🇦', Bahrain: '🇧🇭', Russia: '🇷🇺'
+        'Portugal': '🇵🇹', 'Bosnia': '🇧🇦', 'Slovakia': '🇸🇰', 'Luxembourg': '🇱🇺', 'Iceland': '🇮🇸', 'Poland': '🇵🇱',
+        'Spain': '🇪🇸', 'Norway': '🇳🇴', 'Georgia': '🇬🇪', 'Scotland': scotlandFlag, 'Cyprus': '🇨🇾', 'Italy': '🇮🇹',
+        'Belgium': '🇧🇪', 'Sweden': '🇸🇪', 'Austria': '🇦🇹', 'Estonia': '🇪🇪', 'Azerbaijan': '🇦🇿', 'Serbia': '🇷🇸',
+        'Japan': '🇯🇵', 'Germany': '🇩🇪', 'Türkiye': '🇹🇷', 'Syria': '🇸🇾', 'North Korea': '🇰🇵', 'Tunisia': '🇹🇳',
+        'USA': '🇺🇸', 'Mexico': '🇲🇽', 'Jamaica': '🇯🇲', 'Canada': '🇨🇦', 'Panama': '🇵🇦', 'Cuba': '🇨🇺',
+        'France': '🇫🇷', 'Greece': '🇬🇷', 'Netherlands': '🇳🇱', 'Gibraltar': '🇬🇮', 'Republic Ireland': '🇮🇪', 'Ireland': '🇮🇪',
+        'Iran': '🇮🇷', 'Hong Kong': '🇭🇰', 'Uzbekistan': '🇺🇿', 'Kyrgyzstan': '🇰🇬', 'Jordan': '🇯🇴', 'UAE': '🇦🇪',
+        'Argentina': '🇦🇷', 'Peru': '🇵🇪', 'Paraguay': '🇵🇾', 'Chile': '🇨🇱', 'Brazil': '🇧🇷', 'Uruguay': '🇺🇾',
+        'England': englandFlag, 'Ukraine': '🇺🇦', 'Australia': '🇦🇺', 'Bolivia': '🇧🇴',
+        'Morocco': '🇲🇦', 'Ecuador': '🇪🇨', 'Senegal': '🇸🇳', 'Nigeria': '🇳🇬', 'Cameroon': '🇨🇲',
+        'Ivory Coast': '🇨🇮', 'Gambia': '🇬🇲', 'Mali': '🇲🇱', 'Zambia': '🇿🇲',
+        'Algeria': '🇩🇿', 'DR Congo': '🇨🇩', 'Lebanon': '🇱🇧',
+        'Egypt': '🇪🇬', 'Sierra Leone': '🇸🇱', 'Burkina Faso': '🇧🇫', 'Guinea': '🇬🇳', 'Ethiopia': '🇪🇹',
+        'Mauritania': '🇲🇷', 'Sudan': '🇸🇩', 'Gabon': '🇬🇦', 'Togo': '🇹🇬',
+        'Wales': '🏴', 'Croatia': '🇭🇷', 'Latvia': '🇱🇻', 'Uganda': '🇺🇬', 'Mozambique': '🇲🇿',
+        'Colombia': '🇨🇴', 'Venezuela': '🇻🇪', 'Armenia': '🇦🇲', 'Martinique': '🇲🇶', 'Costa Rica': '🇨🇷',
+        'Turkmenistan': '🇹🇲', 'Oman': '🇴🇲', 'Denmark': '🇩🇰', 'Faroe Islands': '🇫🇴',
+        'Czechia': '🇨🇿', 'New Zealand': '🇳🇿', 'Tahiti': '🇵🇫', 'China': '🇨🇳', 'Fiji': '🇫🇯',
+        'Saudi Arabia': '🇸🇦', 'South Korea': '🇰🇷', 'Iraq': '🇮🇶', 'Malta': '🇲🇹', 'Romania': '🇷🇴',
+        'Ghana': '🇬🇭', 'Cape Verde': '🇨🇻', 'Guyana': '🇬🇾', 'Angola': '🇦🇴', 'Libya': '🇱🇾',
+        'Tajikistan': '🇹🇯', 'Vietnam': '🇻🇳', 'Indonesia': '🇮🇩', 'Haiti': '🇭🇹', 'Guatemala': '🇬🇹',
+        'St Kitts': '🇰🇳', 'Suriname': '🇸🇷', 'Honduras': '🇭🇳', 'South Africa': '🇿🇦', 'Zimbabwe': '🇿🇼',
+        'Namibia': '🇳🇦', 'Madagascar': '🇲🇬', 'Central African Rep': '🇨🇫', 'Liberia': '🇱🇷',
+        'Curaçao': '🇨🇼', 'Aruba': '🇦🇼', 'Barbados': '🇧🇧', 'El Salvador': '🇸🇻', 'Kosovo': '🇽🇰',
+        'Switzerland': '🇨🇭', 'Slovenia': '🇸🇮', 'Malawi': '🇲🇼', 'Equatorial Guinea': '🇬🇶',
+        'Qatar': '🇶🇦', 'Bahrain': '🇧🇭', 'Russia': '🇷🇺'
       };
-
       let formatted = result;
-      const countries = Object.keys(flags).sort((a, b) => b.length - a.length);
-
-      countries.forEach(country => {
-        formatted = formatted.split(country).join(flags[country]);
-      });
+      Object.keys(flags)
+        .sort((a, b) => b.length - a.length)
+        .forEach(country => {
+          formatted = formatted.split(country).join(flags[country]);
+        });
 
       return formatted;
     }
@@ -558,10 +812,10 @@
       teamGrid.innerHTML = rows.map(team => `
         <article class="team-card">
           <div class="team-header">
-            <div>
+            <div class="team-title-wrap">
               <div class="team-name"><span>${team.flag}</span><span>${team.team}</span></div>
             </div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+            <div class="team-pills">
               <span class="group-pill">Group ${team.group}</span>
               <span class="rank-pill">Rank ${team.rank}</span>
             </div>
@@ -578,7 +832,7 @@
                   <div class="game">
                     <div class="game-top">
                       <div class="opponent">v ${game.opponent} ${game.opponentFlag}</div>
-                      <span class="group-pill">MD ${game.matchday}</span>
+                      <span class="md-pill">MD ${game.matchday}</span>
                     </div>
                     <div class="game-meta">
                       <div>Date<span class="meta-value">${game.date}</span></div>
