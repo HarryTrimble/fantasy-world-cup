@@ -607,16 +607,22 @@
 </style>
 
 
-<style id="iphone-se-site-nav-fix">
+
+
+<style id="consistent-mobile-nav-height">
 @media (max-width: 560px) {
   .site-nav {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: center !important;
     width: 100% !important;
     max-width: 100% !important;
-    gap: 4px !important;
-    padding: 6px !important;
-    margin-bottom: 28px !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
+    gap: 6px !important;
+    padding: 8px !important;
+    margin-bottom: 30px !important;
     border-radius: 999px !important;
     overflow: hidden !important;
   }
@@ -625,30 +631,19 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-width: 0 !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    max-height: 56px !important;
     width: 100% !important;
-    padding: 11px 4px !important;
-    font-size: 0.82rem !important;
+    min-width: 0 !important;
+    padding: 0 6px !important;
+    border-radius: 999px !important;
+    font-size: 0.95rem !important;
     line-height: 1 !important;
     white-space: nowrap !important;
     text-align: center !important;
-    border-radius: 999px !important;
   }
 }
-
-@media (max-width: 560px) {
-  .site-nav {
-    gap: 8px;
-    padding: 8px;
-    max-width: 100%;
-  }
-
-  .site-nav a {
-    padding: 13px 8px;
-    font-size: 0.92rem;
-  }
-}
-
 </style>
 
 </head>
