@@ -204,21 +204,7 @@
       font-weight: 900;
       margin-bottom: 10px;
     }
-
-    .last-five {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .result-pill {
-      min-width: 42px;
-      background: rgba(255,255,255,0.055);
-      color: var(--text);
-      border-color: var(--border);
-    }
-
-    .games {
+.games {
       display: grid;
       gap: 10px;
     }
@@ -455,6 +441,79 @@
   }
 }
 
+
+    /* Team form result cards */
+    .last-five {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(58px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .form-result {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .form-score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      padding: 5px 11px;
+      min-width: 58px;
+      font-size: 0.95rem;
+      font-weight: 950;
+      line-height: 1;
+      color: #fff;
+      box-shadow: inset 0 -2px 0 rgba(255,255,255,0.12);
+    }
+
+    .form-score.win { background: #009b63; }
+    .form-score.draw { background: #8a9299; }
+    .form-score.loss {
+      background: #df343c;
+      position: relative;
+    }
+.form-flag {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      line-height: 1;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .form-flag .flag-img {
+      width: 1em;
+      height: 1em;
+    }
+
+    @media (max-width: 560px) {
+      .last-five {
+        grid-template-columns: repeat(5, minmax(46px, 1fr));
+        gap: 8px;
+      }
+
+      .form-score {
+        min-width: 44px;
+        padding: 5px 7px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+      }
+
+      .form-flag {
+        width: 30px;
+        height: 30px;
+        font-size: 1.55rem;
+      }
+    }
+
 </style>
 
 <style id="tiny-pill-override">
@@ -488,6 +547,82 @@
   }
 }
 
+
+    /* Team form result cards */
+    .last-five {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(58px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .form-result {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .form-score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      padding: 5px 11px;
+      min-width: 58px;
+      font-size: 0.95rem;
+      font-weight: 950;
+      line-height: 1;
+      color: #fff;
+      box-shadow: inset 0 -2px 0 rgba(255,255,255,0.12);
+    }
+
+    .form-score.win { background: #009b63; }
+    .form-score.draw { background: #8a9299; }
+    .form-score.loss {
+      background: #df343c;
+      position: relative;
+    }
+
+    
+
+    .form-flag {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      line-height: 1;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .form-flag .flag-img {
+      width: 1em;
+      height: 1em;
+    }
+
+    @media (max-width: 560px) {
+      .last-five {
+        grid-template-columns: repeat(5, minmax(46px, 1fr));
+        gap: 8px;
+      }
+
+      .form-score {
+        min-width: 44px;
+        padding: 5px 7px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+      }
+
+      .form-flag {
+        width: 30px;
+        height: 30px;
+        font-size: 1.55rem;
+      }
+    }
+
 </style>
 
 
@@ -515,6 +650,82 @@
     font-size: 0.92rem;
   }
 }
+
+
+    /* Team form result cards */
+    .last-five {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(58px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .form-result {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .form-score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      padding: 5px 11px;
+      min-width: 58px;
+      font-size: 0.95rem;
+      font-weight: 950;
+      line-height: 1;
+      color: #fff;
+      box-shadow: inset 0 -2px 0 rgba(255,255,255,0.12);
+    }
+
+    .form-score.win { background: #009b63; }
+    .form-score.draw { background: #8a9299; }
+    .form-score.loss {
+      background: #df343c;
+      position: relative;
+    }
+
+    
+
+    .form-flag {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      line-height: 1;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .form-flag .flag-img {
+      width: 1em;
+      height: 1em;
+    }
+
+    @media (max-width: 560px) {
+      .last-five {
+        grid-template-columns: repeat(5, minmax(46px, 1fr));
+        gap: 8px;
+      }
+
+      .form-score {
+        min-width: 44px;
+        padding: 5px 7px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+      }
+
+      .form-flag {
+        width: 30px;
+        height: 30px;
+        font-size: 1.55rem;
+      }
+    }
 
 </style>
 
@@ -547,6 +758,82 @@
     font-size: 0.92rem;
   }
 }
+
+
+    /* Team form result cards */
+    .last-five {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(58px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .form-result {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .form-score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      padding: 5px 11px;
+      min-width: 58px;
+      font-size: 0.95rem;
+      font-weight: 950;
+      line-height: 1;
+      color: #fff;
+      box-shadow: inset 0 -2px 0 rgba(255,255,255,0.12);
+    }
+
+    .form-score.win { background: #009b63; }
+    .form-score.draw { background: #8a9299; }
+    .form-score.loss {
+      background: #df343c;
+      position: relative;
+    }
+
+    
+
+    .form-flag {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      line-height: 1;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .form-flag .flag-img {
+      width: 1em;
+      height: 1em;
+    }
+
+    @media (max-width: 560px) {
+      .last-five {
+        grid-template-columns: repeat(5, minmax(46px, 1fr));
+        gap: 8px;
+      }
+
+      .form-score {
+        min-width: 44px;
+        padding: 5px 7px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+      }
+
+      .form-flag {
+        width: 30px;
+        height: 30px;
+        font-size: 1.55rem;
+      }
+    }
 
 </style>
 
@@ -604,6 +891,82 @@
   }
 }
 
+
+    /* Team form result cards */
+    .last-five {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(58px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .form-result {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .form-score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      padding: 5px 11px;
+      min-width: 58px;
+      font-size: 0.95rem;
+      font-weight: 950;
+      line-height: 1;
+      color: #fff;
+      box-shadow: inset 0 -2px 0 rgba(255,255,255,0.12);
+    }
+
+    .form-score.win { background: #009b63; }
+    .form-score.draw { background: #8a9299; }
+    .form-score.loss {
+      background: #df343c;
+      position: relative;
+    }
+
+    
+
+    .form-flag {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      line-height: 1;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .form-flag .flag-img {
+      width: 1em;
+      height: 1em;
+    }
+
+    @media (max-width: 560px) {
+      .last-five {
+        grid-template-columns: repeat(5, minmax(46px, 1fr));
+        gap: 8px;
+      }
+
+      .form-score {
+        min-width: 44px;
+        padding: 5px 7px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+      }
+
+      .form-flag {
+        width: 30px;
+        height: 30px;
+        font-size: 1.55rem;
+      }
+    }
+
 </style>
 
 
@@ -644,6 +1007,82 @@
     text-align: center !important;
   }
 }
+
+    /* Team form result cards */
+    .last-five {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(58px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .form-result {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .form-score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      padding: 5px 11px;
+      min-width: 58px;
+      font-size: 0.95rem;
+      font-weight: 950;
+      line-height: 1;
+      color: #fff;
+      box-shadow: inset 0 -2px 0 rgba(255,255,255,0.12);
+    }
+
+    .form-score.win { background: #009b63; }
+    .form-score.draw { background: #8a9299; }
+    .form-score.loss {
+      background: #df343c;
+      position: relative;
+    }
+
+    
+
+    .form-flag {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      line-height: 1;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .form-flag .flag-img {
+      width: 1em;
+      height: 1em;
+    }
+
+    @media (max-width: 560px) {
+      .last-five {
+        grid-template-columns: repeat(5, minmax(46px, 1fr));
+        gap: 8px;
+      }
+
+      .form-score {
+        min-width: 44px;
+        padding: 5px 7px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+      }
+
+      .form-flag {
+        width: 30px;
+        height: 30px;
+        font-size: 1.55rem;
+      }
+    }
+
 </style>
 
 </head>
@@ -656,7 +1095,7 @@
         <a href="/players">Players</a>
       </nav>
       <div class="eyebrow">World Cup Fantasy Football</div>
-      <h1>Teams to target</h1>
+      <h1>Team to target</h1>
       <p class="subtitle">See recent form and all three group matches with FIFA rankings and matchup difficulty.</p>
     </section>
   </header>
@@ -665,7 +1104,7 @@
     <section class="controls" aria-label="Team filters">
       <input id="searchInput" type="search" placeholder="Search team..." />
       <select id="groupFilter"><option value="">All groups</option></select>
-      <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option></select>
+      <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option><option value="form">Sort by form</option></select>
     </section>
 
     <section class="team-grid" id="teamGrid"></section>
@@ -758,54 +1197,54 @@
     ];
 
     const lastFiveResults = {
-      Portugal: ['Portugal 3-0 Bosnia','Slovakia 0-1 Portugal','Portugal 9-0 Luxembourg','Iceland 0-1 Portugal','Portugal 5-1 Poland'],
-      Spain: ['Spain 3-1 Norway','Georgia 1-7 Spain','Spain 2-0 Scotland','Cyprus 0-3 Spain','Spain 1-0 Italy'],
-      Belgium: ['Belgium 3-0 Sweden','Austria 2-3 Belgium','Belgium 5-0 Estonia','Azerbaijan 0-1 Belgium','Belgium 2-0 Serbia'],
-      Japan: ['Japan 4-1 Germany','Japan 4-2 Türkiye','Japan 5-0 Syria','North Korea 1-2 Japan','Japan 3-1 Tunisia'],
-      USA: ['USA 2-0 Mexico','USA 3-1 Jamaica','USA 1-1 Canada','Panama 0-2 USA','USA 4-0 Cuba'],
-      France: ['France 2-0 Greece','Netherlands 1-1 France','France 4-0 Gibraltar','Republic Ireland 0-2 France','France 1-0 Germany'],
-      Iran: ['Iran 4-0 Hong Kong','Iran 2-1 Uzbekistan','Iran 1-0 Kyrgyzstan','Jordan 2-2 Iran','Iran 3-0 UAE'],
-      Argentina: ['Argentina 2-0 Peru','Paraguay 0-1 Argentina','Argentina 3-0 Chile','Brazil 0-1 Argentina','Argentina 1-1 Uruguay'],
-      Austria: ['Austria 2-0 Germany','Austria 1-1 Belgium','Austria 3-1 Sweden','Estonia 0-2 Austria','Austria 1-0 Azerbaijan'],
-      England: ['England 2-0 Ukraine','Italy 1-2 England','England 3-1 Scotland','England 2-2 Belgium','England 1-0 Australia'],
-      Mexico: ['Mexico 1-1 Belgium','Mexico 0-0 Portugal','Mexico 4-0 Iceland','Bolivia 0-1 Mexico','Panama 0-1 Mexico'],
-      Uruguay: ['Uruguay 2-0 Brazil','Argentina 1-1 Uruguay','Uruguay 3-0 Bolivia','Colombia 2-2 Uruguay','Uruguay 1-0 Chile'],
-      Morocco: ['Morocco 2-1 Paraguay','Morocco 1-1 Ecuador','Senegal 0-3 Morocco','Nigeria 0-0 Morocco','Cameroon 0-2 Morocco'],
-      Senegal: ['Senegal 1-1 Ivory Coast','Senegal 2-0 Cameroon','Senegal 3-0 Gambia','Algeria 0-1 Senegal','Senegal 1-1 DR Congo'],
-      Australia: ['Australia 2-0 Lebanon','Lebanon 0-5 Australia','Australia 1-0 New Zealand','Australia 2-2 Mexico','Argentina 2-0 Australia'],
-      Egypt: ['Egypt 2-0 Sierra Leone','Egypt 1-1 DR Congo','Egypt 2-0 Burkina Faso','Guinea 1-1 Egypt','Egypt 1-0 Ethiopia'],
-      Netherlands: ['Netherlands 2-1 Ireland','Greece 0-1 Netherlands','Netherlands 3-0 Gibraltar','France 1-1 Netherlands','Netherlands 2-2 Germany'],
-      'DR Congo': ['DR Congo 1-0 Mauritania','DR Congo 1-1 Senegal','DR Congo 2-0 Sudan','Gabon 0-0 DR Congo','DR Congo 1-0 Togo'],
-      'Türkiye': ['Türkiye 3-2 Germany','Türkiye 1-1 Wales','Croatia 0-1 Türkiye','Türkiye 4-0 Latvia','Japan 4-2 Türkiye'],
-      Algeria: ['Algeria 2-0 Somalia','Algeria 1-1 Egypt','Algeria 3-0 Uganda','Guinea 1-0 Algeria','Algeria 2-1 Mozambique'],
-      Colombia: ['Colombia 2-1 Brazil','Colombia 0-0 Ecuador','Colombia 2-1 Paraguay','Uruguay 2-2 Colombia','Colombia 1-0 Venezuela'],
-      Croatia: ['Croatia 1-0 Armenia','Croatia 2-0 Latvia','Wales 2-1 Croatia','Croatia 0-0 Türkiye','Croatia 1-0 Tunisia'],
-      Panama: ['Panama 3-0 Guatemala','Panama 2-0 Martinique','Panama 0-2 Mexico','Panama 1-1 Curaçao','Panama 2-1 Costa Rica'],
-      Uzbekistan: ['Uzbekistan 3-1 Turkmenistan','Uzbekistan 1-0 Iran','Uzbekistan 2-2 Oman','Australia 1-0 Uzbekistan','Uzbekistan 2-0 Hong Kong'],
-      Czechia: ['Czechia 2-2 Denmark','Czechia 2-2 Ireland','Czechia 6-0 Gibraltar','Poland 3-2 Czechia','Czechia 2-1 Faroe Islands'],
-      Canada: ['Canada 0-0 Tunisia','Canada 2-2 Iceland','Canada 1-0 Guatemala','Venezuela 0-2 Canada','Canada 0-0 Ecuador'],
-      Norway: ['Norway 1-1 Scotland','Norway 2-1 Georgia','Norway 0-1 Spain','Norway 2-0 Cyprus','Norway 1-0 Sweden'],
-      'New Zealand': ['New Zealand 1-0 Solomon Islands','New Zealand 2-0 Tahiti','New Zealand 0-2 Australia','New Zealand 1-1 China','New Zealand 1-0 Fiji'],
-      Sweden: ['Sweden 2-0 Estonia','Sweden 1-3 Austria','Sweden 2-1 Moldova','Belgium 1-1 Sweden','Sweden 1-0 Albania'],
-      'Saudi Arabia': ['Saudi Arabia 2-0 Jordan','Saudi Arabia 1-1 South Korea','Saudi Arabia 0-2 Mexico','Saudi Arabia 2-1 Oman','Saudi Arabia 1-0 Iraq'],
-      Bosnia: ['Bosnia 1-1 Italy','Wales 1-1 Bosnia','Austria 1-1 Bosnia','Bosnia 3-1 Romania','Malta 1-4 Bosnia'],
-      'Ivory Coast': ['Ivory Coast 2-0 Gambia','Ivory Coast 1-0 Mali','Ivory Coast 3-1 Zambia','Nigeria 1-1 Ivory Coast','Ivory Coast 0-4 South Korea'],
-      Germany: ['Germany 2-1 Netherlands','Germany 2-0 France','Germany 1-1 Spain','Austria 2-0 Germany','Germany 2-1 Ghana'],
-      Scotland: ['Scotland 2-0 Georgia','Spain 2-0 Scotland','Scotland 1-3 England','Scotland 3-0 Cyprus','Norway 1-2 Scotland'],
-      'Cape Verde': ['Cape Verde 1-0 Guyana','Angola 0-0 Cape Verde','Cape Verde 2-1 Togo','Libya 0-0 Cape Verde','Cape Verde 1-1 Algeria'],
-      Jordan: ['Jordan 2-0 Saudi Arabia','Jordan 2-2 Iraq','Jordan 1-1 South Korea','Jordan 0-2 Iran','Jordan 3-0 Tajikistan'],
-      'South Korea': ['South Korea 1-0 Ghana','South Korea 2-0 Bolivia','South Korea 2-0 Paraguay','South Korea 0-4 Ivory Coast','Austria 1-0 South Korea'],
-      Iraq: ['Iraq 1-0 Vietnam','Iraq 2-2 Jordan','Iraq 1-0 Indonesia','South Korea 1-0 Iraq','Iraq 0-0 Oman'],
-      Haiti: ['Haiti 1-1 Guatemala','Haiti 2-0 St Kitts','Haiti 0-1 Jamaica','Haiti 3-0 Suriname','Haiti 1-2 Honduras'],
-      'South Africa': ['South Africa 1-2 Cameroon','Zimbabwe 2-3 South Africa','South Africa 1-1 Panama','South Africa 0-0 Namibia','South Africa 1-0 Morocco'],
-      Ecuador: ['Ecuador 0-0 Colombia','Ecuador 1-0 Chile','Brazil 1-1 Ecuador','Ecuador 2-1 Uruguay','Argentina 1-0 Ecuador'],
-      Brazil: ['Brazil 3-1 Croatia','Brazil 1-2 France','Brazil 1-1 Tunisia','Brazil 2-0 Senegal','Japan 3-2 Brazil'],
-      Ghana: ['Ghana 2-1 Madagascar','Ghana 1-0 Central African Rep','Ghana 0-2 Mexico','USA 4-0 Ghana','Ghana 2-0 Liberia'],
-      Curaçao: ['Curaçao 1-0 Aruba','Barbados 0-1 Curaçao','Curaçao 2-2 Panama','Curaçao 0-2 Costa Rica','El Salvador 1-1 Curaçao'],
-      Switzerland: ['Norway 0-0 Switzerland','Switzerland 3-4 Germany','Kosovo 1-1 Switzerland','Switzerland 4-1 Sweden','Slovenia 0-0 Switzerland'],
-      Tunisia: ['Tunisia 1-0 Libya','Tunisia 0-1 Japan','Tunisia 1-1 South Korea','Tunisia 2-0 Malawi','Equatorial Guinea 1-0 Tunisia'],
-      Paraguay: ['Morocco 2-1 Paraguay','Greece 0-1 Paraguay','Mexico 1-2 Paraguay','USA 2-1 Paraguay','South Korea 2-0 Paraguay'],
-      Qatar: ['Qatar 2-1 UAE','Oman 0-0 Qatar','Qatar 1-4 Russia','Qatar 2-2 Bahrain','Qatar 1-2 Zimbabwe']
+      Mexico: ['Mexico 1–0 Panama', 'Mexico 1–0 Bolivia', 'Mexico 4–0 Iceland', 'Mexico 0–0 Portugal', 'Mexico 1–1 Belgium'],
+      'South Korea': ['South Korea 2–0 Paraguay', 'South Korea 2–0 Bolivia', 'South Korea 1–0 Ghana', 'South Korea 0–4 Ivory Coast', 'Austria 1–0 South Korea'],
+      Czechia: ['Czechia 1–2 Faroe Islands', 'Czechia 1–0 San Marino', 'Czechia 6–0 Gibraltar', 'Czechia 2–2 Republic of Ireland', 'Czechia 2–2 Denmark'],
+      'South Africa': ['Egypt 1–0 South Africa', 'Zimbabwe 3–2 South Africa', 'South Africa 1–2 Cameroon', 'South Africa 1–1 Panama', 'South Africa 1–2 Panama'],
+      Switzerland: ['Switzerland 0–0 Slovenia', 'Switzerland 4–1 Sweden', 'Switzerland 1–1 Kosovo', 'Switzerland 3–4 Germany', 'Switzerland 0–0 Norway'],
+      Canada: ['Canada 0–0 Ecuador', 'Canada 2–0 Venezuela', 'Canada 1–0 Guatemala', 'Canada 2–2 Iceland', 'Canada 0–0 Tunisia'],
+      Qatar: ['Qatar 2–1 United Arab Emirates', 'Qatar 1–2 Zimbabwe', 'Qatar 0–1 Palestine', 'Qatar 1–1 Syria', 'Qatar 0–3 Tunisia'],
+      Bosnia: ['Bosnia 4–1 Malta', 'Bosnia 3–1 Romania', 'Bosnia 1–1 Austria', 'Bosnia 1–1 Wales', 'Bosnia 1–1 Italy'],
+      Brazil: ['Brazil 2–3 Japan', 'Brazil 2–0 Senegal', 'Brazil 1–1 Tunisia', 'Brazil 1–2 France', 'Brazil 3–1 Croatia'],
+      Morocco: ['Morocco 2–0 Cameroon', 'Morocco 0–0 Nigeria', 'Morocco 3–0 Senegal', 'Morocco 1–1 Ecuador', 'Morocco 2–1 Paraguay'],
+      Scotland: ['Scotland 2–1 Belarus', 'Scotland 2–3 Greece', 'Scotland 4–2 Denmark', 'Scotland 0–1 Japan', 'Scotland 0–1 Ivory Coast'],
+      Haiti: ['Haiti 0–3 Honduras', 'Haiti 1–0 Costa Rica', 'Haiti 2–0 Nicaragua', 'Haiti 0–1 Tunisia', 'Haiti 1–1 Iceland'],
+      USA: ['USA 2–1 Australia', 'USA 2–1 Paraguay', 'USA 5–1 Uruguay', 'USA 2–5 Belgium', 'USA 0–2 Portugal'],
+      'Türkiye': ['Türkiye 4–1 Georgia', 'Türkiye 2–0 Bulgaria', 'Türkiye 2–2 Spain', 'Türkiye 1–0 Romania', 'Türkiye 0–1 Kosovo'],
+      Australia: ['Australia 1–2 USA', 'Australia 0–1 Venezuela', 'Australia 0–3 Colombia', 'Australia 1–0 Cameroon', 'Australia 5–1 Curaçao'],
+      Paraguay: ['Paraguay 0–2 South Korea', 'Paraguay 1–2 USA', 'Paraguay 2–1 Mexico', 'Paraguay 1–0 Greece', 'Paraguay 1–2 Morocco'],
+      Germany: ['Germany 1–0 Northern Ireland', 'Germany 2–0 Luxembourg', 'Germany 6–0 Slovakia', 'Germany 4–3 Switzerland', 'Germany 2–1 Ghana'],
+      Ecuador: ['Ecuador 1–1 Mexico', 'Ecuador 0–0 Canada', 'Ecuador 2–0 New Zealand', 'Ecuador 1–1 Morocco', 'Ecuador 1–1 Netherlands'],
+      'Ivory Coast': ['Ivory Coast 3–2 Gabon', 'Ivory Coast 3–0 Burkina Faso', 'Ivory Coast 2–3 Egypt', 'Ivory Coast 4–0 South Korea', 'Ivory Coast 1–0 Scotland'],
+      'Curaçao': ['Curaçao 1–1 Trinidad and Tobago', 'Curaçao 7–0 Bermuda', 'Curaçao 0–0 Jamaica', 'Curaçao 0–2 China', 'Curaçao 1–5 Australia'],
+      Netherlands: ['Netherlands 4–0 Finland', 'Netherlands 1–1 Poland', 'Netherlands 4–0 Lithuania', 'Netherlands 2–1 Norway', 'Netherlands 1–1 Ecuador'],
+      Japan: ['Japan 3–2 Brazil', 'Japan 2–0 Ghana', 'Japan 3–0 Bolivia', 'Japan 1–0 Scotland', 'Japan 1–0 England'],
+      Sweden: ['Sweden 0–1 Kosovo', 'Sweden 1–4 Switzerland', 'Sweden 1–1 Slovenia', 'Sweden 3–1 Ukraine', 'Sweden 3–2 Poland'],
+      Tunisia: ['Tunisia 2–3 Nigeria', 'Tunisia 1–1 Tanzania', 'Tunisia 1–1 Mali', 'Tunisia 1–0 Haiti', 'Tunisia 0–0 Canada'],
+      Belgium: ['Belgium 4–2 Wales', 'Belgium 1–1 Kazakhstan', 'Belgium 7–0 Liechtenstein', 'Belgium 5–2 USA', 'Belgium 1–1 Mexico'],
+      Iran: ['Iran 2–1 Russia', 'Iran 2–0 Tanzania', 'Iran 0–0 Cape Verde', 'Iran 1–0 Uzbekistan', 'Iran 5–0 Costa Rica'],
+      Egypt: ['Egypt 3–2 Ivory Coast', 'Egypt 0–1 Senegal', 'Egypt 0–0 Nigeria', 'Egypt 4–0 Saudi Arabia', 'Egypt 0–0 Spain'],
+      'New Zealand': ['New Zealand 1–1 Norway', 'New Zealand 1–2 Colombia', 'New Zealand 0–2 Ecuador', 'New Zealand 0–2 Finland', 'New Zealand 4–1 Chile'],
+      Spain: ['Spain 4–0 Bulgaria', 'Spain 4–0 Georgia', 'Spain 2–2 Türkiye', 'Spain 3–0 Serbia', 'Spain 0–0 Egypt'],
+      Uruguay: ['Uruguay 2–1 Uzbekistan', 'Uruguay 0–0 Mexico', 'Uruguay 1–5 USA', 'Uruguay 1–1 England', 'Uruguay 0–0 Algeria'],
+      'Saudi Arabia': ['Saudi Arabia 2–1 Palestine', 'Saudi Arabia 0–1 Jordan', 'Saudi Arabia 0–0 United Arab Emirates', 'Saudi Arabia 0–4 Egypt', 'Saudi Arabia 1–2 Serbia'],
+      'Cape Verde': ['Cape Verde 3–0 Eswatini', 'Cape Verde 0–0 Iran', 'Cape Verde 1–1 Egypt', 'Cape Verde 2–4 Chile', 'Cape Verde 1–1 Finland'],
+      France: ['France 2–2 Iceland', 'France 4–0 Ukraine', 'France 3–1 Azerbaijan', 'France 2–1 Brazil', 'France 3–1 Colombia'],
+      Senegal: ['Senegal 1–0 Mali', 'Senegal 1–0 Egypt', 'Senegal 0–3 Morocco', 'Senegal 2–0 Peru', 'Senegal 3–1 Gambia'],
+      Norway: ['Norway 1–1 New Zealand', 'Norway 4–1 Estonia', 'Norway 4–1 Italy', 'Norway 1–2 Netherlands', 'Norway 0–0 Switzerland'],
+      Iraq: ['Iraq 2–1 Bahrain', 'Iraq 2–0 Sudan', 'Iraq 0–2 Algeria', 'Iraq 0–1 Jordan', 'Iraq 2–1 Bolivia'],
+      Argentina: ['Argentina 1–0 Venezuela', 'Argentina 6–0 Puerto Rico', 'Argentina 2–0 Angola', 'Argentina 2–1 Mauritania', 'Argentina 5–0 Zambia'],
+      Austria: ['Austria 0–1 Romania', 'Austria 2–0 Cyprus', 'Austria 1–1 Bosnia', 'Austria 5–1 Ghana', 'Austria 1–0 South Korea'],
+      Algeria: ['Algeria 3–1 Equatorial Guinea', 'Algeria 1–0 DR Congo', 'Algeria 2–0 Nigeria', 'Algeria 7–0 Guatemala', 'Algeria 0–0 Uruguay'],
+      Jordan: ['Jordan 3–0 Egypt', 'Jordan 1–0 Iraq', 'Jordan 1–0 Saudi Arabia', 'Jordan 2–3 Morocco', 'Jordan 2–2 Costa Rica'],
+      Portugal: ['Portugal 2–2 Hungary', 'Portugal 0–2 Ivory Coast', 'Portugal 9–1 Armenia', 'Portugal 0–0 Mexico', 'Portugal 2–0 USA'],
+      Colombia: ['Colombia 0–0 Canada', 'Colombia 2–1 New Zealand', 'Colombia 3–0 Australia', 'Colombia 1–2 Croatia', 'Colombia 1–3 France'],
+      'DR Congo': ['DR Congo 1–1 Senegal', 'DR Congo 3–0 Botswana', 'DR Congo 0–1 Algeria', 'DR Congo 2–0 Bermuda', 'DR Congo 1–0 Jamaica'],
+      Uzbekistan: ['Uzbekistan 1–2 Uruguay', 'Uzbekistan 2–0 Egypt', 'Uzbekistan 0–0 Iran', 'Uzbekistan 3–1 Gabon', 'Uzbekistan 0–0 Venezuela'],
+      England: ['England 5–0 Latvia', 'England 2–0 Serbia', 'England 2–0 Albania', 'England 1–1 Uruguay', 'England 0–1 Japan'],
+      Croatia: ['Croatia 3–0 Gibraltar', 'Croatia 3–1 Faroe Islands', 'Croatia 3–2 Montenegro', 'Croatia 2–1 Colombia', 'Croatia 1–3 Brazil'],
+      Panama: ['Panama 3–0 El Salvador', 'Panama 1–1 Bolivia', 'Panama 0–1 Mexico', 'Panama 1–1 South Africa', 'Panama 2–1 South Africa'],
+      Ghana: ['Ghana 0–2 Japan', 'Ghana 0–1 South Korea', 'Ghana 0–1 South Africa', 'Ghana 1–5 Austria', 'Ghana 1–2 Germany']
     };
 
     const teams = new Map();
@@ -884,6 +1323,88 @@
       return formatted;
     }
 
+
+    function countryFlag(country) {
+      const flags = {
+        'Portugal': '🇵🇹', 'Bosnia': '🇧🇦', 'Slovakia': '🇸🇰', 'Luxembourg': '🇱🇺', 'Iceland': '🇮🇸', 'Poland': '🇵🇱',
+        'Spain': '🇪🇸', 'Norway': '🇳🇴', 'Georgia': '🇬🇪', 'Scotland': scotlandFlag, 'Cyprus': '🇨🇾', 'Italy': '🇮🇹',
+        'Belgium': '🇧🇪', 'Sweden': '🇸🇪', 'Austria': '🇦🇹', 'Estonia': '🇪🇪', 'Azerbaijan': '🇦🇿', 'Serbia': '🇷🇸',
+        'Japan': '🇯🇵', 'Germany': '🇩🇪', 'Türkiye': '🇹🇷', 'Syria': '🇸🇾', 'North Korea': '🇰🇵', 'Tunisia': '🇹🇳',
+        'USA': '🇺🇸', 'Mexico': '🇲🇽', 'Jamaica': '🇯🇲', 'Canada': '🇨🇦', 'Panama': '🇵🇦', 'Cuba': '🇨🇺',
+        'France': '🇫🇷', 'Greece': '🇬🇷', 'Netherlands': '🇳🇱', 'Gibraltar': '🇬🇮', 'Republic of Ireland': '🇮🇪', 'Republic Ireland': '🇮🇪', 'Ireland': '🇮🇪',
+        'Iran': '🇮🇷', 'Hong Kong': '🇭🇰', 'Uzbekistan': '🇺🇿', 'Kyrgyzstan': '🇰🇬', 'Jordan': '🇯🇴', 'United Arab Emirates': '🇦🇪', 'UAE': '🇦🇪',
+        'Argentina': '🇦🇷', 'Peru': '🇵🇪', 'Paraguay': '🇵🇾', 'Chile': '🇨🇱', 'Brazil': '🇧🇷', 'Uruguay': '🇺🇾',
+        'England': englandFlag, 'Ukraine': '🇺🇦', 'Australia': '🇦🇺', 'Bolivia': '🇧🇴',
+        'Morocco': '🇲🇦', 'Ecuador': '🇪🇨', 'Senegal': '🇸🇳', 'Nigeria': '🇳🇬', 'Cameroon': '🇨🇲',
+        'Ivory Coast': '🇨🇮', 'Gambia': '🇬🇲', 'Mali': '🇲🇱', 'Zambia': '🇿🇲',
+        'Algeria': '🇩🇿', 'DR Congo': '🇨🇩', 'Lebanon': '🇱🇧',
+        'Egypt': '🇪🇬', 'Sierra Leone': '🇸🇱', 'Burkina Faso': '🇧🇫', 'Guinea': '🇬🇳', 'Ethiopia': '🇪🇹',
+        'Mauritania': '🇲🇷', 'Sudan': '🇸🇩', 'Gabon': '🇬🇦', 'Togo': '🇹🇬',
+        'Wales': '🏴', 'Croatia': '🇭🇷', 'Latvia': '🇱🇻', 'Uganda': '🇺🇬', 'Mozambique': '🇲🇿',
+        'Colombia': '🇨🇴', 'Venezuela': '🇻🇪', 'Armenia': '🇦🇲', 'Martinique': '🇲🇶', 'Costa Rica': '🇨🇷',
+        'Turkmenistan': '🇹🇲', 'Oman': '🇴🇲', 'Denmark': '🇩🇰', 'Faroe Islands': '🇫🇴',
+        'Czechia': '🇨🇿', 'New Zealand': '🇳🇿', 'Tahiti': '🇵🇫', 'China': '🇨🇳', 'Fiji': '🇫🇯',
+        'Saudi Arabia': '🇸🇦', 'South Korea': '🇰🇷', 'Iraq': '🇮🇶', 'Malta': '🇲🇹', 'Romania': '🇷🇴',
+        'Ghana': '🇬🇭', 'Cape Verde': '🇨🇻', 'Guyana': '🇬🇾', 'Angola': '🇦🇴', 'Libya': '🇱🇾',
+        'Tajikistan': '🇹🇯', 'Vietnam': '🇻🇳', 'Indonesia': '🇮🇩', 'Haiti': '🇭🇹', 'Guatemala': '🇬🇹',
+        'St Kitts': '🇰🇳', 'Suriname': '🇸🇷', 'Honduras': '🇭🇳', 'South Africa': '🇿🇦', 'Zimbabwe': '🇿🇼',
+        'Namibia': '🇳🇦', 'Madagascar': '🇲🇬', 'Central African Rep': '🇨🇫', 'Liberia': '🇱🇷',
+        'Curaçao': '🇨🇼', 'Aruba': '🇦🇼', 'Barbados': '🇧🇧', 'El Salvador': '🇸🇻', 'Kosovo': '🇽🇰',
+        'Switzerland': '🇨🇭', 'Slovenia': '🇸🇮', 'Malawi': '🇲🇼', 'Equatorial Guinea': '🇬🇶',
+        'Qatar': '🇶🇦', 'Bahrain': '🇧🇭', 'Russia': '🇷🇺', 'Finland': '🇫🇮', 'Lithuania': '🇱🇹',
+        'Northern Ireland': '🇬🇧', 'Liechtenstein': '🇱🇮', 'Kazakhstan': '🇰🇿', 'Tanzania': '🇹🇿',
+        'Palestine': '🇵🇸', 'Hungary': '🇭🇺', 'Puerto Rico': '🇵🇷', 'Angola': '🇦🇴',
+        'Botswana': '🇧🇼', 'Bermuda': '🇧🇲', 'Nicaragua': '🇳🇮', 'Trinidad and Tobago': '🇹🇹',
+        'Eswatini': '🇸🇿', 'Belarus': '🇧🇾', 'San Marino': '🇸🇲', 'Montenegro': '🇲🇪'
+      };
+return flags[country] || country;
+    }
+
+    function formatTeamFormResult(result, teamName) {
+      const match = result.match(/^(.*?)\s+(\d+)[–-](\d+)\s+(.*?)$/);
+      if (!match) {
+        return `<div class="form-result"><span class="form-score draw">${result}</span></div>`;
+      }
+
+      const homeTeam = match[1].trim();
+      const homeScore = Number(match[2]);
+      const awayScore = Number(match[3]);
+      const awayTeam = match[4].trim();
+      const isHome = homeTeam === teamName;
+      const teamScore = isHome ? homeScore : awayScore;
+      const opponentScore = isHome ? awayScore : homeScore;
+      const opponent = isHome ? awayTeam : homeTeam;
+      const outcome = teamScore > opponentScore ? 'win' : teamScore < opponentScore ? 'loss' : 'draw';
+
+      return `<div class="form-result" title="${result}">
+        <span class="form-score ${outcome}">${teamScore} - ${opponentScore}</span>
+        <span class="form-flag">${countryFlag(opponent)}</span>
+      </div>`;
+    }
+
+
+    function formPoints(result, teamName) {
+      const match = result.match(/^(.*?)\s+(\d+)[–-](\d+)\s+(.*?)$/);
+      if (!match) return 0;
+
+      const homeTeam = match[1].trim();
+      const homeScore = Number(match[2]);
+      const awayScore = Number(match[3]);
+      const awayTeam = match[4].trim();
+
+      const isHome = homeTeam === teamName;
+      const teamScore = isHome ? homeScore : awayScore;
+      const opponentScore = isHome ? awayScore : homeScore;
+
+      if (teamScore > opponentScore) return 3;
+      if (teamScore === opponentScore) return 1;
+      return 0;
+    }
+
+    function formScore(team) {
+      return team.lastFive.reduce((total, result) => total + formPoints(result, team.team), 0);
+    }
+
     function render() {
       const query = searchInput.value.toLowerCase();
       const group = groupFilter.value;
@@ -894,6 +1415,7 @@
         .sort((a, b) => {
           if (sort === 'rank') return a.rank - b.rank;
           if (sort === 'country') return a.team.localeCompare(b.team);
+          if (sort === 'form') return formScore(b) - formScore(a) || a.rank - b.rank;
           return a.group.localeCompare(b.group) || a.rank - b.rank;
         });
 
@@ -911,7 +1433,7 @@
           <div class="team-body">
             <section>
               <div class="section-title">Last five results</div>
-              <div class="last-five">${team.lastFive.map(result => `<span class="result-pill" contenteditable="true">${formatResult(result)}</span>`).join('')}</div>
+              <div class="last-five">${team.lastFive.map(result => formatTeamFormResult(result, team.team)).join('')}</div>
             </section>
             <section>
               <div class="section-title">Group games</div>
