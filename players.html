@@ -195,7 +195,7 @@
       padding: 22px;
       display: flex;
       justify-content: space-between;
-      gap: 16px;
+      gap: 12px;
       align-items: flex-start;
       border-bottom: 1px solid var(--border);
       background: radial-gradient(circle at top left, rgba(64,224,160,0.12), transparent 62%);
@@ -429,6 +429,100 @@
   }
 </style>
 
+
+<style id="individual-player-card-layout">
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+
+  .player-card {
+    padding: 22px !important;
+    overflow: visible !important;
+  }
+
+  .individual-player-card {
+    display: grid;
+    gap: 12px;
+  }
+
+  .player-card-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .player-card-main .shirt {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+  }
+
+  .player-copy {
+    min-width: 0;
+  }
+
+  .player-name {
+    font-size: 1.15rem;
+    line-height: 1.1;
+  }
+
+  .player-country-line {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    font-weight: 800;
+  }
+
+  .player-meta-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .player-meta-separator {
+    opacity: 0.45;
+  }
+
+  .player-card-reason {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+
+  @media (max-width: 1000px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .player-card {
+      padding: 18px !important;
+    }
+
+    .player-card-main .shirt {
+      width: 42px;
+      height: 42px;
+    }
+  }
+</style>
+
 </head>
 <body>
   <header>
@@ -470,7 +564,8 @@
       <input id="searchInput" type="search" placeholder="Search country or player..." />
       <select id="groupFilter"><option value="">All groups</option></select>
       <select id="roleFilter"><option value="">All roles</option><option>Forward</option><option>Midfielder</option><option>Defender</option><option>Goalkeeper</option><option>Penalty taker</option></select>
-      <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option></select>
+      <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option>
+              <option value="price">Sort by price</option></select>
     </section>
 
     <section class="grid" id="playerGrid"></section>
@@ -612,48 +707,71 @@
       const role = roleFilter.value;
       const sort = sortSelect.value;
 
-      let rows = teams.filter(team => {
-        const names = Object.values(team.picks).flat().join(' ').toLowerCase();
-        return (!group || team.group === group) &&
-          (!query || team.country.toLowerCase().includes(query) || names.includes(query));
+      const roleRows = [
+        ['Forward', 'forward'],
+        ['Midfielder', 'midfielder'],
+        ['Defender', 'defender'],
+        ['Goalkeeper', 'goalkeeper'],
+        ['Penalty taker', 'penalty']
+      ];
+
+      let rows = teams.flatMap(team =>
+        roleRows
+          .filter(([label]) => !role || label === role)
+          .map(([label, key]) => {
+            const pick = team.picks[key];
+            return {
+              team,
+              role: label,
+              name: pick[0],
+              why: pick[1],
+              number: pick[2],
+              price: rolePrices[label] || '$5m'
+            };
+          })
+      ).filter(player => {
+        const searchable = `${player.name} ${player.why} ${player.team.country} ${player.role}`.toLowerCase();
+        return (!group || player.team.group === group) &&
+          (!query || searchable.includes(query));
       });
 
       rows.sort((a, b) => {
-        if (sort === 'rank') return a.rank - b.rank;
-        if (sort === 'country') return a.country.localeCompare(b.country);
-        return a.group.localeCompare(b.group) || a.rank - b.rank;
+        if (sort === 'rank') return a.team.rank - b.team.rank || a.name.localeCompare(b.name);
+        
+        if (sort === 'price') {
+          const priceValue = (price) => {
+            const match = String(price).match(/[\d.]+/);
+            return match ? parseFloat(match[0]) : 0;
+          };
+
+          return priceValue(b.price) - priceValue(a.price) || a.name.localeCompare(b.name);
+        }
+
+        if (sort === 'country') return a.team.country.localeCompare(b.team.country) || a.role.localeCompare(b.role);
+        return a.team.group.localeCompare(b.team.group) || a.team.rank - b.team.rank || a.role.localeCompare(b.role);
       });
 
-      playerGrid.innerHTML = rows.map(team => {
-        const pickRows = [
-          ['Forward', team.picks.forward],
-          ['Midfielder', team.picks.midfielder],
-          ['Defender', team.picks.defender],
-          ['Goalkeeper', team.picks.goalkeeper],
-          ['Penalty taker', team.picks.penalty]
-        ].filter(([label]) => !role || label === role);
-
-        return `<article class="player-card">
-          <div class="country-header">
-            <div class="country-name"><span>${team.flag}</span><span>${team.country}</span></div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
-              <span class="tag good">Group ${team.group}</span>
-              <span class="tag">FIFA rank ${team.rank}</span>
+      playerGrid.innerHTML = rows.map(player => `
+        <article class="player-card individual-player-card">
+          <div class="player-card-main">
+            <div>${shirtSvg(player.team.country, player.number)}</div>
+            <div class="player-copy">
+              <div class="player-name">${player.name}</div>
+              
             </div>
           </div>
-          <div class="list">
-            ${pickRows.map(([label, pick]) => `<div class="row">
-              <div>${shirtSvg(team.country, pick[2])}</div>
-              <div>
-                <div class="player-name">${pick[0]}</div>
-                <div class="player-meta">${rolePrices[label] || "$5m"} · ${label}</div>
-                <div class="why">${pick[1]}</div>
-              </div>
-              <div class="role">${label}</div>
-            </div>`).join('')}
+
+          <div class="player-meta-line">
+            <span>${player.team.flag} ${player.team.country}</span>
+            <span class="player-meta-separator">•</span>
+            <span>${player.role}</span>
+            <span class="player-meta-separator">•</span>
+            <span>${player.price}</span>
           </div>
-        </article>`;
-      }).join('');
+
+          <div class="player-card-reason">${player.why || 'No note added yet.'}</div>
+        </article>
+      `).join('');
 
       noResults.style.display = rows.length ? 'none' : 'block';
     }
