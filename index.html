@@ -34,6 +34,14 @@
       padding: 32px 24px;
     }
 
+    header {
+      padding-bottom: 10px;
+    }
+
+    main {
+      padding-top: 8px;
+    }
+
     .hero {
       display: grid;
       grid-template-columns: 1.5fr 1fr;
@@ -249,6 +257,11 @@
     }
 
     @media (max-width: 560px) {
+      h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.05 !important;
+      }
+
 
       .site-nav {
         width: 100%;
@@ -263,6 +276,14 @@
       }
 
       header, main { padding: 20px 12px; }
+
+      header {
+        padding-bottom: 6px;
+      }
+
+      main {
+        padding-top: 4px;
+      }
       .hero-card { border-radius: 28px; padding: 26px; }
       h1 { font-size: clamp(2.2rem, 13vw, 3.7rem); }
       .subtitle { font-size: .96rem; }
@@ -401,7 +422,7 @@
       ['Fri','June 12','2:00','Los Angeles 🇺🇸',17,'D',1,'🇺🇸','USA','Paraguay','🇵🇾',16,41,25],
       ['Sat','June 13','20:00','Vancouver 🇨🇦',18,'B',1,'🇶🇦','Qatar','Switzerland','🇨🇭',56,19,37],
       ['Sat','June 13','23:00','Miami 🇺🇸',28,'C',1,'🇧🇷','Brazil','Morocco','🇲🇦',6,8,2],
-      ['Sat','June 13','2:00','Dallas 🇺🇸',26,'C',1,'🇭🇹','Haiti','Scotland',scotlandFlag,83,43,40],
+      ['Sat','June 13','2:00','Dallas 🇺🇸',26,'C',1,'🇭🇹','Haiti','Scotland','🏴',83,43,40],
       ['Sat','June 13','5:00','Seattle 🇺🇸',13,'D',1,'🇦🇺','Australia','Türkiye','🇹🇷',27,22,5],
       ['Sun','June 14','18:00','New York 🇺🇸',27,'E',1,'🇩🇪','Germany','Curaçao','🇨🇼',10,81,71],
       ['Sun','June 14','21:00','Boston 🇺🇸',24,'F',1,'🇳🇱','Netherlands','Japan','🇯🇵',7,18,11],
@@ -416,9 +437,57 @@
       ['Tue','June 16','2:00','Houston 🇺🇸',27,'J',1,'🇦🇷','Argentina','Algeria','🇩🇿',3,28,25],
       ['Tue','June 16','5:00','Dallas 🇺🇸',25,'J',1,'🇦🇹','Austria','Jordan','🇯🇴',24,64,40],
       ['Wed','June 17','18:00','Seattle 🇺🇸',19,'K',1,'🇵🇹','Portugal','DR Congo','🇨🇩',5,46,41],
-      ['Wed','June 17','20:00','Toronto 🇨🇦',22,'L',1,englandFlag,'England','Croatia','🇭🇷',4,11,7],
+      ['Wed','June 17','20:00','Toronto 🇨🇦',22,'L',1,'🏴','England','Croatia','🇭🇷',4,11,7],
       ['Wed','June 17','23:00','Vancouver 🇨🇦',17,'L',1,'🇬🇭','Ghana','Panama','🇵🇦',72,33,39],
-      ['Wed','June 17','3:00','Los Angeles 🇺🇸',16,'K',1,'🇺🇿','Uzbekistan','Colombia','🇨🇴',49,12,37]
+      ['Wed','June 17','3:00','Los Angeles 🇺🇸',16,'K',1,'🇺🇿','Uzbekistan','Colombia','🇨🇴',49,12,37],
+      ['Thu','June 18','17:00','Monterrey 🇲🇽',32,'A',2,'🇨🇿','Czechia','South Africa','🇿🇦',38,60,22],
+      ['Thu','June 18','23:00','Toronto 🇨🇦',19,'B',2,'🇨🇭','Switzerland','Bosnia','🇧🇦',19,71,52],
+      ['Thu','June 18','20:00','Vancouver 🇨🇦',18,'B',2,'🇨🇦','Canada','Qatar','🇶🇦',30,56,26],
+      ['Thu','June 18','20:00','Mexico City 🇲🇽',22,'A',2,'🇲🇽','Mexico','South Korea','🇰🇷',15,25,10],
+      ['Fri','June 19','2:00','Los Angeles 🇺🇸',17,'D',2,'🇺🇸','USA','Australia','🇦🇺',16,27,11],
+      ['Fri','June 19','2:00','Dallas 🇺🇸',26,'C',2,'🏴','Scotland','Morocco','🇲🇦',43,8,35],
+      ['Fri','June 19','23:00','Miami 🇺🇸',28,'C',2,'🇧🇷','Brazil','Haiti','🇭🇹',6,83,77],
+      ['Fri','June 19','5:00','Seattle 🇺🇸',13,'D',2,'🇹🇷','Türkiye','Paraguay','🇵🇾',22,41,19],
+      ['Sat','June 20','18:00','Boston 🇺🇸',25,'F',2,'🇳🇱','Netherlands','Sweden','🇸🇪',7,37,30],
+      ['Sat','June 20','21:00','New York 🇺🇸',26,'E',2,'🇩🇪','Germany','Ivory Coast','🇨🇮',10,34,24],
+      ['Sat','June 20','1:00','Houston 🇺🇸',27,'E',2,'🇪🇨','Ecuador','Curaçao','🇨🇼',23,81,58],
+      ['Sat','June 20','5:00','Atlanta 🇺🇸',23,'F',2,'🇹🇳','Tunisia','Japan','🇯🇵',44,18,26],
+      ['Sun','June 21','23:00','Philadelphia 🇺🇸',24,'H',2,'🇪🇸','Spain','Saudi Arabia','🇸🇦',2,61,59],
+      ['Sun','June 21','20:00','Kansas City 🇺🇸',26,'G',2,'🇧🇪','Belgium','Iran','🇮🇷',9,20,11],
+      ['Sun','June 21','17:00','Los Angeles 🇺🇸',22,'H',2,'🇺🇾','Uruguay','Cape Verde','🇨🇻',17,67,50],
+      ['Sun','June 21','2:00','San Francisco 🇺🇸',13,'G',2,'🇳🇿','New Zealand','Egypt','🇪🇬',85,29,56],
+      ['Mon','June 22','18:00','Dallas 🇺🇸',33,'J',2,'🇦🇷','Argentina','Austria','🇦🇹',3,24,21],
+      ['Mon','June 22','1:00','New York 🇺🇸',25,'I',2,'🇫🇷','France','Iraq','🇮🇶',1,58,57],
+      ['Mon','June 22','22:00','Boston 🇺🇸',23,'I',2,'🇳🇴','Norway','Senegal','🇸🇳',31,13,18],
+      ['Mon','June 22','4:00','Houston 🇺🇸',26,'J',2,'🇯🇴','Jordan','Algeria','🇩🇿',64,28,36],
+      ['Tue','June 23','18:00','Seattle 🇺🇸',20,'K',2,'🇵🇹','Portugal','Uzbekistan','🇺🇿',5,49,44],
+      ['Tue','June 23','20:00','Toronto 🇨🇦',23,'L',2,'🏴','England','Ghana','🇬🇭',4,72,68],
+      ['Tue','June 23','17:00','Vancouver 🇨🇦',19,'L',2,'🇵🇦','Panama','Croatia','🇭🇷',33,11,22],
+      ['Tue','June 23','3:00','Los Angeles 🇺🇸',16,'K',2,'🇨🇴','Colombia','DR Congo','🇨🇩',12,46,34],
+      ['Wed','June 24','20:00','Toronto 🇨🇦',23,'B',3,'🇨🇭','Switzerland','Canada','🇨🇦',19,30,11],
+      ['Wed','June 24','20:00','Vancouver 🇨🇦',18,'B',3,'🇧🇦','Bosnia','Qatar','🇶🇦',71,56,15],
+      ['Wed','June 24','23:00','Miami 🇺🇸',28,'C',3,'🇲🇦','Morocco','Haiti','🇭🇹',8,83,75],
+      ['Wed','June 24','23:00','Dallas 🇺🇸',30,'C',3,'🏴','Scotland','Brazil','🇧🇷',43,6,37],
+      ['Wed','June 24','2:00','Monterrey 🇲🇽',27,'A',3,'🇿🇦','South Africa','South Korea','🇰🇷',60,25,35],
+      ['Wed','June 24','2:00','Mexico City 🇲🇽',18,'A',3,'🇨🇿','Czechia','Mexico','🇲🇽',38,15,23],
+      ['Thu','June 25','21:00','Houston 🇺🇸',28,'E',3,'🇨🇼','Curaçao','Ivory Coast','🇨🇮',81,34,47],
+      ['Thu','June 25','21:00','New York 🇺🇸',26,'E',3,'🇪🇨','Ecuador','Germany','🇩🇪',23,10,13],
+      ['Thu','June 25','19:00','Atlanta 🇺🇸',27,'F',3,'🇹🇳','Tunisia','Netherlands','🇳🇱',44,7,37],
+      ['Thu','June 25','19:00','Boston 🇺🇸',24,'F',3,'🇯🇵','Japan','Sweden','🇸🇪',18,37,19],
+      ['Thu','June 25','21:00','Los Angeles 🇺🇸',20,'D',3,'🇹🇷','Türkiye','USA','🇺🇸',22,16,6],
+      ['Thu','June 25','21:00','Seattle 🇺🇸',18,'D',3,'🇵🇾','Paraguay','Australia','🇦🇺',41,27,14],
+      ['Fri','June 26','23:00','New York 🇺🇸',24,'I',3,'🇳🇴','Norway','France','🇫🇷',31,1,30],
+      ['Fri','June 26','23:00','Boston 🇺🇸',22,'I',3,'🇸🇳','Senegal','Iraq','🇮🇶',13,58,45],
+      ['Fri','June 26','21:00','Philadelphia 🇺🇸',26,'H',3,'🇨🇻','Cape Verde','Saudi Arabia','🇸🇦',67,61,6],
+      ['Fri','June 26','21:00','Los Angeles 🇺🇸',20,'H',3,'🇺🇾','Uruguay','Spain','🇪🇸',17,2,15],
+      ['Fri','June 26','19:00','Kansas City 🇺🇸',27,'G',3,'🇳🇿','New Zealand','Belgium','🇧🇪',85,9,76],
+      ['Fri','June 26','19:00','San Francisco 🇺🇸',16,'G',3,'🇪🇬','Egypt','Iran','🇮🇷',29,20,9],
+      ['Sat','June 27','20:00','Toronto 🇨🇦',24,'L',3,'🇵🇦','Panama','England','🏴',33,4,29],
+      ['Sat','June 27','23:00','Vancouver 🇨🇦',18,'L',3,'🇭🇷','Croatia','Ghana','🇬🇭',11,72,61],
+      ['Sat','June 27','23:30','Los Angeles 🇺🇸',19,'K',3,'🇨🇴','Colombia','Portugal','🇵🇹',12,5,7],
+      ['Sat','June 27','23:30','Seattle 🇺🇸',17,'K',3,'🇨🇩','DR Congo','Uzbekistan','🇺🇿',46,49,3],
+      ['Sat','June 27','19:00','Houston 🇺🇸',30,'J',3,'🇩🇿','Algeria','Austria','🇦🇹',28,24,4],
+      ['Sat','June 27','19:00','Dallas 🇺🇸',33,'J',3,'🇯🇴','Jordan','Argentina','🇦🇷',64,3,61]
     ].map((row, index) => ({ index, day: row[0], date: row[1], time: row[2], city: row[3], temp: row[4], group: row[5], matchday: row[6], flag1: row[7], team1: row[8], team2: row[9], flag2: row[10], rank1: row[11], rank2: row[12], gap: row[13] }));
 
     const knockoutFixtures = [

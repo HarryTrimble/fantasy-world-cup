@@ -35,7 +35,15 @@
       padding: 32px 24px;
     }
 
-    .hero, .controls, .team-card {
+    header {
+      padding-bottom: 10px;
+    }
+
+    main {
+      padding-top: 8px;
+    }
+
+    .controls, .team-card {
       background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
       border: 1px solid var(--border);
       border-radius: 28px;
@@ -44,6 +52,22 @@
     }
 
     .hero {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 24px;
+      background: none;
+      border: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+      padding: 0;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
       padding: 32px;
     }
 
@@ -109,6 +133,39 @@
     .site-nav a.active {
       color: #06101d;
       background: var(--accent);
+    }
+
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      padding: 20px;
+      min-height: 118px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .stat-value {
+      font-size: 2.1rem;
+      font-weight: 950;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.35;
     }
 
     .controls {
@@ -258,15 +315,66 @@
     }
 
     @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+
       .team-grid { grid-template-columns: 1fr; }
       .hero { flex-direction: column; }
-      .controls { grid-template-columns: 1fr; position: static; }
+  
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      padding: 20px;
+      min-height: 118px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .stat-value {
+      font-size: 2.1rem;
+      font-weight: 950;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    .controls { grid-template-columns: 1fr; position: static; }
     }
 
     @media (max-width: 560px) {
+      h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.05 !important;
+      }
+
+      .stats-grid { display: none; }
+
       header, main { padding: 18px 12px; }
-      .hero, .team-card, .controls { border-radius: 22px; }
-      .hero { padding: 24px; }
+
+      header {
+        padding-bottom: 6px;
+      }
+
+      main {
+        padding-top: 4px;
+      }
+      .hero-card, .team-card, .controls { border-radius: 22px; }
+      .hero-card { padding: 24px; }
       h1 { font-size: clamp(2.2rem, 13vw, 3.6rem); }
       .game-meta { grid-template-columns: repeat(2, 1fr); }
 
@@ -1089,19 +1197,39 @@
 <body>
   <header>
     <section class="hero">
-      <nav class="site-nav" aria-label="Site navigation">
+      <div class="hero-card">
+        <nav class="site-nav" aria-label="Site navigation">
         <a href="/">Fixtures</a>
         <a class="active" href="/teams">Teams</a>
         <a href="/players">Players</a>
       </nav>
       <div class="eyebrow">World Cup Fantasy Football</div>
-      <h1>Teams to target</h1>
+      <h1>Team to target</h1>
       <p class="subtitle">See recent form and all three group matches with FIFA rankings and matchup difficulty.</p>
+      </div>
+      <section class="stats-grid" aria-label="Team stats">
+      <div class="stat-card">
+        <div class="stat-value" id="totalTeams">0</div>
+        <div class="stat-label">Qualified teams</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="bestRank">0</div>
+        <div class="stat-label">Best FIFA rank</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="topFormScore">0</div>
+        <div class="stat-label">Best last-five form score</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="biggestTeamGap">0</div>
+        <div class="stat-label">Biggest group-game rank gap</div>
+      </div>
+    </section>
     </section>
   </header>
 
   <main>
-    <section class="controls" aria-label="Team filters">
+<section class="controls" aria-label="Team filters">
       <input id="searchInput" type="search" placeholder="Search team..." />
       <select id="groupFilter"><option value="">All groups</option></select>
       <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option><option value="form">Sort by form</option></select>
@@ -1405,6 +1533,19 @@ return flags[country] || country;
       return team.lastFive.reduce((total, result) => total + formPoints(result, team.team), 0);
     }
 
+
+    function populateStats() {
+      const teamRows = [...teams.values()];
+      const bestRankTeam = [...teamRows].sort((a, b) => a.rank - b.rank)[0];
+      const topFormTeam = [...teamRows].sort((a, b) => formScore(b) - formScore(a) || a.rank - b.rank)[0];
+      const biggestGap = Math.max(...fixtures.map(row => Number(row[14])));
+
+      document.getElementById('totalTeams').textContent = teamRows.length;
+      document.getElementById('bestRank').textContent = bestRankTeam ? bestRankTeam.rank : 0;
+      document.getElementById('topFormScore').textContent = topFormTeam ? formScore(topFormTeam) : 0;
+      document.getElementById('biggestTeamGap').textContent = biggestGap;
+    }
+
     function render() {
       const query = searchInput.value.toLowerCase();
       const group = groupFilter.value;
@@ -1427,7 +1568,7 @@ return flags[country] || country;
             </div>
             <div class="team-pills">
               <span class="group-pill">Group ${team.group}</span>
-              <span class="rank-pill">FIFA rank ${team.rank}</span>
+              <span class="rank-pill">FIFA Rank ${team.rank}</span>
             </div>
           </div>
           <div class="team-body">
@@ -1462,6 +1603,7 @@ return flags[country] || country;
     }
 
     [searchInput, groupFilter, sortSelect].forEach(el => el.addEventListener('input', render));
+    populateStats();
     render();
   </script>
 </body>
