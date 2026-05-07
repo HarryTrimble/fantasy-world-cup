@@ -44,8 +44,6 @@
     }
 
     .hero {
-      margin-bottom: 6px;
-
       display: grid;
       grid-template-columns: 1.5fr 1fr;
       gap: 24px;
@@ -59,7 +57,6 @@
       backdrop-filter: blur(14px);
       padding: 32px;
     }
-
 
     .stats-grid {
       display: grid;
@@ -90,7 +87,6 @@
     .stat-label {
       color: var(--muted);
       font-size: 0.9rem;
-      line-height: 1.35;
     }
 
     .site-nav {
@@ -163,8 +159,6 @@
     }
 
     .controls {
-      margin-top: 0 !important;
-
       padding: 18px;
       display: grid;
       grid-template-columns: 1.5fr 1fr 1fr 1fr;
@@ -300,45 +294,8 @@
     @media (max-width: 560px) {
       .stats-grid { display: none; }
 
-      .hero {
-        margin-bottom: 2px;
-      }
 
-
-  
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .stat-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      padding: 22px;
-      min-height: 136px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .stat-value {
-      font-size: 2.4rem;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      line-height: 1;
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.35;
-    }
-
-    .site-nav {
+      .site-nav {
         width: 100%;
         max-width: 100%;
         gap: 8px;
@@ -412,12 +369,9 @@
 </style>
 
 
-
-
-
-<style id="safe-hero-controls-spacing-fix">
+<style id="balanced-hero-controls-spacing">
   header {
-    padding-bottom: 18px !important;
+    padding-bottom: 14px !important;
   }
 
   main {
@@ -429,7 +383,7 @@
   }
 
   .hero {
-    margin-bottom: 18px !important;
+    margin-bottom: 0 !important;
   }
 
   .controls {
@@ -439,11 +393,11 @@
 
   @media (max-width: 560px) {
     header {
-      padding-bottom: 14px !important;
+      padding-bottom: 10px !important;
     }
 
-    .hero {
-      margin-bottom: 14px !important;
+    main {
+      padding-top: 0 !important;
     }
 
     .controls {
@@ -452,6 +406,28 @@
   }
 </style>
 
+
+<style id="force-hide-stats-mobile">
+  @media (max-width: 560px) {
+    .stats-grid,
+    section.stats-grid,
+    [aria-label="Player stats"] {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      min-height: 0 !important;
+      max-height: 0 !important;
+      overflow: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+    }
+
+    .hero {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
 
 </head>
 <body>
@@ -465,8 +441,9 @@
       </nav>
       <div class="eyebrow">World Cup Fantasy Football</div>
       <h1>Players to target</h1>
-      <p class="subtitle">One forward, midfielder, defender, goalkeeper and penalty taker per country. Picks are loaded from the latest player recommendations CSV, covering likely starters, attacking output, clean-sheet upside, penalties and set pieces.</p>
+      <p class="subtitle">One forward, midfielder, defender, goalkeeper and penalty taker per country. Picks are provisional and weighted toward likely starters, attacking output, clean-sheet upside, penalties and set pieces.</p>
       </div>
+
       <section class="stats-grid" aria-label="Player stats">
         <div class="stat-card">
           <div class="stat-value" id="totalTeams">0</div>
@@ -551,8 +528,8 @@
       { group:"H", country:"Uruguay", flag:"🇺🇾", picks:{ forward:["Darwin", "Mid market forward", 10], midfielder:["Valverde", "Elite midfielder", 10], defender:["Araujo", "Barcelona defender", 10], goalkeeper:["Rochet", "Budget keeper", 10], penalty:["Valverde", "Recent penalty taker", 10] } },
       { group:"K", country:"Uzbekistan", flag:"🇺🇿", picks:{ forward:["Shomurodov", "Budget forward", 10], midfielder:["Fayzullayev", "Budget midfielder", 10], defender:["Khusanov", "Proven defender", 10], goalkeeper:["Yusupov", "Budget keeper", 10], penalty:["Shukurov", "Recent penalty taker", 10] } },
       { group:"A", country:"South Africa", flag:"🇿🇦", picks:{ forward:["Foster", "Burnley forward", 10], midfielder:["Appollis", "Winger with assist threat + pens", 10], defender:["Mbokazi", "Defcon defender", 10], goalkeeper:["Williams", "Budget keeper", 10], penalty:["Appollis", "Took pens at AFCON", 10] } },
-      { group:"L", country:"England", flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿", picks:{ forward:["Kane", "Elite forward + pens", 10], midfielder:["Saka", "Elite winger with", 10], defender:["Guehi", "Nailed defender in elite team", 10], goalkeeper:["Pickford", "Keeper in elite team", 10], penalty:["Kane", "Excellent penalty record", 10] } },
-      { group:"C", country:"Scotland", flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿", picks:{ forward:["Adams", "Budget forward", 10], midfielder:["McTominay", "Elite winger + pens", 10], defender:["Robertson", "Defender with attack threat", 10], goalkeeper:["Gunn", "Budget keeper", 10], penalty:["McTominay", "Recent penalty taker", 10] } }
+      { group:"L", country:"England", flag:"🏴", picks:{ forward:["Kane", "Elite forward + pens", 10], midfielder:["Saka", "Elite winger with", 10], defender:["Guehi", "Nailed defender in elite team", 10], goalkeeper:["Pickford", "Keeper in elite team", 10], penalty:["Kane", "Excellent penalty record", 10] } },
+      { group:"C", country:"Scotland", flag:"🏴", picks:{ forward:["Adams", "Budget forward", 10], midfielder:["McTominay", "Elite winger + pens", 10], defender:["Robertson", "Defender with attack threat", 10], goalkeeper:["Gunn", "Budget keeper", 10], penalty:["McTominay", "Recent penalty taker", 10] } }
     ];
 
     const fifaRanks = {
@@ -572,23 +549,27 @@
 
     function countryKit(country) {
       const kits = {
-        Argentina: ['#75aadb'], Australia: ['#f6c542'], Austria: ['#ef4444'], Belgium: ['#ef4444'],
-        Bosnia: ['#2563eb'], Brazil: ['#facc15'], Canada: ['#ef4444'], Colombia: ['#facc15'],
-        Croatia: ['#ef4444'], Czechia: ['#2563eb'], Ecuador: ['#facc15'], Egypt: ['#ef4444'],
-        England: ['#ffffff'], France: ['#2563eb'], Germany: ['#ffffff'], Ghana: ['#facc15'],
-        Japan: ['#2563eb'], Mexico: ['#16a34a'], Morocco: ['#ef4444'], Netherlands: ['#f97316'],
-        Norway: ['#ef4444'], Portugal: ['#ef4444'], Qatar: ['#7f1d1d'], Scotland: ['#2563eb'],
-        Senegal: ['#16a34a'], Spain: ['#ef4444'], Switzerland: ['#ef4444'], Tunisia: ['#ffffff'],
-        Türkiye: ['#ef4444'], Uruguay: ['#75aadb'], USA: ['#ffffff'], 'South Africa': ['#16a34a'],
-        'South Korea': ['#ef4444'], Haiti: ['#2563eb'], Paraguay: ['#ef4444'], Curaçao: ['#2563eb'],
-        'Ivory Coast': ['#f97316'], Iran: ['#16a34a'], 'New Zealand': ['#111827'],
-        'Cape Verde': ['#2563eb'], 'Saudi Arabia': ['#16a34a'], Iraq: ['#16a34a'], Algeria: ['#16a34a'],
-        Jordan: ['#ef4444'], 'DR Congo': ['#2563eb'], Uzbekistan: ['#2563eb'], Panama: ['#ef4444']
+        Argentina: ['#75aadb', '#ffffff'], Australia: ['#f6c542', '#006b3f'], Austria: ['#ef4444', '#ffffff'], Belgium: ['#ef4444', '#111827'], Bosnia: ['#2563eb', '#facc15'], Brazil: ['#facc15', '#16a34a'], Canada: ['#ef4444', '#ffffff'], Colombia: ['#facc15', '#2563eb'], Croatia: ['#ffffff', '#ef4444'], Czechia: ['#ef4444', '#2563eb'], Ecuador: ['#facc15', '#2563eb'], Egypt: ['#ef4444', '#ffffff'], England: ['#ffffff', '#2563eb'], France: ['#2563eb', '#ffffff'], Germany: ['#ffffff', '#111827'], Ghana: ['#ffffff', '#ef4444'], Japan: ['#2563eb', '#ffffff'], Mexico: ['#16a34a', '#ef4444'], Morocco: ['#ef4444', '#16a34a'], Netherlands: ['#f97316', '#ffffff'], Norway: ['#ef4444', '#2563eb'], Portugal: ['#ef4444', '#16a34a'], Qatar: ['#7f1d1d', '#ffffff'], Scotland: ['#2563eb', '#ffffff'], Senegal: ['#ffffff', '#16a34a'], Spain: ['#ef4444', '#facc15'], Switzerland: ['#ef4444', '#ffffff'], Tunisia: ['#ffffff', '#ef4444'], Türkiye: ['#ef4444', '#ffffff'], Uruguay: ['#75aadb', '#111827'], USA: ['#ffffff', '#ef4444']
       };
-      return kits[country] || ['#59a7ff'];
+      return kits[country] || ['#59a7ff', '#ffffff'];
     }
 
-    function readableNumberColour(hex) {
+    function shirtNumber(playerName) {
+      const numbers = {
+        'Lionel Messi': 10, 'Kylian Mbappé': 10, 'Vinícius Júnior': 7, 'Harry Kane': 9, 'Cristiano Ronaldo': 7,
+        'Bruno Fernandes': 8, 'Álvaro Morata': 7, 'Jamal Musiala': 10, 'Kai Havertz': 7, 'Kevin De Bruyne': 7,
+        'Romelu Lukaku': 10, 'Cody Gakpo': 11, 'Darwin Núñez': 9, 'Luis Díaz': 7, 'Luka Modrić': 10,
+        'Christian Pulisic': 10, 'Santiago Giménez': 11, 'Achraf Hakimi': 2, 'Hakim Ziyech': 7, 'Youssef En-Nesyri': 19,
+        'Granit Xhaka': 10, 'Kaoru Mitoma': 7, 'Takefusa Kubo': 20, 'Sadio Mané': 10, 'Nicolas Jackson': 7,
+        'Mohamed Salah': 10, 'Erling Haaland': 9, 'Martin Ødegaard': 10, 'Riyad Mahrez': 7, 'Son Heung-min': 7,
+        'Lee Kang-in': 18, 'Patrik Schick': 10, 'Jonathan David': 20, 'Akram Afif': 11, 'Enner Valencia': 13,
+        'Alexander Isak': 9, 'Hakan Çalhanoğlu': 10, 'Mehdi Taremi': 9, 'Chris Wood': 9, 'Salem Al-Dawsari': 10,
+        'Federico Valverde': 15, 'James Rodríguez': 10, 'Jude Bellingham': 10, 'Andrej Kramarić': 9, 'Mohammed Kudus': 20
+      };
+      return numbers[playerName] || 10;
+    }
+
+        function readableNumberColour(hex) {
       const clean = String(hex || '#59a7ff').replace('#', '');
       const r = parseInt(clean.substring(0, 2), 16);
       const g = parseInt(clean.substring(2, 4), 16);
@@ -603,11 +584,9 @@
 
       return `<svg class="shirt" viewBox="0 0 512 512" aria-hidden="true">
         <path d="M160 0c18 16 50 24 96 24s78-8 96-24l88 52 48 52v130h-82v216H106V234H24V104l48-52 88-52z" fill="${main}"/>
-        <path d="M160 0c18 16 50 24 96 24s78-8 96-24v0c-9 52-48 88-96 104-48-16-87-52-96-104z" fill="rgba(255,255,255,0.14)"/>
-        <text x="256" y="350" text-anchor="middle" font-size="190" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${numberColour}" stroke="rgba(8,17,31,0.18)" stroke-width="6" paint-order="stroke">${number || 10}</text>
+        <text x="256" y="350" text-anchor="middle" font-size="190" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${numberColour}" stroke="rgba(8,17,31,0.16)" stroke-width="6" paint-order="stroke">${number || 10}</text>
       </svg>`;
     }
-
 
     function populateStats() {
       const bestRank = Math.min(...teams.map(team => team.rank));
@@ -617,6 +596,15 @@
       document.getElementById('totalPicks').textContent = totalPicks;
       document.getElementById('topRank').textContent = bestRank;
     }
+
+
+    const rolePrices = {
+      Forward: '$9m',
+      Midfielder: '$7.5m',
+      Defender: '$5m',
+      Goalkeeper: '$5m',
+      'Penalty taker': '$9m'
+    };
 
     function render() {
       const query = searchInput.value.toLowerCase();
@@ -637,13 +625,12 @@
       });
 
       playerGrid.innerHTML = rows.map(team => {
-        // Shirt number comes from pick[2], so edit the third value in the data array.
         const pickRows = [
-          ['Forward', team.picks.forward, 10],
-          ['Midfielder', team.picks.midfielder, 10],
-          ['Defender', team.picks.defender, 10],
-          ['Goalkeeper', team.picks.goalkeeper, 10],
-          ['Penalty taker', team.picks.penalty, 10]
+          ['Forward', team.picks.forward],
+          ['Midfielder', team.picks.midfielder],
+          ['Defender', team.picks.defender],
+          ['Goalkeeper', team.picks.goalkeeper],
+          ['Penalty taker', team.picks.penalty]
         ].filter(([label]) => !role || label === role);
 
         return `<article class="player-card">
@@ -659,7 +646,7 @@
               <div>${shirtSvg(team.country, pick[2])}</div>
               <div>
                 <div class="player-name">${pick[0]}</div>
-                <div class="player-meta">$${(8 + Math.random()*4).toFixed(1)}m · ${label}</div>
+                <div class="player-meta">${rolePrices[label] || "$5m"} · ${label}</div>
                 <div class="why">${pick[1]}</div>
               </div>
               <div class="role">${label}</div>
