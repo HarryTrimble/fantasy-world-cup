@@ -302,10 +302,11 @@
       margin-top: 3px;
     }
 
-    .gap-low { color: #ff9f43; }
-    .gap-midlow { color: #ffd166; }
-    .gap-mid { color: #40e0a0; }
-    .gap-high { color: #59a7ff; }
+    .gap-high { color: #59a7ff; }   /* Blue = big plus */
+    .gap-mid { color: #40e0a0; }    /* Green = medium plus */
+    .gap-midlow { color: #ffd166; } /* Yellow = small +/- */
+    .gap-low { color: #ff9f43; }    /* Orange = medium minus */
+    .gap-danger { color: #ff5c5c; } /* Red = big minus */
 
     .no-results {
       display: none;
@@ -1232,7 +1233,7 @@
 <section class="controls" aria-label="Team filters">
       <input id="searchInput" type="search" placeholder="Search team..." />
       <select id="groupFilter"><option value="">All groups</option></select>
-      <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option><option value="form">Sort by form</option></select>
+      <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option><option value="form">Sort by form</option><option value="fixture-gap">Sort by fixture rank gap</option></select>
     </section>
 
     <section class="team-grid" id="teamGrid"></section>
@@ -1405,18 +1406,31 @@
       groupFilter.add(new Option(`Group ${group}`, group));
     });
 
-    function gapClass(gap) {
-      if (gap <= 15) return 'gap-low';
-      if (gap <= 30) return 'gap-midlow';
-      if (gap <= 45) return 'gap-mid';
-      return 'gap-high';
+    function gapClass(teamRank, opponentRank) {
+      const gap = Math.abs(teamRank - opponentRank);
+      const diff = opponentRank - teamRank;
+
+      // Big plus gap (much weaker opponent)
+      if (diff >= 45) return 'gap-high';
+
+      // Medium plus gap
+      if (diff >= 16) return 'gap-mid';
+
+      // Small plus/minus gap
+      if (diff > -16) return 'gap-midlow';
+
+      // Medium minus gap
+      if (diff > -45) return 'gap-low';
+
+      // Big minus gap (much stronger opponent)
+      return 'gap-danger';
     }
 
     function formatResult(result) {
       const flags = {
         'Portugal': '🇵🇹', 'Bosnia': '🇧🇦', 'Slovakia': '🇸🇰', 'Luxembourg': '🇱🇺', 'Iceland': '🇮🇸', 'Poland': '🇵🇱',
         'Spain': '🇪🇸', 'Norway': '🇳🇴', 'Georgia': '🇬🇪', 'Scotland': scotlandFlag, 'Cyprus': '🇨🇾', 'Italy': '🇮🇹',
-        'Belgium': '🇧🇪', 'Sweden': '🇸🇪', 'Austria': '🇦🇹', 'Estonia': '🇪🇪', 'Azerbaijan': '🇦🇿', 'Serbia': '🇷🇸',
+        'Belgium': '🇧🇪', 'Sweden': '🇸🇪', 'Austria': '🇦🇹', 'Estonia': '🇪🇪', 'Azerbaijan': '🇦🇿', 'Serbia': '🇷🇸', 'Albania': '🇦🇱', 'Bulgaria': '🇧🇬',
         'Japan': '🇯🇵', 'Germany': '🇩🇪', 'Türkiye': '🇹🇷', 'Syria': '🇸🇾', 'North Korea': '🇰🇵', 'Tunisia': '🇹🇳',
         'USA': '🇺🇸', 'Mexico': '🇲🇽', 'Jamaica': '🇯🇲', 'Canada': '🇨🇦', 'Panama': '🇵🇦', 'Cuba': '🇨🇺',
         'France': '🇫🇷', 'Greece': '🇬🇷', 'Netherlands': '🇳🇱', 'Gibraltar': '🇬🇮', 'Republic Ireland': '🇮🇪', 'Ireland': '🇮🇪',
@@ -1456,7 +1470,7 @@
       const flags = {
         'Portugal': '🇵🇹', 'Bosnia': '🇧🇦', 'Slovakia': '🇸🇰', 'Luxembourg': '🇱🇺', 'Iceland': '🇮🇸', 'Poland': '🇵🇱',
         'Spain': '🇪🇸', 'Norway': '🇳🇴', 'Georgia': '🇬🇪', 'Scotland': scotlandFlag, 'Cyprus': '🇨🇾', 'Italy': '🇮🇹',
-        'Belgium': '🇧🇪', 'Sweden': '🇸🇪', 'Austria': '🇦🇹', 'Estonia': '🇪🇪', 'Azerbaijan': '🇦🇿', 'Serbia': '🇷🇸',
+        'Belgium': '🇧🇪', 'Sweden': '🇸🇪', 'Austria': '🇦🇹', 'Estonia': '🇪🇪', 'Azerbaijan': '🇦🇿', 'Serbia': '🇷🇸', 'Albania': '🇦🇱', 'Bulgaria': '🇧🇬',
         'Japan': '🇯🇵', 'Germany': '🇩🇪', 'Türkiye': '🇹🇷', 'Syria': '🇸🇾', 'North Korea': '🇰🇵', 'Tunisia': '🇹🇳',
         'USA': '🇺🇸', 'Mexico': '🇲🇽', 'Jamaica': '🇯🇲', 'Canada': '🇨🇦', 'Panama': '🇵🇦', 'Cuba': '🇨🇺',
         'France': '🇫🇷', 'Greece': '🇬🇷', 'Netherlands': '🇳🇱', 'Gibraltar': '🇬🇮', 'Republic of Ireland': '🇮🇪', 'Republic Ireland': '🇮🇪', 'Ireland': '🇮🇪',
@@ -1557,6 +1571,14 @@ return flags[country] || country;
           if (sort === 'rank') return a.rank - b.rank;
           if (sort === 'country') return a.team.localeCompare(b.team);
           if (sort === 'form') return formScore(b) - formScore(a) || a.rank - b.rank;
+
+          if (sort === 'fixture-gap') {
+            const avgGapA = a.games.reduce((sum, game) => sum + (game.opponentRank - a.rank), 0) / a.games.length;
+            const avgGapB = b.games.reduce((sum, game) => sum + (game.opponentRank - b.rank), 0) / b.games.length;
+
+            return avgGapB - avgGapA;
+          }
+
           return a.group.localeCompare(b.group) || a.rank - b.rank;
         });
 
@@ -1589,7 +1611,12 @@ return flags[country] || country;
                       <div>Date<span class="meta-value">${game.date}</span></div>
                       <div>Time<span class="meta-value">${game.time}</span></div>
                       <div>Ranks<span class="meta-value">${team.rank} vs ${game.opponentRank}</span></div>
-                      <div>Gap<span class="meta-value ${gapClass(game.gap)}">${game.gap}</span></div>
+                      <div>
+                        Gap
+                        <span class="meta-value ${gapClass(team.rank, game.opponentRank)}">
+                          ${game.opponentRank > team.rank ? '+' : '-'}${Math.abs(team.rank - game.opponentRank)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 `).join('')}
