@@ -29,7 +29,7 @@
   <meta name="twitter:title" content="Fantasy World Cup Targets" />
   <meta name="twitter:description" content="Target fixtures, teams and players for fantasy World Cup" />
   <meta name="twitter:image" content="https://fantasy-world-cup-targets.xyz/preview-card.png" />
-
+  
   <style>
     :root {
       --bg: #08111f;
@@ -420,18 +420,13 @@
       <select id="matchdayFilter"><option value="">All matchdays</option><option value="1">Matchday 1</option><option value="2">Matchday 2</option><option value="3">Matchday 3</option></select>
       <select id="groupFilter"><option value="">All groups</option></select>
       <select id="sortSelect"><option value="schedule">Schedule</option><option value="gap-desc">Rank gap</option></select>
-      <select id="fixtureViewSelect"><option value="group">Group fixtures</option><option value="knockout">Knockout fixtures</option></select>
+      <select id="fixtureViewSelect"><option value="all">All fixtures</option><option value="group">Group fixtures</option><option value="knockout">Knockout fixtures</option></select>
     </section>
 
     <section class="table-card" id="groupFixtures">
       <div class="table-topbar"><div class="table-title">Fixtures</div><div class="count"><span id="visibleCount">0</span> showing</div></div>
       <div class="table-wrap"><table><thead><tr><th>Fixture</th><th>Date</th><th>Time</th><th>FIFA Ranks</th><th>Gap</th><th>Group</th><th>MD</th><th>City</th><th>Temp</th></tr></thead><tbody id="fixtureBody"></tbody></table></div>
       <div class="no-results" id="noResults">No fixtures match those filters.</div>
-    </section>
-
-    <section class="table-card knockout-card" id="knockoutFixtures" aria-label="Knockout fixtures">
-      <div class="table-topbar"><div class="table-title">Knockout fixtures</div><div class="count">32 matches · Round of 32 to Final</div></div>
-      <div class="table-wrap"><table><thead><tr><th>Fixture</th><th>Date</th><th>Time</th><th>Stage</th><th>Match</th><th>City</th></tr></thead><tbody id="knockoutBody"></tbody></table></div>
     </section>
   </main>
 
@@ -517,15 +512,41 @@
     ].map((row, index) => ({ index, day: row[0], date: row[1], time: row[2], city: row[3], temp: row[4], group: row[5], matchday: row[6], flag1: row[7], team1: row[8], team2: row[9], flag2: row[10], rank1: row[11], rank2: row[12], gap: row[13] }));
 
     const knockoutFixtures = [
-      ['A2 v B2','June 28','TBC','R32',73,'Los Angeles'],
-      ['E1 v 3rd','June 29','TBC','R32',74,'Boston'],
-      ['F1 v C2','June 29','TBC','R32',75,'Monterrey'],
-      ['C1 v F2','June 29','TBC','R32',76,'Houston'],
-      ['W101 v W102','July 19','TBC','Final',104,'New York']
+      ['A2 v B2','June 28','20:00','R32',73,'Los Angeles'],
+      ['C1 v F2','June 29','18:00','R32',76,'Houston'],
+      ['E1 v 3rd','June 29','21:00','R32',74,'Boston'],
+      ['F1 v C2','June 30','2:00','R32',75,'Monterrey'],
+      ['E2 v I2','June 30','18:00','R32',78,'Dallas'],
+      ['I1 v 3rd','June 30','22:00','R32',77,'New York'],
+      ['A1 v 3rd','July 1','2:00','R32',79,'Mexico City'],
+      ['L1 v 3rd','July 1','17:00','R32',80,'Atlanta'],
+      ['G1 v 3rd','July 1','21:00','R32',82,'Seattle'],
+      ['D1 v 3rd','July 2','1:00','R32',81,'San Francisco'],
+      ['H1 v J2','July 2','20:00','R32',84,'Los Angeles'],
+      ['K2 v L2','July 3','0:00','R32',83,'Toronto'],
+      ['B1 v 3rd','July 3','2:00','R32',85,'Vancouver'],
+      ['D2 v G2','July 3','19:00','R32',88,'Dallas'],
+      ['J1 v H2','July 3','23:00','R32',86,'Miami'],
+      ['K1 v 3rd','July 4','2:30','R32',87,'Kansas City'],
+      ['W73 v W75','July 4','18:00','R16',90,'Houston'],
+      ['W74 v W77','July 4','22:00','R16',89,'Philadelphia'],
+      ['W76 v W78','July 5','21:00','R16',91,'New York'],
+      ['W79 v W80','July 6','1:00','R16',92,'Mexico City'],
+      ['W83 v W84','July 6','17:00','R16',95,'Atlanta'],
+      ['W81 v W82','July 6','20:00','R16',93,'Dallas'],
+      ['W86 v W88','July 7','1:00','R16',94,'Seattle'],
+      ['W85 v W87','July 7','21:00','R16',96,'Vancouver'],
+      ['W89 v W90','July 9','21:00','QF',97,'Boston'],
+      ['W93 v W94','July 10','20:00','QF',98,'Los Angeles'],
+      ['W91 v W92','July 11','22:00','QF',99,'Miami'],
+      ['W95 v W96','July 12','2:00','QF',100,'Kansas City'],
+      ['W97 v W98','July 14','20:00','SF',101,'Dallas'],
+      ['W99 v W100','July 15','20:00','SF',102,'Atlanta'],
+      ['L101 v L102','July 18','22:00','3P',103,'Miami'],
+      ['W101 v W102','July 19','20:00','Final',104,'New York']
     ];
 
     const body = document.getElementById('fixtureBody');
-    const knockoutBody = document.getElementById('knockoutBody');
     const visibleCount = document.getElementById('visibleCount');
     const noResults = document.getElementById('noResults');
     const searchInput = document.getElementById('searchInput');
@@ -533,8 +554,6 @@
     const matchdayFilter = document.getElementById('matchdayFilter');
     const sortSelect = document.getElementById('sortSelect');
     const fixtureViewSelect = document.getElementById('fixtureViewSelect');
-    const groupFixturesSection = document.getElementById('groupFixtures');
-    const knockoutFixturesSection = document.getElementById('knockoutFixtures');
 
     [...new Set(fixtures.map(f => f.group))].sort().forEach(group => groupFilter.add(new Option(`Group ${group}`, group)));
     function renderGroupFixtures() {
@@ -542,30 +561,43 @@
       const group = groupFilter.value;
       const matchday = matchdayFilter.value;
       const sort = sortSelect.value;
-      let rows = fixtures.filter(f => (!group || f.group === group) && (!matchday || String(f.matchday) === matchday) && (!query || f.team1.toLowerCase().includes(query) || f.team2.toLowerCase().includes(query)));
-      rows.sort((a, b) => sort === 'gap-desc' ? b.gap - a.gap : a.index - b.index);
+      const fixtureView = fixtureViewSelect.value;
 
-      body.innerHTML = rows.map(f => {
-        const gapClass = f.gap <= 15 ? 'low' : f.gap <= 30 ? 'midlow' : f.gap <= 45 ? 'mid' : 'high';
-        const tempClass = f.temp >= 28 ? 'temp-hot' : f.temp <= 17 ? 'temp-cool' : '';
-        return `<tr class="fixture-row"><td class="fixture" data-label="Fixture"><span class="team">${f.flag1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${f.flag2}</span></td><td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td></tr>`;
-      }).join('');
+      let rows = [];
+
+      if (fixtureView === 'all' || fixtureView === 'group') {
+        let groupRows = fixtures.filter(f =>
+          (!group || f.group === group) &&
+          (!matchday || String(f.matchday) === matchday) &&
+          (!query || f.team1.toLowerCase().includes(query) || f.team2.toLowerCase().includes(query))
+        );
+
+        groupRows.sort((a, b) => sort === 'gap-desc' ? b.gap - a.gap : a.index - b.index);
+
+        rows.push(...groupRows.map(f => {
+          const gapClass = f.gap <= 15 ? 'low' : f.gap <= 30 ? 'midlow' : f.gap <= 45 ? 'mid' : 'high';
+          const tempClass = f.temp >= 28 ? 'temp-hot' : f.temp <= 17 ? 'temp-cool' : '';
+          return `<tr class="fixture-row"><td class="fixture" data-label="Fixture"><span class="team">${f.flag1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${f.flag2}</span></td><td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td></tr>`;
+        }));
+      }
+
+      if (fixtureView === 'all' || fixtureView === 'knockout') {
+        const knockoutRows = knockoutFixtures.filter(f => {
+          const searchable = `${f[0]} ${f[2]} ${f[3]} ${f[4]} ${f[5]}`.toLowerCase();
+          return !query || searchable.includes(query);
+        }).map(f => {
+          return `<tr class="fixture-row knockout-row"><td class="fixture" data-label="Fixture">${f[0]}</td><td data-label="Date">${f[1]}</td><td data-label="Time">${f[2]}</td><td data-label="Ranks">—</td><td data-label="Gap">—</td><td data-label="Group"><span class="pill">KO</span></td><td data-label="Matchday"><span class="pill matchday">${f[3]}</span></td><td data-label="City">${f[5]}</td><td data-label="Temp">—</td></tr>`;
+        });
+
+        rows.push(...knockoutRows);
+      }
+
+      body.innerHTML = rows.join('');
       visibleCount.textContent = rows.length;
       noResults.style.display = rows.length ? 'none' : 'block';
     }
 
-    function renderKnockoutFixtures() {
-      knockoutBody.innerHTML = knockoutFixtures.map(f => {
-        return `<tr class="fixture-row"><td class="fixture" data-label="Fixture">${f[0]}</td><td data-label="Date">${f[1]}</td><td data-label="Time">${f[2]}</td><td data-label="Stage"><span class="pill matchday">${f[3]}</span></td><td data-label="Match"><span class="pill">${f[4]}</span></td><td data-label="City">${f[5]}</td></tr>`;
-      }).join('');
-    }
-
-    [searchInput, groupFilter, matchdayFilter, sortSelect].forEach(el => el.addEventListener('input', renderGroupFixtures));
-    fixtureViewSelect.addEventListener('input', () => {
-      const showKnockout = fixtureViewSelect.value === 'knockout';
-      groupFixturesSection.style.display = showKnockout ? 'none' : 'block';
-      knockoutFixturesSection.style.display = showKnockout ? 'block' : 'none';
-    });
+    [searchInput, groupFilter, matchdayFilter, sortSelect, fixtureViewSelect].forEach(el => el.addEventListener('input', renderGroupFixtures));
 
     document.getElementById('totalFixtures').textContent = fixtures.length;
     const maxGap = Math.max(...fixtures.map(f => f.gap));
@@ -578,7 +610,6 @@
     document.getElementById('hottestFixture').innerHTML = `${hottestFixture.flag1} ${hottestFixture.team1} vs ${hottestFixture.team2} ${hottestFixture.flag2}`;
 
     renderGroupFixtures();
-    renderKnockoutFixtures();
   </script>
 </body>
 </html>
