@@ -544,6 +544,17 @@
   }
 </style>
 
+
+<style id="mobile-h1-size-fix">
+  @media (max-width: 560px) {
+    h1 {
+      font-size: 2rem !important;
+      line-height: 1.05 !important;
+      letter-spacing: -0.04em !important;
+    }
+  }
+</style>
+
 </head>
 <body>
   <header>
@@ -700,7 +711,7 @@
 
       return `<svg class="shirt" viewBox="0 0 512 512" aria-hidden="true">
         <path d="M160 0c18 16 50 24 96 24s78-8 96-24l88 52 48 52v130h-82v216H106V234H24V104l48-52 88-52z" fill="${main}"/>
-        <text x="256" y="350" text-anchor="middle" font-size="190" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${numberColour}" stroke="rgba(8,17,31,0.16)" stroke-width="6" paint-order="stroke">${number || 10}</text>
+        <text x="256" y="320" text-anchor="middle" font-size="175" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${numberColour}" stroke="rgba(8,17,31,0.16)" stroke-width="6" paint-order="stroke">${number || 10}</text>
       </svg>`;
     }
 
