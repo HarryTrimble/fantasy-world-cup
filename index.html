@@ -406,7 +406,7 @@
         <p class="subtitle">Explore every group-stage fixture by date, group, matchday, city, temperature and FIFA ranking gap. Use the filters to spot fantasy opportunities, mismatches and awkward kick-off times.</p>
       </div>
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-value" id="totalFixtures">0</div><div class="stat-label">Group fixtures</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalFixtures">0</div><div class="stat-label">Total fixtures</div></div>
         <div class="stat-card"><div class="stat-value">12</div><div class="stat-label">Groups A-L</div></div>
         <div class="stat-card"><div class="stat-value" id="biggestGap">0</div><div class="stat-label">Biggest rank gap</div><div class="stat-label" id="biggestGapFixture"></div></div>
         <div class="stat-card"><div class="stat-value" id="hottestTemp">0°C</div><div class="stat-label">Hottest listed fixture</div><div class="stat-label" id="hottestFixture"></div></div>
@@ -599,7 +599,7 @@
 
     [searchInput, groupFilter, matchdayFilter, sortSelect, fixtureViewSelect].forEach(el => el.addEventListener('input', renderGroupFixtures));
 
-    document.getElementById('totalFixtures').textContent = fixtures.length;
+    document.getElementById('totalFixtures').textContent = 104;
     const maxGap = Math.max(...fixtures.map(f => f.gap));
     document.getElementById('biggestGap').textContent = maxGap;
     const maxFixture = fixtures.find(f => f.gap === maxGap);
