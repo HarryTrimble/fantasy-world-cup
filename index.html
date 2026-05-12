@@ -391,6 +391,191 @@
 }
 </style>
 
+
+
+<style id="world-cup-2026-ball-theme">
+  :root {
+    --bg: #f7f3ea;
+    --card: #fffdf8;
+    --text: #14243b;
+    --muted: #5f6f84;
+    --accent: #00a8e8;
+    --accent-2: #0aa36b;
+    --accent-red: #d72d3f;
+    --accent-gold: #d8a60a;
+    --accent-maroon: #7b1f3a;
+    --border: rgba(0,168,232,0.24);
+    --border-red: rgba(215,45,63,0.18);
+    --border-green: rgba(10,163,107,0.20);
+    --shadow: 0 18px 42px rgba(20,36,59,0.12);
+  }
+
+  body {
+    color: var(--text) !important;
+    background:
+      linear-gradient(135deg, #fffdf8 0%, #f7f3ea 44%, #eef8fb 100%) !important;
+  }
+
+  body::before { display: none !important; content: none !important; }
+
+  .hero-card,
+  .controls,
+  .table-card,
+  .stat-card,
+  .team-card,
+  .player-card {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,251,242,0.92)) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: var(--shadow) !important;
+  }
+
+  .hero-card,
+  .table-card,
+  .team-card,
+  .player-card,
+  .stat-card { position: relative; overflow: hidden; }
+
+  .hero-card::after,
+  .table-card::after,
+  .team-card::after,
+  .player-card::after,
+  .stat-card::after { display: none !important; content: none !important; }
+
+  .hero-card {
+    border-color: rgba(215,45,63,0.22) !important;
+    background:
+      linear-gradient(90deg, rgba(0,168,232,0.09), transparent 28%),
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,250,240,0.96)) !important;
+  }
+
+  .site-nav {
+    background: rgba(255,255,255,0.82) !important;
+    border-color: rgba(20,36,59,0.12) !important;
+    box-shadow: 0 10px 24px rgba(20,36,59,0.08) !important;
+  }
+
+  .site-nav a { color: #5f6f84 !important; }
+  .site-nav a:hover {
+    color: var(--text) !important;
+    background: rgba(0,168,232,0.08) !important;
+  }
+  .site-nav a.active {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, var(--accent-red), var(--accent), var(--accent-2)) !important;
+    box-shadow: 0 12px 28px rgba(0,168,232,0.24) !important;
+  }
+
+  input,
+  select,
+  .game,
+  .recommend-btn,
+  .recommend-panel {
+    background: rgba(255,255,255,0.82) !important;
+    border-color: rgba(0,168,232,0.22) !important;
+    color: var(--text) !important;
+  }
+
+  select option { background: #fffdf8 !important; color: var(--text) !important; }
+  input::placeholder { color: #7d8ba0 !important; }
+
+  h1,
+  .fixture,
+  .role,
+  .player-name,
+  .country-name,
+  .team-name,
+  .table-title,
+  .stat-value,
+  .meta-value { color: var(--text) !important; }
+
+  .eyebrow { color: var(--accent-red) !important; }
+  .subtitle,
+  .stat-label,
+  .count,
+  .section-title,
+  .player-meta,
+  .player-country-line,
+  .player-meta-line,
+  .player-card-reason,
+  .why,
+  .no-results,
+  footer,
+  th,
+  .versus,
+  tbody td::before,
+  .game-meta { color: var(--muted) !important; }
+
+  .table-topbar,
+  th,
+  .team-header,
+  .country-header {
+    background:
+      linear-gradient(90deg, rgba(0,168,232,0.10), rgba(255,255,255,0.72), rgba(215,45,63,0.08)) !important;
+    border-color: rgba(0,168,232,0.18) !important;
+  }
+
+  td,
+  th,
+  .row,
+  .player-card-reason,
+  .table-topbar,
+  .country-header,
+  .team-header,
+  .game {
+    border-color: rgba(20,36,59,0.10) !important;
+  }
+
+  tr:hover td { background: rgba(0,168,232,0.07) !important; }
+
+  .pill,
+  .rank-pill,
+  .tag {
+    background: rgba(0,168,232,0.10) !important;
+    color: #006c96 !important;
+    border-color: rgba(0,168,232,0.28) !important;
+  }
+
+  .matchday,
+  .group-pill,
+  .tag.good,
+  .md-pill {
+    background: rgba(10,163,107,0.10) !important;
+    color: #087b53 !important;
+    border-color: rgba(10,163,107,0.28) !important;
+  }
+
+  .shirt { color: var(--accent) !important; }
+  .rank-gap.low,
+  .gap-low { color: #b6541d !important; }
+  .rank-gap.midlow,
+  .gap-midlow { color: #9a7500 !important; }
+  .rank-gap.mid,
+  .gap-mid { color: #087b53 !important; }
+  .rank-gap.high,
+  .gap-high { color: #006c96 !important; }
+  .gap-danger { color: var(--accent-red) !important; }
+
+  .form-score.win { background: #0aa36b !important; }
+  .form-score.draw { background: #7d8ba0 !important; }
+  .form-score.loss { background: #d72d3f !important; }
+
+  @media (max-width: 560px) {
+    tbody tr,
+    .recommend-row {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.98), rgba(255,250,240,0.96)) !important;
+      border-color: rgba(0,168,232,0.22) !important;
+      box-shadow: var(--shadow) !important;
+    }
+
+    tbody td.fixture { border-bottom-color: rgba(20,36,59,0.14) !important; }
+    tbody td.fixture::before,
+    .role { color: var(--accent-red) !important; }
+  }
+</style>
+
+
 </head>
 <body>
   <header>

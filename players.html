@@ -581,6 +581,191 @@
   }
 </style>
 
+
+
+<style id="world-cup-2026-ball-theme">
+  :root {
+    --bg: #f7f3ea;
+    --card: #fffdf8;
+    --text: #14243b;
+    --muted: #5f6f84;
+    --accent: #00a8e8;
+    --accent-2: #0aa36b;
+    --accent-red: #d72d3f;
+    --accent-gold: #d8a60a;
+    --accent-maroon: #7b1f3a;
+    --border: rgba(0,168,232,0.24);
+    --border-red: rgba(215,45,63,0.18);
+    --border-green: rgba(10,163,107,0.20);
+    --shadow: 0 18px 42px rgba(20,36,59,0.12);
+  }
+
+  body {
+    color: var(--text) !important;
+    background:
+      linear-gradient(135deg, #fffdf8 0%, #f7f3ea 44%, #eef8fb 100%) !important;
+  }
+
+  body::before { display: none !important; content: none !important; }
+
+  .hero-card,
+  .controls,
+  .table-card,
+  .stat-card,
+  .team-card,
+  .player-card {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,251,242,0.92)) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: var(--shadow) !important;
+  }
+
+  .hero-card,
+  .table-card,
+  .team-card,
+  .player-card,
+  .stat-card { position: relative; overflow: hidden; }
+
+  .hero-card::after,
+  .table-card::after,
+  .team-card::after,
+  .player-card::after,
+  .stat-card::after { display: none !important; content: none !important; }
+
+  .hero-card {
+    border-color: rgba(215,45,63,0.22) !important;
+    background:
+      linear-gradient(90deg, rgba(0,168,232,0.09), transparent 28%),
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,250,240,0.96)) !important;
+  }
+
+  .site-nav {
+    background: rgba(255,255,255,0.82) !important;
+    border-color: rgba(20,36,59,0.12) !important;
+    box-shadow: 0 10px 24px rgba(20,36,59,0.08) !important;
+  }
+
+  .site-nav a { color: #5f6f84 !important; }
+  .site-nav a:hover {
+    color: var(--text) !important;
+    background: rgba(0,168,232,0.08) !important;
+  }
+  .site-nav a.active {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, var(--accent-red), var(--accent), var(--accent-2)) !important;
+    box-shadow: 0 12px 28px rgba(0,168,232,0.24) !important;
+  }
+
+  input,
+  select,
+  .game,
+  .recommend-btn,
+  .recommend-panel {
+    background: rgba(255,255,255,0.82) !important;
+    border-color: rgba(0,168,232,0.22) !important;
+    color: var(--text) !important;
+  }
+
+  select option { background: #fffdf8 !important; color: var(--text) !important; }
+  input::placeholder { color: #7d8ba0 !important; }
+
+  h1,
+  .fixture,
+  .role,
+  .player-name,
+  .country-name,
+  .team-name,
+  .table-title,
+  .stat-value,
+  .meta-value { color: var(--text) !important; }
+
+  .eyebrow { color: var(--accent-red) !important; }
+  .subtitle,
+  .stat-label,
+  .count,
+  .section-title,
+  .player-meta,
+  .player-country-line,
+  .player-meta-line,
+  .player-card-reason,
+  .why,
+  .no-results,
+  footer,
+  th,
+  .versus,
+  tbody td::before,
+  .game-meta { color: var(--muted) !important; }
+
+  .table-topbar,
+  th,
+  .team-header,
+  .country-header {
+    background:
+      linear-gradient(90deg, rgba(0,168,232,0.10), rgba(255,255,255,0.72), rgba(215,45,63,0.08)) !important;
+    border-color: rgba(0,168,232,0.18) !important;
+  }
+
+  td,
+  th,
+  .row,
+  .player-card-reason,
+  .table-topbar,
+  .country-header,
+  .team-header,
+  .game {
+    border-color: rgba(20,36,59,0.10) !important;
+  }
+
+  tr:hover td { background: rgba(0,168,232,0.07) !important; }
+
+  .pill,
+  .rank-pill,
+  .tag {
+    background: rgba(0,168,232,0.10) !important;
+    color: #006c96 !important;
+    border-color: rgba(0,168,232,0.28) !important;
+  }
+
+  .matchday,
+  .group-pill,
+  .tag.good,
+  .md-pill {
+    background: rgba(10,163,107,0.10) !important;
+    color: #087b53 !important;
+    border-color: rgba(10,163,107,0.28) !important;
+  }
+
+  .shirt { color: var(--accent) !important; }
+  .rank-gap.low,
+  .gap-low { color: #b6541d !important; }
+  .rank-gap.midlow,
+  .gap-midlow { color: #9a7500 !important; }
+  .rank-gap.mid,
+  .gap-mid { color: #087b53 !important; }
+  .rank-gap.high,
+  .gap-high { color: #006c96 !important; }
+  .gap-danger { color: var(--accent-red) !important; }
+
+  .form-score.win { background: #0aa36b !important; }
+  .form-score.draw { background: #7d8ba0 !important; }
+  .form-score.loss { background: #d72d3f !important; }
+
+  @media (max-width: 560px) {
+    tbody tr,
+    .recommend-row {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.98), rgba(255,250,240,0.96)) !important;
+      border-color: rgba(0,168,232,0.22) !important;
+      box-shadow: var(--shadow) !important;
+    }
+
+    tbody td.fixture { border-bottom-color: rgba(20,36,59,0.14) !important; }
+    tbody td.fixture::before,
+    .role { color: var(--accent-red) !important; }
+  }
+</style>
+
+
 </head>
 <body>
   <header>
@@ -702,9 +887,63 @@
 
     function countryKit(country) {
       const kits = {
-        Argentina: ['#75aadb', '#ffffff'], Australia: ['#f6c542', '#006b3f'], Austria: ['#ef4444', '#ffffff'], Belgium: ['#ef4444', '#111827'], Bosnia: ['#2563eb', '#facc15'], Brazil: ['#facc15', '#16a34a'], Canada: ['#ef4444', '#ffffff'], Colombia: ['#facc15', '#2563eb'], Croatia: ['#ffffff', '#ef4444'], Czechia: ['#ef4444', '#2563eb'], Ecuador: ['#facc15', '#2563eb'], Egypt: ['#ef4444', '#ffffff'], England: ['#ffffff', '#2563eb'], France: ['#2563eb', '#ffffff'], Germany: ['#ffffff', '#111827'], Ghana: ['#ffffff', '#ef4444'], Japan: ['#2563eb', '#ffffff'], Mexico: ['#16a34a', '#ef4444'], Morocco: ['#ef4444', '#16a34a'], Netherlands: ['#f97316', '#ffffff'], Norway: ['#ef4444', '#2563eb'], Portugal: ['#ef4444', '#16a34a'], Qatar: ['#7f1d1d', '#ffffff'], Scotland: ['#2563eb', '#ffffff'], Senegal: ['#ffffff', '#16a34a'], Spain: ['#ef4444', '#facc15'], Switzerland: ['#ef4444', '#ffffff'], Tunisia: ['#ffffff', '#ef4444'], Türkiye: ['#ef4444', '#ffffff'], Uruguay: ['#75aadb', '#111827'], USA: ['#ffffff', '#ef4444']
+        'Argentina': { torso:'#badef2', sleeves:'#badef2', sleeveEnds:'#badef2', collar:'#badef2', bottomEdge:'#badef2' },
+        'Austria': { torso:'#d30a1b', sleeves:'#241f21', sleeveEnds:'#d30a1b', collar:'#241f21', bottomEdge:'#d30a1b' },
+        'Australia': { torso:'#f9bb77', sleeves:'#f9bb77', sleeveEnds:'#f9bb77', collar:'#1e756a', bottomEdge:'#1e756a' },
+        'Bosnia': { torso:'#014ac5', sleeves:'#014ac5', sleeveEnds:'#f7c807', collar:'#f7c807', bottomEdge:'#f7c807' },
+        'Belgium': { torso:'#fc4949', sleeves:'#fc4949', sleeveEnds:'#2d1f1f', collar:'#fed159', bottomEdge:'#2d1f1f' },
+        'Brazil': { torso:'#faee81', sleeves:'#faee81', sleeveEnds:'#04587b', collar:'#04587b', bottomEdge:'#faee81' },
+        'Canada': { torso:'#a80119', sleeves:'#a80119', sleeveEnds:'#da0a27', collar:'#da0a27', bottomEdge:'#da0a27' },
+        'DR Congo': { torso:'#55a1da', sleeves:'#55a1da', sleeveEnds:'#a52c24', collar:'#a52c24', bottomEdge:'#a52c24' },
+        'Switzerland': { torso:'#d80317', sleeves:'#d80317', sleeveEnds:'#d80317', collar:'#d80317', bottomEdge:'#d80317' },
+        'Ivory Coast': { torso:'#f25700', sleeves:'#f25700', sleeveEnds:'#00906d', collar:'#00906d', bottomEdge:'#f25700' },
+        'Colombia': { torso:'#f6db57', sleeves:'#f6db57', sleeveEnds:'#0575d4', collar:'#e26650', bottomEdge:'#e26650' },
+        'Cape Verde': { torso:'#01417e', sleeves:'#01417e', sleeveEnds:'#ac191c', collar:'#ac191c', bottomEdge:'#01417e' },
+        'Curaçao': { torso:'#ead9a3', sleeves:'#ead9a3', sleeveEnds:'#1b3b83', collar:'#1b3b83', bottomEdge:'#ead9a3' },
+        'Czechia': { torso:'#af0d2f', sleeves:'#af0d2f', sleeveEnds:'#25243b', collar:'#25243b', bottomEdge:'#25243b' },
+        'Germany': { torso:'#e0dfe7', sleeves:'#b2021c', sleeveEnds:'#111827', collar:'#fdbb02', bottomEdge:'#111827' },
+        'Algeria': { torso:'#e2e0df', sleeves:'#e2e0df', sleeveEnds:'#ca111f', collar:'#0a846d', bottomEdge:'#0a846d' },
+        'Ecuador': { torso:'#f6ce01', sleeves:'#f6ce01', sleeveEnds:'#09192e', collar:'#09192e', bottomEdge:'#09192e' },
+        'Egypt': { torso:'#d4212a', sleeves:'#d4212a', sleeveEnds:'#26211e', collar:'#26211e', bottomEdge:'#26211e' },
+        'Spain': { torso:'#fa554e', sleeves:'#2a2c56', sleeveEnds:'#2a2c56', collar:'#2a2c56', bottomEdge:'#fa554e' },
+        'France': { torso:'#233a9b', sleeves:'#233a9b', sleeveEnds:'#171942', collar:'#171942', bottomEdge:'#171942' },
+        'Ghana': { torso:'#f1cf65', sleeves:'#f1cf65', sleeveEnds:'#006e61', collar:'#c73029', bottomEdge:'#35271f' },
+        'Croatia': { torso:'#d4d7e4', sleeves:'#e73e47', sleeveEnds:'#5082dd', collar:'#5082dd', bottomEdge:'#5082dd' },
+        'Haiti': { torso:'#1c2a89', sleeves:'#1c2a89', sleeveEnds:'#9f2118', collar:'#9f2118', bottomEdge:'#1c2a89' },
+        'Iraq': { torso:'#038235', sleeves:'#038235', sleeveEnds:'#038235', collar:'#038235', bottomEdge:'#038235' },
+        'Iran': { torso:'#c4c4c4', sleeves:'#c4c4c4', sleeveEnds:'#567d50', collar:'#567d50', bottomEdge:'#567d50' },
+        'Jordan': { torso:'#e8e8e8', sleeves:'#e8e8e8', sleeveEnds:'#a60426', collar:'#a60426', bottomEdge:'#a60426' },
+        'Japan': { torso:'#1e1f58', sleeves:'#1e1f58', sleeveEnds:'#1e1f58', collar:'#1e1f58', bottomEdge:'#1e1f58' },
+        'South Korea': { torso:'#ef4444', sleeves:'#ef4444', sleeveEnds:'#09090a', collar:'#09090a', bottomEdge:'#09090a' },
+        'Morocco': { torso:'#d70d20', sleeves:'#d70d20', sleeveEnds:'#008148', collar:'#008148', bottomEdge:'#008148' },
+        'Mexico': { torso:'#004738', sleeves:'#004738', sleeveEnds:'#d1002c', collar:'#d1002c', bottomEdge:'#d1002c' },
+        'Netherlands': { torso:'#ea662a', sleeves:'#ea662a', sleeveEnds:'#0f0b06', collar:'#0f0b06', bottomEdge:'#ea662a' },
+        'Norway': { torso:'#e5082a', sleeves:'#051030', sleeveEnds:'#e5082a', collar:'#051030', bottomEdge:'#051030' },
+        'New Zealand': { torso:'#232122', sleeves:'#232122', sleeveEnds:'#232122', collar:'#232122', bottomEdge:'#232122' },
+        'Panama': { torso:'#e7362c', sleeves:'#e7362c', sleeveEnds:'#0a1112', collar:'#e7362c', bottomEdge:'#e7362c' },
+        'Portugal': { torso:'#ae2631', sleeves:'#ae2631', sleeveEnds:'#027775', collar:'#027775', bottomEdge:'#ae2631' },
+        'Paraguay': { torso:'#e3e1df', sleeves:'#aa2c38', sleeveEnds:'#1d3b8d', collar:'#1d3b8d', bottomEdge:'#aa2c38' },
+        'Qatar': { torso:'#8c2829', sleeves:'#8c2829', sleeveEnds:'#8c2829', collar:'#8c2829', bottomEdge:'#8c2829' },
+        'Saudi Arabia': { torso:'#1b4741', sleeves:'#1b4741', sleeveEnds:'#5353a2', collar:'#5353a2', bottomEdge:'#5353a2' },
+        'Sweden': { torso:'#f9db55', sleeves:'#f9db55', sleeveEnds:'#2656b3', collar:'#2656b3', bottomEdge:'#2563eb' },
+        'Senegal': { torso:'#dedde2', sleeves:'#dedde2', sleeveEnds:'#067164', collar:'#067164', bottomEdge:'#067164' },
+        'Tunisia': { torso:'#f2332b', sleeves:'#f2332b', sleeveEnds:'#f2332b', collar:'#f2332b', bottomEdge:'#f2332b' },
+        'Türkiye': { torso:'#cf030c', sleeves:'#cf030c', sleeveEnds:'#cf030c', collar:'#cf030c', bottomEdge:'#cf030c' },
+        'USA': { torso:'#e8e8e8', sleeves:'#e8e8e8', sleeveEnds:'#e22f35', collar:'#2e3543', bottomEdge:'#2e3543' },
+        'Uruguay': { torso:'#c7dafa', sleeves:'#c7dafa', sleeveEnds:'#111827', collar:'#353b51', bottomEdge:'#c7dafa' },
+        'Uzbekistan': { torso:'#0454c0', sleeves:'#0454c0', sleeveEnds:'#2c8835', collar:'#2c8835', bottomEdge:'#ee0e2a' },
+        'South Africa': { torso:'#f6cf5b', sleeves:'#f6cf5b', sleeveEnds:'#0f926b', collar:'#0f926b', bottomEdge:'#f6cf5b' },
+        'England': { torso:'#dfe0f7', sleeves:'#dfe0f7', sleeveEnds:'#2c2843', collar:'#e22e4b', bottomEdge:'#2c2843' },
+        'Scotland': { torso:'#2e3453', sleeves:'#2e3453', sleeveEnds:'#2e3453', collar:'#2e3453', bottomEdge:'#2e3453' }
       };
-      return kits[country] || ['#59a7ff', '#ffffff'];
+
+      return kits[country] || {
+        torso:'#59a7ff',
+        sleeves:'#59a7ff',
+        sleeveEnds:'#ffffff',
+        collar:'#ffffff',
+        bottomEdge:'#ffffff'
+      };
     }
 
     function shirtNumber(playerName) {
@@ -732,12 +971,51 @@
     }
 
     function shirtSvg(country, number) {
-      const [main] = countryKit(country);
-      const numberColour = readableNumberColour(main);
+      const kit = countryKit(country);
+      const numberColour = readableNumberColour(kit.torso);
 
-      return `<svg class="shirt" viewBox="0 0 512 512" aria-hidden="true">
-        <path d="M160 0c18 16 50 24 96 24s78-8 96-24l88 52 48 52v130h-82v216H106V234H24V104l48-52 88-52z" fill="${main}"/>
-        <text x="256" y="320" text-anchor="middle" font-size="175" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${numberColour}" stroke="rgba(8,17,31,0.16)" stroke-width="6" paint-order="stroke">${number || 10}</text>
+      return `<svg class="shirt" viewBox="0 0 826 872" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        <g transform="translate(0,872) scale(0.1,-0.1)" stroke="none">
+          <path d="M5547 8505 c-9 -46 -31 -125 -47 -175 -17 -51 -30 -97 -30 -103 0 -7
+30 -32 66 -57 36 -25 91 -63 122 -86 31 -22 248 -175 482 -340 437 -307 530
+-383 619 -504 157 -214 230 -473 202 -725 -5 -49 -49 -250 -97 -445 -47 -195
+-111 -454 -140 -575 -30 -121 -59 -256 -65 -300 l-12 -80 65 -110 c36 -60 101
+-170 144 -244 43 -74 82 -135 85 -135 5 -1 1065 699 1082 714 8 7 -30 158
+-218 880 -41 157 -99 384 -130 505 -86 332 -126 421 -251 547 -31 31 -189 150
+-352 265 -162 114 -318 224 -346 244 -59 41 -466 328 -541 381 -188 131 -481
+339 -538 379 -37 27 -71 49 -75 49 -4 0 -15 -38 -25 -85z" fill="${kit.sleeves}"/>
+          <path d="M2160 8274 c-228 -162 -440 -312 -470 -332 -30 -21 -147 -103 -260
+-183 -224 -159 -245 -174 -462 -326 -172 -121 -254 -200 -314 -303 -72 -122
+-43 -23 -344 -1188 -82 -320 -150 -586 -150 -591 0 -10 1055 -712 1080 -718
+10 -3 36 32 86 119 39 68 103 178 143 245 l72 121 -16 94 c-9 51 -38 183 -65
+293 -27 110 -76 313 -110 450 -33 138 -72 295 -85 350 -64 256 -60 433 13 650
+44 129 111 247 196 343 105 119 104 119 991 740 121 85 223 158 228 162 4 3
+-4 36 -17 72 -25 65 -58 189 -70 261 -4 20 -12 37 -19 36 -7 0 -199 -133 -427
+-295z" fill="${kit.sleeves}"/>
+          <path d="M5311 7970 c-49 -73 -225 -238 -322 -302 -349 -231 -790 -317 -1229
+-239 -356 63 -674 243 -884 500 -32 39 -62 71 -67 71 -5 0 -138 -91 -296 -203
+-159 -112 -391 -276 -518 -364 -126 -89 -256 -185 -288 -213 -111 -100 -202
+-256 -239 -409 -17 -72 -19 -107 -15 -221 5 -132 8 -147 132 -645 155 -626
+171 -701 185 -846 7 -76 11 -830 13 -2264 l2 -2150 2307 -3 2307 -2 4 2187 c3
+1996 4 2198 20 2298 19 128 74 362 237 1020 59 240 72 309 77 400 12 233 -71
+446 -238 613 -35 34 -167 135 -294 224 -126 88 -252 178 -280 198 -27 21 -158
+113 -290 205 -132 92 -247 174 -256 181 -24 21 -31 17 -68 -36z" fill="${kit.torso}"/>
+          <path d="M91 5088 c-4 -13 -18 -65 -31 -117 -20 -83 -21 -95 -8 -102 9 -5 184
+-120 389 -257 206 -137 415 -275 464 -307 50 -32 95 -62 102 -67 14 -11 130
+179 117 192 -5 4 -112 76 -237 159 -125 83 -348 231 -495 329 -147 97 -273
+181 -280 185 -8 5 -15 0 -21 -15z" fill="${kit.sleeveEnds}"/>
+          <path d="M7572 4770 c-281 -187 -512 -344 -512 -349 0 -5 23 -48 51 -96 37
+-63 56 -86 68 -82 9 2 231 146 494 320 381 252 477 321 473 335 -3 9 -15 58
+-27 107 -12 50 -25 93 -28 97 -4 4 -237 -145 -519 -332z" fill="${kit.sleeveEnds}"/>
+          <path d="M1784 447 c-2 -7 -3 -89 -2 -182 l3 -170 2308 -3 2307 -2 0 185 0
+185 -2305 0 c-1870 0 -2307 -2 -2311 -13z" fill="${kit.bottomEdge}"/>
+          <path d="M5290 8596 c-14 -8 -70 -33 -125 -56 -55 -23 -113 -48 -130 -55 -114
+-50 -423 -130 -625 -162 -160 -25 -577 -25 -735 0 -262 41 -608 147 -807 248
+-36 18 -38 18 -38 2 0 -10 11 -61 25 -113 30 -114 105 -270 174 -361 288 -380
+865 -559 1396 -433 434 103 739 364 864 740 31 93 50 204 35 204 -5 -1 -20 -7
+-34 -14z" fill="${kit.collar}"/>
+        </g>
+        <text x="413" y="395" text-anchor="middle" dominant-baseline="middle" font-size="220" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${numberColour}" stroke="rgba(8,17,31,0.18)" stroke-width="8" paint-order="stroke">${number || 10}</text>
       </svg>`;
     }
 
