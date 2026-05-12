@@ -533,13 +533,34 @@
     opacity: 0.45;
   }
 
-  .player-card-reason {
+  
+  .player-divider {
+    display: block !important;
+    width: 100% !important;
+    height: 1px !important;
+    min-height: 1px !important;
+    background: rgba(20,36,59,0.10) !important;
+    margin: 14px 0 !important;
+    opacity: 1 !important;
+    flex: 0 0 100% !important;
+  }
+
+  .player-stats-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+.player-card-reason {
     color: var(--muted);
     font-size: 0.9rem;
     line-height: 1.45;
-    padding-top: 14px;
-    border-top: 1px solid rgba(255,255,255,0.12);
-  }
+    padding-top: 0;
+    }
 
   @media (max-width: 1000px) {
     .grid {
@@ -766,6 +787,152 @@
 </style>
 
 
+
+<style id="enhanced-player-card-design">
+  .player-card.individual-player-card {
+    display: grid !important;
+    gap: 14px !important;
+    padding: 20px !important;
+    border-radius: 24px !important;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,251,242,0.94)) !important;
+    border: 1px solid rgba(0,168,232,0.20) !important;
+    box-shadow: 0 16px 34px rgba(20,36,59,0.10) !important;
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  }
+
+  .player-card.individual-player-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 44px rgba(20,36,59,0.14) !important;
+    border-color: rgba(0,168,232,0.34) !important;
+  }
+
+  .player-card-main {
+    padding-bottom: 2px;
+  }
+
+  .player-copy {
+    display: grid;
+    gap: 4px;
+  }
+
+  .player-name {
+    font-size: 1.22rem !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.035em;
+  }
+
+  .player-meta-line,
+  .player-stats-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px !important;
+    color: var(--muted) !important;
+    font-size: 0.86rem !important;
+    font-weight: 800 !important;
+  }
+
+  .player-meta-line span:not(.player-meta-separator),
+  .player-stats-line span:not(.player-meta-separator) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 6px 9px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+  }
+
+  /* Country, role and price */
+  .player-meta-line span:not(.player-meta-separator) {
+    background: rgba(0,168,232,0.10) !important;
+    border-color: rgba(0,168,232,0.22) !important;
+    color: #006c96 !important;
+  }
+
+  /* Default stat line pill */
+  .player-stats-line span:not(.player-meta-separator) {
+    background: rgba(20,36,59,0.08) !important;
+    border-color: rgba(20,36,59,0.12) !important;
+    color: #5f6f84 !important;
+  }
+
+
+  .player-stats-line .stat-pill,
+  .player-stats-line span.stat-pill {
+    background: rgba(10,163,107,0.14) !important;
+    border: 1px solid rgba(10,163,107,0.24) !important;
+    color: #087b53 !important;
+  }
+
+  .player-stats-line .stat-pill,
+  .player-stats-line span.stat-pill {
+    background: rgba(215,45,63,0.12) !important;
+    border: 1px solid rgba(215,45,63,0.24) !important;
+    color: #9f2030 !important;
+  }
+
+
+  .player-stats-line .club-pill {
+    background: rgba(20,36,59,0.08) !important;
+    border-color: rgba(20,36,59,0.12) !important;
+    color: #5f6f84 !important;
+  }
+
+  .player-meta-separator {
+    display: none !important;
+  }
+
+  .player-divider {
+    display: block !important;
+    width: 100% !important;
+    height: 1px !important;
+    min-height: 1px !important;
+    background: rgba(20,36,59,0.10) !important;
+    margin: 2px 0 !important;
+    opacity: 1 !important;
+  }
+
+  .player-card-reason {
+    margin: 0 !important;
+    padding: 12px 13px !important;
+    border: 0 !important;
+    border-radius: 16px;
+    background: rgba(20,36,59,0.045);
+    color: var(--muted) !important;
+    font-size: 0.9rem !important;
+    line-height: 1.45 !important;
+  }
+
+  @media (max-width: 560px) {
+    .player-card.individual-player-card {
+      padding: 18px !important;
+      border-radius: 22px !important;
+    }
+
+    .player-meta-line,
+    .player-stats-line {
+      gap: 7px !important;
+    }
+
+    .player-meta-line span:not(.player-meta-separator),
+    .player-stats-line span:not(.player-meta-separator) {
+      min-height: 26px;
+      padding: 5px 8px;
+    }
+  }
+</style>
+
+
+<style id="final-stat-pill-colour-overrides">
+  .player-stats-line span.stat-pill,
+  .player-stats-line span.club-pill {
+    background: rgba(20,36,59,0.08) !important;
+    border: 1px solid rgba(20,36,59,0.12) !important;
+    color: #5f6f84 !important;
+  }
+</style>
+
 </head>
 <body>
   <header>
@@ -818,7 +985,12 @@
   <script>
     const englandFlag = '<img class="flag-img" style="width:1em;height:1em;vertical-align:-0.1em" alt="England flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg">';
     const scotlandFlag = '<img class="flag-img" style="width:1em;height:1em;vertical-align:-0.1em" alt="Scotland flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg">';
-    // Edit shirt numbers via the third value in each pick array, e.g. forward:['Kane','Elite forward + pens',9]
+    // Edit pick placeholders:
+    // [name, note, shirtNumber, club, xGI/xGC, defenderSecondXGC]
+    // For forwards/midfielders: the 5th value is xGI.
+    // For defenders: the 5th and 6th values are xGC placeholders.
+    // For goalkeepers: the 5th value is xGC.
+    // Example: forward:['Kane','Elite forward + pens',9,'Bayern Munich','0.85 xGI']
     const teams = [
       { group:"J", country:"Argentina", flag:"🇦🇷", picks:{ forward:["Alvarez", "Elite attack", 9], midfielder:["Messi", "Elite attack + pens + set pieces", 10], defender:["Romero", "Starter + some attack threat", 13], goalkeeper:["Martinez", "Starter when fit", 23], penalty:["Messi", "Nailed pen taker", 10] } },
       { group:"J", country:"Austria", flag:"🇦🇹", picks:{ forward:["Arnautovic", "Attack threat", 7], midfielder:["Sabitzer", "Regular returns + pens", 9], defender:["Laimer", "Regular with some attack threat", 20], goalkeeper:["Schlager", "Starter", 1], penalty:["Sabitzer", "Nailed pen taker", 9] } },
@@ -887,7 +1059,7 @@
 
     function countryKit(country) {
       const kits = {
-        'Argentina': { torso:'#badef2', sleeves:'#badef2', sleeveEnds:'#badef2', collar:'#badef2', bottomEdge:'#badef2' },
+        'Argentina': { torso:'#ffffff', torsoStripes:['#badef2', '#ffffff', '#badef2', '#ffffff', '#badef2'], sleeves:'#badef2', sleeveEnds:'#ffffff', collar:'#badef2', bottomEdge:'#badef2' },
         'Austria': { torso:'#d30a1b', sleeves:'#241f21', sleeveEnds:'#d30a1b', collar:'#241f21', bottomEdge:'#d30a1b' },
         'Australia': { torso:'#f9bb77', sleeves:'#f9bb77', sleeveEnds:'#f9bb77', collar:'#1e756a', bottomEdge:'#1e756a' },
         'Bosnia': { torso:'#014ac5', sleeves:'#014ac5', sleeveEnds:'#f7c807', collar:'#f7c807', bottomEdge:'#f7c807' },
@@ -922,7 +1094,7 @@
         'New Zealand': { torso:'#232122', sleeves:'#232122', sleeveEnds:'#232122', collar:'#232122', bottomEdge:'#232122' },
         'Panama': { torso:'#e7362c', sleeves:'#e7362c', sleeveEnds:'#0a1112', collar:'#e7362c', bottomEdge:'#e7362c' },
         'Portugal': { torso:'#ae2631', sleeves:'#ae2631', sleeveEnds:'#027775', collar:'#027775', bottomEdge:'#ae2631' },
-        'Paraguay': { torso:'#e3e1df', sleeves:'#aa2c38', sleeveEnds:'#1d3b8d', collar:'#1d3b8d', bottomEdge:'#aa2c38' },
+        'Paraguay': { torso:'#ffffff', torsoStripes:['#ee7f80', '#ffffff', '#ee7f80', '#ffffff', '#ee7f80'], sleeves:'#ee7f80', sleeveEnds:'#1d3a94', collar:'#1d3a94', bottomEdge:'#ee7f80' },
         'Qatar': { torso:'#8c2829', sleeves:'#8c2829', sleeveEnds:'#8c2829', collar:'#8c2829', bottomEdge:'#8c2829' },
         'Saudi Arabia': { torso:'#1b4741', sleeves:'#1b4741', sleeveEnds:'#5353a2', collar:'#5353a2', bottomEdge:'#5353a2' },
         'Sweden': { torso:'#f9db55', sleeves:'#f9db55', sleeveEnds:'#2656b3', collar:'#2656b3', bottomEdge:'#2563eb' },
@@ -970,9 +1142,64 @@
       return luminance > 0.58 ? '#08111f' : '#ffffff';
     }
 
+
+    function normalisePick(pick, roleKey) {
+      if (Array.isArray(pick)) {
+        return {
+          name: pick[0],
+          why: pick[1],
+          number: pick[2],
+          club: pick[3] || 'Fulham',
+          xGI: pick[4] || '0.56',
+          xGC: pick[4] || '0.82',
+          xGC2: pick[5] || '0.82'
+        };
+      }
+
+      return {
+        name: pick.name || '',
+        why: pick.why || '',
+        number: pick.number || 10,
+        club: pick.club || 'Fulham',
+        xGI: pick.xGI || '0.56',
+        xGC: pick.xGC || '0.82',
+        xGC2: pick.xGC2 || '0.82'
+      };
+    }
+
+    function playerStatLine(role, pick) {
+      if (role === 'Forward' || role === 'Midfielder' || role === 'Penalty taker') {
+        return `<span class="stat-pill">${pick.xGI || '0.56'} xGI per 90 ⚽</span>`;
+      }
+
+      if (role === 'Defender') {
+        return `<span class="stat-pill">${pick.xGC || '0.82'} xGC per 90 🛡️</span><span class="player-meta-separator">•</span><span class="stat-pill">${pick.xGI || '0.56'} xGI per 90 ⚽</span>`;
+      }
+
+      if (role === 'Goalkeeper') {
+        return `<span class="stat-pill">${pick.xGC || '0.82'} xGC per 90 🛡️</span>`;
+      }
+
+      return '';
+    }
+
     function shirtSvg(country, number) {
       const kit = countryKit(country);
-      const numberColour = readableNumberColour(kit.torso);
+      const numberColour = country === 'Paraguay' ? '#000000' : (kit.number || readableNumberColour(kit.torso));
+      const torsoClipId = `shirt-torso-${country.replace(/[^a-z0-9]/gi, '').toLowerCase()}-${number}-${Math.random().toString(36).slice(2)}`;
+      const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.length === 5
+        ? `<clipPath id="${torsoClipId}"><path d="M5311 7970 c-49 -73 -225 -238 -322 -302 -349 -231 -790 -317 -1229
+-86 -356 63 -674 243 -884 500 -32 39 -62 71 -67 71 -5 0 -138 -91 -296 -203
+-159 -112 -391 -276 -518 -364 -126 -89 -256 -185 -288 -213 -111 -100 -202
+-256 -239 -409 -17 -72 -19 -107 -15 -221 5 -132 8 -147 132 -645 155 -626
+171 -701 185 -846 7 -76 11 -830 13 -2264 l2 -2150 2307 -3 2307 -2 4 2187 c3
+1996 4 2198 20 2298 19 128 74 362 237 1020 59 240 72 309 77 400 12 233 -71
+446 -238 613 -35 34 -167 135 -294 224 -126 88 -252 178 -280 198 -27 21 -158
+113 -290 205 -132 92 -247 174 -256 181 -24 21 -31 17 -68 -36z"/></clipPath>
+          <g clip-path="url(#${torsoClipId})">
+            ${kit.torsoStripes.map((colour, index) => `<rect x="1783" y="780" width="923" height="7220" fill="${colour}" transform="translate(${index * 923} 0)"/>`).join('')}
+          </g>`
+        : '';
 
       return `<svg class="shirt" viewBox="0 0 826 872" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
         <g transform="translate(0,872) scale(0.1,-0.1)" stroke="none">
@@ -1000,6 +1227,7 @@
 1996 4 2198 20 2298 19 128 74 362 237 1020 59 240 72 309 77 400 12 233 -71
 446 -238 613 -35 34 -167 135 -294 224 -126 88 -252 178 -280 198 -27 21 -158
 113 -290 205 -132 92 -247 174 -256 181 -24 21 -31 17 -68 -36z" fill="${kit.torso}"/>
+          ${torsoStripeOverlay}
           <path d="M91 5088 c-4 -13 -18 -65 -31 -117 -20 -83 -21 -95 -8 -102 9 -5 184
 -120 389 -257 206 -137 415 -275 464 -307 50 -32 95 -62 102 -67 14 -11 130
 179 117 192 -5 4 -112 76 -237 159 -125 83 -348 231 -495 329 -147 97 -273
@@ -1015,7 +1243,7 @@
 865 -559 1396 -433 434 103 739 364 864 740 31 93 50 204 35 204 -5 -1 -20 -7
 -34 -14z" fill="${kit.collar}"/>
         </g>
-        <text x="413" y="395" text-anchor="middle" dominant-baseline="middle" font-size="220" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${numberColour}" stroke="rgba(8,17,31,0.18)" stroke-width="8" paint-order="stroke">${number || 10}</text>
+        <text x="413" y="395" text-anchor="middle" dominant-baseline="middle" font-size="220" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${numberColour}" stroke="${country === 'Paraguay' ? 'transparent' : 'rgba(8,17,31,0.18)'}" stroke-width="${country === 'Paraguay' ? '0' : '8'}" paint-order="stroke">${number || 10}</text>
       </svg>`;
     }
 
@@ -1055,13 +1283,15 @@
         roleRows
           .filter(([label]) => !role || label === role)
           .map(([label, key]) => {
-            const pick = team.picks[key];
+            const pick = normalisePick(team.picks[key], key);
             return {
               team,
               role: label,
-              name: pick[0],
-              why: pick[1],
-              number: pick[2],
+              name: pick.name,
+              why: pick.why,
+              number: pick.number,
+              club: pick.club,
+              statLine: playerStatLine(label, pick),
               price: rolePrices[label] || '$5m'
             };
           })
@@ -1104,6 +1334,16 @@
             <span class="player-meta-separator">•</span>
             <span>${player.price}</span>
           </div>
+
+          <div class="player-divider" aria-hidden="true"></div>
+
+          <div class="player-stats-line">
+            ${player.statLine}
+            <span class="player-meta-separator">•</span>
+            <span class="club-pill">${player.club || 'Fulham'}&nbsp;${englandFlag}</span>
+          </div>
+
+          <div class="player-divider" aria-hidden="true"></div>
 
           <div class="player-card-reason">${player.why || 'No note added yet.'}</div>
         </article>
