@@ -802,9 +802,8 @@
   }
 
   .player-card.individual-player-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 22px 44px rgba(20,36,59,0.14) !important;
-    border-color: rgba(0,168,232,0.34) !important;
+    box-shadow: 0 16px 34px rgba(20,36,59,0.10) !important;
+    border-color: rgba(0,168,232,0.20) !important;
   }
 
   .player-card-main {
@@ -930,6 +929,193 @@
     background: rgba(20,36,59,0.08) !important;
     border: 1px solid rgba(20,36,59,0.12) !important;
     color: #5f6f84 !important;
+  }
+</style>
+
+
+<style id="clean-player-card-table-design">
+  .player-card.individual-player-card {
+    display: grid !important;
+    gap: 0 !important;
+    padding: 30px 32px !important;
+    border-radius: 30px !important;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,251,242,0.94)) !important;
+    border: 1px solid rgba(0,168,232,0.20) !important;
+    box-shadow: 0 16px 34px rgba(20,36,59,0.10) !important;
+    overflow: hidden !important;
+  }
+
+  .player-card.individual-player-card:hover {
+    box-shadow: 0 16px 34px rgba(20,36,59,0.10) !important;
+    border-color: rgba(0,168,232,0.20) !important;
+  }
+
+  .player-card-main {
+    display: grid !important;
+    grid-template-columns: 56px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 14px !important;
+    min-width: 0 !important;
+    margin: -30px -32px 0 !important;
+    padding: 22px 28px !important;
+    background:
+      linear-gradient(135deg,
+        rgba(0,168,232,0.14),
+        rgba(255,255,255,0.04),
+        rgba(215,45,63,0.10)) !important;
+    border-bottom: 1px solid rgba(20,36,59,0.10) !important;
+  }
+
+  .player-card-main > div:first-child {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .player-card-main .shirt,
+  .player-card.individual-player-card .shirt {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .player-card-main .player-name {
+    color: var(--text) !important;
+    font-size: clamp(1.15rem, 2vw, 1.55rem) !important;
+    line-height: 1 !important;
+    letter-spacing: -0.055em !important;
+    font-weight: 950 !important;
+  }
+
+  .player-country-subtitle {
+    margin-top: 6px !important;
+    color: var(--muted) !important;
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  .player-info-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    background: transparent !important;
+    border: 0 !important;
+    color: var(--muted) !important;
+    font-size: 1.05rem !important;
+    font-weight: 400 !important;
+  }
+
+  .player-info-table tbody,
+  .player-info-table tr,
+  .player-info-table th,
+  .player-info-table td {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  .player-info-table tr {
+    border-bottom: 1px solid rgba(20,36,59,0.10) !important;
+  }
+
+  .player-info-table tr:first-child {
+    border-top: 0 !important;
+  }
+
+  .player-info-table th,
+  .player-info-table td {
+    padding: 18px 0 !important;
+    vertical-align: middle !important;
+    border: 0 !important;
+    color: var(--muted) !important;
+    text-align: left !important;
+  }
+
+  .player-info-table th {
+    width: 34% !important;
+    padding-right: 22px !important;
+    font-weight: 950 !important;
+  }
+
+  .player-info-table td {
+    width: 66% !important;
+    padding-left: 28px !important;
+    border-left: 0 !important;
+  }
+
+  .player-info-table .stat-pill,
+  .player-info-table .club-pill {
+    display: inline !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--muted) !important;
+    font: inherit !important;
+  }
+
+  
+
+  .player-info-table .player-meta-separator {
+    display: none !important;
+  }
+
+  @media (max-width: 560px) {
+    .player-card.individual-player-card {
+      padding: 24px !important;
+      gap: 18px !important;
+      border-radius: 24px !important;
+    }
+
+    .player-card-main {
+      grid-template-columns: 46px minmax(0, 1fr) !important;
+      gap: 18px !important;
+    }
+
+    .player-card-main .shirt,
+    .player-card.individual-player-card .shirt {
+      width: 42px !important;
+      height: 42px !important;
+    }
+
+    .player-card-main .player-name {
+      font-size: 1.2rem !important;
+    }
+
+    .player-info-table {
+      font-size: 0.98rem !important;
+    }
+
+    .player-info-table th {
+      width: 32% !important;
+      padding-right: 14px !important;
+    }
+
+    .player-info-table td {
+      width: 68% !important;
+      padding-left: 18px !important;
+    }
+
+    .player-info-table th,
+    .player-info-table td {
+      padding-top: 16px !important;
+      padding-bottom: 16px !important;
+    }
+  }
+</style>
+
+
+<style id="remove-player-table-hover">
+  .player-info-table tr:hover td,
+  .player-info-table tr:hover th,
+  .player-info-table tbody tr:hover td,
+  .player-info-table tbody tr:hover th {
+    background: transparent !important;
   }
 </style>
 
@@ -1169,15 +1355,15 @@
 
     function playerStatLine(role, pick) {
       if (role === 'Forward' || role === 'Midfielder' || role === 'Penalty taker') {
-        return `<span class="stat-pill">${pick.xGI || '0.56'} xGI per 90 ⚽</span>`;
+        return `<span class="stat-pill">${pick.xGI || '0.56'} xGI ⚽</span>`;
       }
 
       if (role === 'Defender') {
-        return `<span class="stat-pill">${pick.xGC || '0.82'} xGC per 90 🛡️</span><span class="player-meta-separator">•</span><span class="stat-pill">${pick.xGI || '0.56'} xGI per 90 ⚽</span>`;
+        return `<span class="stat-pill">${pick.xGC || '0.82'} xGC 🛡️</span><span class="player-meta-separator">•</span><span class="stat-pill">${pick.xGI || '0.56'} xGI ⚽</span>`;
       }
 
       if (role === 'Goalkeeper') {
-        return `<span class="stat-pill">${pick.xGC || '0.82'} xGC per 90 🛡️</span>`;
+        return `<span class="stat-pill">${pick.xGC || '0.82'} xGC 🛡️</span>`;
       }
 
       return '';
@@ -1323,29 +1509,39 @@
             <div>${shirtSvg(player.team.country, player.number)}</div>
             <div class="player-copy">
               <div class="player-name">${player.name}</div>
-              
+              <div class="player-country-subtitle">${player.team.flag} ${player.team.country}</div>
             </div>
           </div>
 
-          <div class="player-meta-line">
-            <span>${player.team.flag} ${player.team.country}</span>
-            <span class="player-meta-separator">•</span>
-            <span>${player.role}</span>
-            <span class="player-meta-separator">•</span>
-            <span>${player.price}</span>
-          </div>
+          <table class="player-info-table" aria-label="${player.name} details">
+            <tbody>
+              <tr>
+                <th scope="row">Position</th>
+                <td>${player.role}</td>
+              </tr>
+              <tr>
+                <th scope="row">Price</th>
+                <td>${player.price}</td>
+              </tr>
+              <tr>
+                <th scope="row">xGI per 90</th>
+                <td>${player.role === 'Forward' || player.role === 'Midfielder' || player.role === 'Penalty taker' || player.role === 'Defender' ? (player.statLine.match(/([\d.]+) xGI/)?.[1] || '0.56') : '-'}</td>
+              </tr>
 
-          <div class="player-divider" aria-hidden="true"></div>
-
-          <div class="player-stats-line">
-            ${player.statLine}
-            <span class="player-meta-separator">•</span>
-            <span class="club-pill">${player.club || 'Fulham'}&nbsp;${englandFlag}</span>
-          </div>
-
-          <div class="player-divider" aria-hidden="true"></div>
-
-          <div class="player-card-reason">${player.why || 'No note added yet.'}</div>
+              <tr>
+                <th scope="row">xGC per 90</th>
+                <td>${player.role === 'Defender' || player.role === 'Goalkeeper' ? (player.statLine.match(/([\d.]+) xGC/)?.[1] || '0.82') : '-'}</td>
+              </tr>
+              <tr>
+                <th scope="row">Club</th>
+                <td>${player.club || 'Fulham'}&nbsp;${englandFlag}</td>
+              </tr>
+              <tr>
+                <th scope="row">Notes</th>
+                <td>${player.why || 'No note added yet.'}</td>
+              </tr>
+            </tbody>
+          </table>
         </article>
       `).join('');
 
