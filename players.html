@@ -937,7 +937,7 @@
   .player-card.individual-player-card {
     display: grid !important;
     gap: 0 !important;
-    padding: 30px 32px !important;
+    padding: 30px 32px 14px !important;
     border-radius: 30px !important;
     background:
       linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,251,242,0.94)) !important;
@@ -961,9 +961,9 @@
     padding: 22px 28px !important;
     background:
       linear-gradient(135deg,
-        rgba(0,168,232,0.14),
+        rgba(215,45,63,0.12),
         rgba(255,255,255,0.04),
-        rgba(215,45,63,0.10)) !important;
+        rgba(0,168,232,0.14)) !important;
     border-bottom: 1px solid rgba(20,36,59,0.10) !important;
   }
 
@@ -1021,6 +1021,10 @@
     border-bottom: 1px solid rgba(20,36,59,0.10) !important;
   }
 
+  .player-info-table tr:last-child {
+    border-bottom: 0 !important;
+  }
+
   .player-info-table tr:first-child {
     border-top: 0 !important;
   }
@@ -1035,13 +1039,13 @@
   }
 
   .player-info-table th {
-    width: 34% !important;
+    width: 42% !important;
     padding-right: 22px !important;
     font-weight: 950 !important;
   }
 
   .player-info-table td {
-    width: 66% !important;
+    width: 58% !important;
     padding-left: 28px !important;
     border-left: 0 !important;
   }
@@ -1067,7 +1071,7 @@
 
   @media (max-width: 560px) {
     .player-card.individual-player-card {
-      padding: 24px !important;
+      padding: 24px 24px 12px !important;
       gap: 18px !important;
       border-radius: 24px !important;
     }
@@ -1092,12 +1096,12 @@
     }
 
     .player-info-table th {
-      width: 32% !important;
+      width: 40% !important;
       padding-right: 14px !important;
     }
 
     .player-info-table td {
-      width: 68% !important;
+      width: 60% !important;
       padding-left: 18px !important;
     }
 
@@ -1161,7 +1165,7 @@
       <select id="groupFilter"><option value="">All groups</option></select>
       <select id="roleFilter"><option value="">All roles</option><option>Forward</option><option>Midfielder</option><option>Defender</option><option>Goalkeeper</option><option>Penalty taker</option></select>
       <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option>
-              <option value="price">Sort by price</option></select>
+              <option value="price">Sort by price</option><option value="xgi">Sort by expected goal involvements</option><option value="xgc">Sort by expected goals conceded</option></select>
     </section>
 
     <section class="grid" id="playerGrid"></section>
@@ -1171,61 +1175,277 @@
   <script>
     const englandFlag = '<img class="flag-img" style="width:1em;height:1em;vertical-align:-0.1em" alt="England flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg">';
     const scotlandFlag = '<img class="flag-img" style="width:1em;height:1em;vertical-align:-0.1em" alt="Scotland flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg">';
-    // Edit pick placeholders:
-    // [name, note, shirtNumber, club, xGI/xGC, defenderSecondXGC]
-    // For forwards/midfielders: the 5th value is xGI.
-    // For defenders: the 5th and 6th values are xGC placeholders.
-    // For goalkeepers: the 5th value is xGC.
-    // Example: forward:['Kane','Elite forward + pens',9,'Bayern Munich','0.85 xGI']
+
+    function clubFlag(club) {
+      const flags = {
+        "Atlético Madrid":"🇪🇸",
+        "Inter Miami":"🇺🇸",
+        "Al-Ahli SFC":"🇸🇦",
+        "Bayer Leverkusen":"🇩🇪",
+        "LOSC Lille":"🇫🇷",
+        "Granada CF":"🇪🇸",
+
+        "Al-Wehda":"🇸🇦",
+        "Middlesbrough":englandFlag,
+        "Leicester City":englandFlag,
+        "AZ Alkmaar":"🇳🇱",
+        "Adelaide United":"🇦🇺",
+
+        "Borussia Dortmund":"🇩🇪",
+        "RB Leipzig":"🇩🇪",
+        "Real Madrid":"🇪🇸",
+        "RB Salzburg":"🇦🇹",
+
+        "Atalanta":"🇮🇹",
+        "Napoli":"🇮🇹",
+        "Lille":"🇫🇷",
+
+        "Schalke 04":"🇩🇪",
+        "PSV Eindhoven":"🇳🇱",
+        "Feyenoord":"🇳🇱",
+
+        "Real Madrid":"🇪🇸",
+        "Newcastle United":englandFlag,
+        "Arsenal":englandFlag,
+        "Chelsea":englandFlag,
+
+        "Pachuca":"🇲🇽",
+        "Huracán":"🇦🇷",
+
+        "Pyramids FC":"🇪🇬",
+        "Al Ahly":"🇪🇬",
+
+        "Real Sociedad":"🇪🇸",
+        "Barcelona":"🇪🇸",
+        "Athletic Club":"🇪🇸",
+        "AC Milan":"🇮🇹",
+
+        "Bournemouth":englandFlag,
+        "Hearts of Oak":"🇬🇭",
+
+        "Torino":"🇮🇹",
+        "Hamburger SV":"🇩🇪",
+        "Esteghlal":"🇮🇷",
+        "FC Dallas":"🇺🇸",
+        "LDU Quito":"🇪🇨",
+        "SC Bastia":"🇫🇷",
+
+        "Olympiacos":"🇬🇷",
+        "Al Ittihad Kalba":"🇦🇪",
+        "Tractor SC":"🇮🇷",
+
+        "Rennes":"🇫🇷",
+        "Al-Waab":"🇶🇦",
+        "Al-Zawraa":"🇮🇶",
+        "Al-Hussein SC":"🇯🇴",
+
+        "Brighton":englandFlag,
+        "Parma":"🇮🇹",
+
+        "Paris Saint-Germain":"🇫🇷",
+        "Los Angeles FC":"🇺🇸",
+        "Al-Shabab":"🇸🇦",
+        "FC Tokyo":"🇯🇵",
+        "Wydad AC":"🇲🇦",
+
+        "Lokomotiv Moscow":"🇷🇺",
+        "Guadalajara":"🇲🇽",
+
+
+
+
+
+
+
+
+
+
+        "Liverpool":englandFlag,
+        "Manchester City":englandFlag,
+
+        "Juventus":"🇮🇹",
+        "Villarreal":"🇪🇸",
+        "Hajduk Split":"🇭🇷",
+        "Minnesota United":"🇺🇸",
+
+        "Spartak Moscow":"🇷🇺",
+        "Burnley":englandFlag,
+        "Le Havre":"🇫🇷",
+
+        "Nottingham Forest":englandFlag,
+        "Sunderland":englandFlag,
+        "Inter Milan":"🇮🇹",
+
+        "Crystal Palace":englandFlag,
+        "Roma":"🇮🇹",
+        "Porto":"🇵🇹",
+        "Strasbourg":"🇫🇷",
+        "Atlanta United":"🇺🇸",
+        "Palmeiras":"🇧🇷",
+        "Cerro Porteño":"🇵🇾",
+
+        "Al-Shamal":"🇶🇦",
+        "Al Sadd":"🇶🇦",
+        "Al-Arabi":"🇶🇦",
+        "Al-Rayyan":"🇶🇦",
+
+
+        "Al-Ahli":"🇸🇦",
+
+        "Bayern Munich":"🇩🇪",
+        "Atlético Nacional":"🇨🇴",
+
+        "Casa Pia":"🇵🇹",
+        "Apollon Limassol":"🇨🇾",
+        "Columbus Crew":"🇺🇸",
+        "Chaves":"🇵🇹",
+
+        "Miami FC":"🇺🇸",
+        "Gaziantep":"🇹🇷",
+        "RKC Waalwijk":"🇳🇱",
+        "Iğdır FK":"🇹🇷",
+
+        "West Ham United":englandFlag,
+        "Wolves":englandFlag,
+
+
+
+
+
+
+
+
+
+        "FC St. Pauli":"🇩🇪",
+
+
+
+
+        "Tottenham Hotspur":englandFlag,
+        "Aston Villa":englandFlag,
+        "Sevilla":"🇪🇸",
+
+        "Motherwell":scotlandFlag,
+        "Sheffield United":englandFlag,
+        "Millwall":englandFlag,
+
+        "León":"🇲🇽",
+        "UNAM":"🇲🇽",
+        "Beşiktaş":"🇹🇷",
+        "Al-Fayha":"🇸🇦",
+
+        "Manchester United":englandFlag,
+        "Porto":"🇵🇹",
+        "Strasbourg":"🇫🇷",
+        "Atlanta United":"🇺🇸",
+        "Palmeiras":"🇧🇷",
+        "Cerro Porteño":"🇵🇾",
+
+        "Al-Shamal":"🇶🇦",
+        "Al Sadd":"🇶🇦",
+        "Al-Arabi":"🇶🇦",
+        "Al-Rayyan":"🇶🇦",
+
+
+
+
+
+        "Bayern Munich":"🇩🇪",
+        "Fulham":englandFlag
+      };
+
+      return flags[club] || "🏳️";
+    }
+
+    // Editable player values:
+    // [name, note, shirtNumber, club, FBref 2025/26 club xGI per 90, FBref 2025/26 club xGC per 90]
+    //
+    // Edit xGI and xGC directly for every player below.
+    //
+    // Example:
+    // forward:['Kane','Elite forward + pens',9,'Bayern Munich','0.85','1.12']
+    //
+    // The 5th value = club xGI per 90
+    // The 6th value = club xGC per 90
     const teams = [
-      { group:"J", country:"Argentina", flag:"🇦🇷", picks:{ forward:["Alvarez", "Elite attack", 9], midfielder:["Messi", "Elite attack + pens + set pieces", 10], defender:["Romero", "Starter + some attack threat", 13], goalkeeper:["Martinez", "Starter when fit", 23], penalty:["Messi", "Nailed pen taker", 10] } },
-      { group:"J", country:"Austria", flag:"🇦🇹", picks:{ forward:["Arnautovic", "Attack threat", 7], midfielder:["Sabitzer", "Regular returns + pens", 9], defender:["Laimer", "Regular with some attack threat", 20], goalkeeper:["Schlager", "Starter", 1], penalty:["Sabitzer", "Nailed pen taker", 9] } },
-      { group:"D", country:"Australia", flag:"🇦🇺", picks:{ forward:["Metcalfe", "Regular starter + sporadic returns", 8], midfielder:["O'Neill", "Starter", 13], defender:["Circati", "Budget defender", 2], goalkeeper:["Ryan", "Starter", 1], penalty:["Boyle", "Recent penalty taker", 6] } },
-      { group:"B", country:"Bosnia", flag:"🇧🇦", picks:{ forward:["Dzeko", "Goal threat + some pens", 11], midfielder:["Bajraktarevic", "Starter with attacking output", 23], defender:["Ahmedhodžić", "Budget defender", 16], goalkeeper:["Vasilj", "Starter", 1], penalty:["Dzeko", "Takes penalties historically", 11] } },
-      { group:"G", country:"Belgium", flag:"🇧🇪", picks:{ forward:["De Ketelaere", "Budget forward", 17], midfielder:["De Bruyne", "Talisman + pens", 7], defender:["Meunier", "Budget defender with attack threat", 15], goalkeeper:["Courtois", "Premium keeper", 1], penalty:["De Bruyne", "Nailed pen taker", 7] } },
-      { group:"C", country:"Brazil", flag:"🇧🇷", picks:{ forward:["Vinicius", "Premium + pens", 7], midfielder:["Guimarães", "Starter with attack threeat", 8], defender:["Gabriel", "Premium defender with goal threat", 4], goalkeeper:["Allison", "Not nailed", 1], penalty:["Vinicius", "Nailed pen taker", 7] } },
-      { group:"B", country:"Canada", flag:"🇨🇦", picks:{ forward:["Jonathan David", "Talisman + pens", 10], midfielder:["Buchanan", "Most nailed midfielder", 17], defender:["Sigur", "Budget defender + goal threat", 3], goalkeeper:["St. Clair", "Budget keeper", 1], penalty:["Jonathan David", "Nailed pen taker", 10] } },
-      { group:"K", country:"DR Congo", flag:"🇨🇩", picks:{ forward:["Wissa", "Budget forward + pens", 20], midfielder:["Bongonda", "Budget midfielder", 10], defender:["Tuanzebe", "Budget defender", 6], goalkeeper:["Mpasi-Nzau", "Budget keeper", 1], penalty:["Wissa", "No nailed on pens", 20] } },
-      { group:"B", country:"Switzerland", flag:"🇨🇭", picks:{ forward:["Ndoye", "Good attack threat", 19], midfielder:["Xhaka", "Talisman + pens", 10], defender:["Akanji", "Budget defender", 5], goalkeeper:["Kobel", "Budget keeper", 1], penalty:["Xhaka", "Nailed pen taker", 10] } },
-      { group:"E", country:"Ivory Coast", flag:"🇨🇮", picks:{ forward:["Guessand", "Budget forward", 22], midfielder:["Guessand", "Defcon midfileder", 22], defender:["N'Dicka", "Budget defender", 21], goalkeeper:["Fofana", "Budget keeper", 1], penalty:["Kessie", "Typical penalty taker", 8] } },
-      { group:"K", country:"Colombia", flag:"🇨🇴", picks:{ forward:["Luis Diaz", "Elite forward", 7], midfielder:["Rodriguez", "Talisman + pens", 10], defender:["Munoz", "Attacking defender", 21], goalkeeper:["Ospina", "Budget keeper", 1], penalty:["Rodriguez", "Historical pen taker", 10] } },
-      { group:"H", country:"Cape Verde", flag:"🇨🇻", picks:{ forward:["Livramento", "Budget forward", 9], midfielder:["Rodrigues", "Budget midfielder on pens", 10], defender:["Moreira", "Budget defender", 5], goalkeeper:["Vozinha", "Budget keeper", 1], penalty:["Rodrigues", "Recent penalty keeper", 10] } },
-      { group:"E", country:"Curaçao", flag:"🇨🇼", picks:{ forward:["Locadia", "Budget forward", 9], midfielder:["J Bacuna", "Budget midfielder", 10], defender:["van Eijma", "Budget defender", 4], goalkeeper:["Room", "Budget keeper", 1], penalty:["L Bacuna", "Regular", 7] } },
-      { group:"A", country:"Czechia", flag:"🇨🇿", picks:{ forward:["Schick", "Proven forward + pens", 10], midfielder:["Soucek", "Budget midfielder with set piece threat", 22], defender:["Krejcí", "Budget defender", 7], goalkeeper:["Kovar", "Budget keeper", 1], penalty:["Schick", "Nailed pen taker", 10] } },
-      { group:"E", country:"Germany", flag:"🇩🇪", picks:{ forward:["Havertz", "Proven forward + pens", 7], midfielder:["Wirtz", "Creative midfielder with goal threat", 17], defender:["Tah", "Defender with set piece threat", 4], goalkeeper:["Neuer", "Elite keeper", 1], penalty:["Havertz", "Nailed pen taker", 7] } },
-      { group:"J", country:"Algeria", flag:"🇩🇿", picks:{ forward:["Mahrez", "Proven forward + pens", 7], midfielder:["Maza", "Creative midfielder with goal threat", 8], defender:["Mandi", "Budget defender", 2], goalkeeper:["Zidane", "Budget keeper in solid defense", 1], penalty:["Mahrez", "Nailed pen taker", 7] } },
-      { group:"E", country:"Ecuador", flag:"🇪🇨", picks:{ forward:["Valencia", "Talisman + pens", 13], midfielder:["Caicedo", "Defcon monster", 23], defender:["Hincapie", "Proven defender in strong defence", 3], goalkeeper:["Galíndez", "Budget keeper in solid defense", 1], penalty:["Valencia", "Nailed pen taker", 13] } },
-      { group:"G", country:"Egypt", flag:"🇪🇬", picks:{ forward:["Marmoush", "Proven forward", 22], midfielder:["Salah", "Talisman + pens", 10], defender:["Fathy", "Budget defender", 14], goalkeeper:["Shobeir", "Budget keeper", 1], penalty:["Salah", "Nailed pen taker", 10] } },
-      { group:"H", country:"Spain", flag:"🇪🇸", picks:{ forward:["Oyarzabal", "Proven forward", 21], midfielder:["Yamal", "Talisman + pens", 19], defender:["Cucurella", "Elite defender with attack threat", 24], goalkeeper:["Simon", "Keeper in elite team", 1], penalty:["Yamal", "Nailed pen taker", 19] } },
-      { group:"I", country:"France", flag:"🇫🇷", picks:{ forward:["Mbappe", "Elite forward + pens", 10], midfielder:["Olise", "Elite midfielder", 11], defender:["Upamecano", "Elite defender with attack threat", 4], goalkeeper:["Maignan", "Keeper in elite team", 1], penalty:["Mbappe", "Nailed pen taker", 10] } },
-      { group:"L", country:"Ghana", flag:"🇬🇭", picks:{ forward:["Ayew", "Budget forward + pens", 10], midfielder:["Semenyo", "Goal scoring winger", 9], defender:["Djiku", "Budget defender with goal threat", 23], goalkeeper:["Asare", "Budget keeper", 1], penalty:["Ayew", "Captain on pens", 10] } },
-      { group:"L", country:"Croatia", flag:"🇭🇷", picks:{ forward:["Vlasic", "Budget forward", 13], midfielder:["Modric", "Talisman + pens", 10], defender:["Vuskovic", "Budget defender with goal threat", 5], goalkeeper:["Livakovic", "Budget keeper", 1], penalty:["Modric", "Captain on pens", 10] } },
-      { group:"C", country:"Haiti", flag:"🇭🇹", picks:{ forward:["Nazon", "Talisman + pens", 9], midfielder:["Providence", "Budget midfielder", 7], defender:["Adé", "Budget defender", 4], goalkeeper:["Placide", "Budget keeper", 1], penalty:["Nazon", "Talisman + pens", 9] } },
-      { group:"I", country:"Iraq", flag:"🇮🇶", picks:{ forward:["Hussein", "Talisman + pens", 18], midfielder:["Bayesh", "Winger good for assists", 8], defender:["Sulaka", "Budget defender", 5], goalkeeper:["Hassan", "Budget keeper", 1], penalty:["Hussein", "Talisman + pens", 18] } },
-      { group:"G", country:"Iran", flag:"🇮🇷", picks:{ forward:["Taremi", "Talisman + pens", 9], midfielder:["Ghoddos", "Assist machine", 14], defender:["Khalilzadeh", "Centre-back, strong aerial threat", 3], goalkeeper:["Beiranvand", "Budget keeper", 1], penalty:["Taremi", "Talisman + pens", 9] } },
-      { group:"J", country:"Jordan", flag:"🇯🇴", picks:{ forward:["Tamari", "Budget forward", 10], midfielder:["Faisal", "Pens", 13], defender:["Nasib", "Centre-back, strong aerial threat", 5], goalkeeper:["Abulaila", "Budget keeper", 1], penalty:["Faisal", "Recent penalty taker", 13] } },
-      { group:"F", country:"Japan", flag:"🇯🇵", picks:{ forward:["Ueda", "Forward on pens", 9], midfielder:["Mitoma", "Attacking winger", 7], defender:["Ito", "Budget defender plays for Bayern", 21], goalkeeper:["Suzuki", "Budget keeper", 1], penalty:["Ueda", "Forward on pens", 9] } },
-      { group:"A", country:"South Korea", flag:"🇰🇷", picks:{ forward:["Kant-In Lee", "Starting forward", 18], midfielder:["Son", "Talisman + pens", 7], defender:["Min-Jae Kim", "Budget defender plays for Bayern", 4], goalkeeper:["Sueng-Gyu Kim", "Budget keeper", 1], penalty:["Son", "Talisman + pens", 7] } },
-      { group:"C", country:"Morocco", flag:"🇲🇦", picks:{ forward:["Ziyech", "On set pieces", 7], midfielder:["Brahim Diaz", "Creative midfielder with goal threat", 10], defender:["Hakimi", "Elite defender with attack threat", 2], goalkeeper:["Bounou", "Keeper in strong defence", 1], penalty:["Diaz", "Took penalty in AFCON final", 10] } },
-      { group:"A", country:"Mexico", flag:"🇲🇽", picks:{ forward:["Raul Jimenez", "Proven forward + pens", 9], midfielder:["Álvarez", "Most reliable to start", 4], defender:["Montes", "Budget defender", 3], goalkeeper:["Rangel", "Budget keeper", 1], penalty:["Raul Jimenez", "Excellent penalty record", 9] } },
-      { group:"F", country:"Netherlands", flag:"🇳🇱", picks:{ forward:["Malen", "Proven forward", 18], midfielder:["Gakpo", "Proven at international level + pens", 11], defender:["Dumfries", "Elite defender with attack threat", 22], goalkeeper:["Verbruggen", "Keeper in elite team", 1], penalty:["Gakpo", "Recent penalty taker", 11] } },
-      { group:"I", country:"Norway", flag:"🇳🇴", picks:{ forward:["Haaland", "Elite forward + pens", 9], midfielder:["Ødegaard", "On set pieces", 10], defender:["Ryerson", "Full-back with assist threat", 14], goalkeeper:["Nyland", "No.1 for Norway", 1], penalty:["Haaland", "Nailed penalty taker", 9] } },
-      { group:"G", country:"New Zealand", flag:"🇳🇿", picks:{ forward:["Wood", "Talisman + pens", 9], midfielder:["Just", "Winger with goal threat", 11], defender:["Bindon", "Budget defender", 4], goalkeeper:["Crocombe", "No.1 for New Zealand", 1], penalty:["Wood", "Good penalty record at club and international level", 9] } },
-      { group:"L", country:"Panama", flag:"🇵🇦", picks:{ forward:["Diaz", "Strong recent form + pens", 10], midfielder:["Carrasquilla", "Creative hub of the team", 8], defender:["Murillo", "Budget defender with assist threat", 2], goalkeeper:["Mosquera", "Budget keeper", 1], penalty:["Diaz", "Recent penalty taker", 10] } },
-      { group:"K", country:"Portugal", flag:"🇵🇹", picks:{ forward:["Ronaldo", "Penalties", 7], midfielder:["Bruno", "Elite assists and set pieces", 8], defender:["Mendes", "Elite defender with attack threat", 19], goalkeeper:["Diogo Costa", "Keeper in elite team", 1], penalty:["Ronaldo", "Historic penaltu taker", 7] } },
-      { group:"D", country:"Paraguay", flag:"🇵🇾", picks:{ forward:["Enciso", "Creative star + pens", 19], midfielder:["Almirón", "Proven at international level", 10], defender:["Gómez", "Heart of defence", 6], goalkeeper:["Fernández", "Budget keeper", 1], penalty:["Diaz", "Nailed penalty taker", 10] } },
-      { group:"B", country:"Qatar", flag:"🇶🇦", picks:{ forward:["Al Mannai", "Budget forward", 11], midfielder:["Afif", "Main threat + pens", 10], defender:["Fathy", "Attacking defender", 14], goalkeeper:["Abunada", "Budget keeper", 1], penalty:["Afif", "Nailed penalty taker", 10] } },
-      { group:"H", country:"Saudi Arabia", flag:"🇸🇦", picks:{ forward:["Al-Buraikan", "Budget forward", 9], midfielder:["Al-Dawsari", "Set pieces + pens", 10], defender:["Al Tambakti", "Budget defender", 4], goalkeeper:["Alaqidi", "Budget keeper", 1], penalty:["Al-Dawsari", "Nailed penalty taker", 10] } },
-      { group:"F", country:"Sweden", flag:"🇸🇪", picks:{ forward:["Gyokeres", "Talisman + pens", 9], midfielder:["Nygren", "Attacking winger", 11], defender:["Lindelöf", "Nailed defender", 3], goalkeeper:["Johansson", "Budget keeper", 1], penalty:["Gyokeres", "Great penalty record", 9] } },
-      { group:"I", country:"Senegal", flag:"🇸🇳", picks:{ forward:["Mane", "Talisman + pens", 10], midfielder:["Ndiaye", "Creative midfielder with goal threat", 13], defender:["Diouf", "Attacking defender", 12], goalkeeper:["Mendy", "Nailed keeper", 1], penalty:["Mane", "Nailed penalty taker", 10] } },
-      { group:"F", country:"Tunisia", flag:"🇹🇳", picks:{ forward:["Abdi", "Budget Forward on pens", 9], midfielder:["Hannibal Mejbri", "Budget mid with assist threat", 10], defender:["Talbi", "Budget defender", 4], goalkeeper:["Dahmen", "Budget keeper", 1], penalty:["Abdi", "Recent penalty taker", 9] } },
-      { group:"D", country:"Türkiye", flag:"🇹🇷", picks:{ forward:["Aktürkoglu", "Budget forward", 7], midfielder:["Guler", "Elite midfielder", 8], defender:["Kadioglu", "Attacking wing-back", 20], goalkeeper:["Çakir", "Budget keeper", 1], penalty:["Çalhanoglu", "Takes penalties when fit", 10] } },
-      { group:"D", country:"USA", flag:"🇺🇸", picks:{ forward:["Haji Wright", "Budget forward", 19], midfielder:["McKennie", "Attacking winger", 8], defender:["Richards", "Nailed defender", 3], goalkeeper:["Freese", "Budget keeper", 1], penalty:["Pulisic", "On penalties when not injured", 10] } },
-      { group:"H", country:"Uruguay", flag:"🇺🇾", picks:{ forward:["Darwin", "Mid market forward", 9], midfielder:["Valverde", "Elite midfielder", 15], defender:["Araujo", "Barcelona defender", 4], goalkeeper:["Rochet", "Budget keeper", 1], penalty:["Valverde", "Recent penalty taker", 15] } },
-      { group:"K", country:"Uzbekistan", flag:"🇺🇿", picks:{ forward:["Shomurodov", "Budget forward", 14], midfielder:["Fayzullayev", "Budget midfielder", 22], defender:["Khusanov", "Proven defender", 5], goalkeeper:["Yusupov", "Budget keeper", 1], penalty:["Shukurov", "Recent penalty taker", 7] } },
-      { group:"A", country:"South Africa", flag:"🇿🇦", picks:{ forward:["Foster", "Burnley forward", 9], midfielder:["Appollis", "Winger with assist threat + pens", 10], defender:["Mbokazi", "Defcon defender", 4], goalkeeper:["Williams", "Budget keeper", 1], penalty:["Appollis", "Took pens at AFCON", 10] } },
-      { group:"L", country:"England", flag:englandFlag, picks:{ forward:["Kane", "Elite forward + pens", 9], midfielder:["Saka", "Elite winger with", 7], defender:["Guehi", "Nailed defender in elite team", 6], goalkeeper:["Pickford", "Keeper in elite team", 1], penalty:["Kane", "Excellent penalty record", 9] } },
-      { group:"C", country:"Scotland", flag:scotlandFlag, picks:{ forward:["Adams", "Budget forward", 10], midfielder:["McTominay", "Elite winger + pens", 4], defender:["Robertson", "Defender with attack threat", 3], goalkeeper:["Gunn", "Budget keeper", 1], penalty:["McTominay", "Recent penalty taker", 4] } }
+      { group:"J", country:"Argentina", flag:"🇦🇷", picks:{ forward:["Alvarez", "Elite attack", 9,"Atlético Madrid","0.56","0.82"], midfielder:["Messi", "Elite attack + pens + set pieces", 10,"Inter Miami","0.56","0.82"], defender:["Romero", "Starter + some attack threat", 13,"Tottenham Hotspur","0.56","0.82"], goalkeeper:["Martinez", "Starter when fit", 23,"Aston Villa","0.56","0.82"], penalty:["Messi", "Nailed pen taker", 10,"Inter Miami","0.56","0.82"] } },
+      { group:"I", country:"Austria", flag:"🇦🇹", picks:{
+      forward:["Sabitzer", "Leader + long shots", 9,"Borussia Dortmund","0.56","0.82"],
+      midfielder:["Baumgartner", "Goal threat from midfield", 19,"RB Leipzig","0.56","0.82"],
+      defender:["Alaba", "Experienced defender + set pieces", 8,"Real Madrid","0.56","0.82"],
+      goalkeeper:["Schlager", "Reliable keeper", 1,"RB Salzburg","0.56","0.82"],
+      penalty:["Sabitzer", "Likely penalty taker", 9,"Borussia Dortmund","0.56","0.82"]
+    } },
+      { group:"H", country:"Australia", flag:"🇦🇺", picks:{
+      forward:["Goodwin", "Set pieces + goals", 23,"Adelaide United","0.56","0.82"],
+      midfielder:["McGree", "Creative midfielder", 14,"Middlesbrough","0.56","0.82"],
+      defender:["Souttar", "Set piece threat", 19,"Leicester City","0.56","0.82"],
+      goalkeeper:["Ryan", "Veteran keeper", 1,"AZ Alkmaar","0.56","0.82"],
+      penalty:["Goodwin", "Likely penalty taker", 23,"Adelaide United","0.56","0.82"]
+    } },
+      { group:"H", country:"Bosnia and Herzegovina", flag:"🇧🇦", picks:{
+      forward:["Dzeko", "Veteran striker + penalties", 11,"Schalke 04","0.56","0.82"],
+      midfielder:["Bajraktarevic", "Young creative midfielder", 20,"PSV Eindhoven","0.56","0.82"],
+      defender:["Ahmedhodžić", "Strong aerial defender", 5,"Feyenoord","0.56","0.82"],
+      goalkeeper:["Vasilj", "Reliable goalkeeper", 1,"FC St. Pauli","0.56","0.82"],
+      penalty:["Dzeko", "Nailed penalty taker", 11,"Schalke 04","0.56","0.82"]
+    } },
+      { group:"E", country:"Belgium", flag:"🇧🇪", picks:{
+      forward:["De Ketelaere", "Creative forward with goal threat", 17,"Atalanta","0.56","0.82"],
+      midfielder:["De Bruyne", "Creative engine + set pieces", 7,"Napoli","0.56","0.82"],
+      defender:["Meunier", "Experienced attacking full-back", 15,"Lille","0.56","0.82"],
+      goalkeeper:["Courtois", "Elite goalkeeper", 1,"Real Madrid","0.56","0.82"],
+      penalty:["De Bruyne", "Likely penalty taker", 7,"Napoli","0.56","0.82"]
+    } },
+      { group:"G", country:"Brazil", flag:"🇧🇷", picks:{
+      forward:["Vinicius", "Elite winger + goals", 7,"Real Madrid","0.56","0.82"],
+      midfielder:["Guimarães", "Box-to-box midfielder", 8,"Newcastle United","0.56","0.82"],
+      defender:["Gabriel", "Dominant centre-back", 6,"Arsenal","0.56","0.82"],
+      goalkeeper:["Alisson", "Elite goalkeeper", 1,"Liverpool","0.56","0.82"],
+      penalty:["Vinicius", "Likely penalty taker", 7,"Real Madrid","0.56","0.82"]
+    } },
+      { group:"B", country:"Canada", flag:"🇨🇦", picks:{ forward:["Jonathan David", "Talisman + pens", 10,"Juventus","0.56","0.82"], midfielder:["Buchanan", "Most nailed midfielder", 17,"Villarreal","0.56","0.82"], defender:["Sigur", "Budget defender + goal threat", 3,"Hajduk Split","0.56","0.82"], goalkeeper:["St. Clair", "Budget keeper", 1,"Minnesota United","0.56","0.82"], penalty:["Jonathan David", "Nailed pen taker", 10,"Juventus","0.56","0.82"] } },
+      { group:"K", country:"DR Congo", flag:"🇨🇩", picks:{ forward:["Wissa", "Budget forward + pens", 20,"Newcastle United","0.56","0.82"], midfielder:["Bongonda", "Budget midfielder", 10,"Spartak Moscow","0.56","0.82"], defender:["Tuanzebe", "Budget defender", 6,"Burnley","0.56","0.82"], goalkeeper:["Mpasi-Nzau", "Budget keeper", 1,"Le Havre","0.56","0.82"], penalty:["Wissa", "No nailed on pens", 20,"Newcastle United","0.56","0.82"] } },
+      { group:"B", country:"Switzerland", flag:"🇨🇭", picks:{ forward:["Ndoye", "Good attack threat", 19,"Nottingham Forest","0.56","0.82"], midfielder:["Xhaka", "Talisman + pens", 10,"Sunderland","0.56","0.82"], defender:["Akanji", "Budget defender", 5,"Inter Milan","0.56","0.82"], goalkeeper:["Kobel", "Budget keeper", 1,"Borussia Dortmund","0.56","0.82"], penalty:["Xhaka", "Nailed pen taker", 10,"Sunderland","0.56","0.82"] } },
+      { group:"E", country:"Ivory Coast", flag:"🇨🇮", picks:{ forward:["Guessand", "Budget forward", 22,"Crystal Palace","0.56","0.82"], midfielder:["Guessand", "Defcon midfileder", 22,"Crystal Palace","0.56","0.82"], defender:["N'Dicka", "Budget defender", 21,"Roma","0.56","0.82"], goalkeeper:["Fofana", "Budget keeper", 1,"Porto","0.56","0.82"], penalty:["Kessie", "Typical penalty taker", 8,"Al-Ahli","0.56","0.82"] } },
+      { group:"K", country:"Colombia", flag:"🇨🇴", picks:{ forward:["Luis Diaz", "Elite forward", 7,"Bayern Munich","0.56","0.82"], midfielder:["Rodriguez", "Talisman + pens", 10,"Fulham","0.56","0.82"], defender:["Munoz", "Attacking defender", 21,"Crystal Palace","0.56","0.82"], goalkeeper:["Ospina", "Budget keeper", 1,"Atlético Nacional","0.56","0.82"], penalty:["Rodriguez", "Historical pen taker", 10,"Fulham","0.56","0.82"] } },
+      { group:"H", country:"Cape Verde", flag:"🇨🇻", picks:{ forward:["Livramento", "Budget forward", 9,"Casa Pia","0.56","0.82"], midfielder:["Rodrigues", "Budget midfielder on pens", 10,"Apollon Limassol","0.56","0.82"], defender:["Moreira", "Budget defender", 5,"Columbus Crew","0.56","0.82"], goalkeeper:["Vozinha", "Budget keeper", 1,"Chaves","0.56","0.82"], penalty:["Rodrigues", "Recent penalty keeper", 10,"Apollon Limassol","0.56","0.82"] } },
+      { group:"E", country:"Curaçao", flag:"🇨🇼", picks:{ forward:["Locadia", "Budget forward", 9,"Miami FC","0.56","0.82"], midfielder:["J Bacuna", "Budget midfielder", 10,"Gaziantep","0.56","0.82"], defender:["van Eijma", "Budget defender", 4,"RKC Waalwijk","0.56","0.82"], goalkeeper:["Room", "Budget keeper", 1,"Miami FC","0.56","0.82"], penalty:["L Bacuna", "Regular", 7,"Iğdır FK","0.56","0.82"] } },
+      { group:"A", country:"Czechia", flag:"🇨🇿", picks:{ forward:["Schick", "Proven forward + pens", 10,"Bayer Leverkusen","0.56","0.82"], midfielder:["Soucek", "Budget midfielder with set piece threat", 22,"West Ham United","0.56","0.82"], defender:["Krejcí", "Budget defender", 7,"Wolves","0.56","0.82"], goalkeeper:["Kovar", "Budget keeper", 1,"PSV Eindhoven","0.56","0.82"], penalty:["Schick", "Nailed pen taker", 10,"Bayer Leverkusen","0.56","0.82"] } },
+      { group:"E", country:"Germany", flag:"🇩🇪", picks:{ forward:["Havertz", "Proven forward + pens", 7,"Arsenal","0.56","0.82"], midfielder:["Wirtz", "Creative midfielder with goal threat", 17,"Liverpool","0.56","0.82"], defender:["Tah", "Defender with set piece threat", 4,"Bayern Munich","0.56","0.82"], goalkeeper:["Neuer", "Elite keeper", 1,"Bayern Munich","0.56","0.82"], penalty:["Havertz", "Nailed pen taker", 7,"Arsenal","0.56","0.82"] } },
+      { group:"J", country:"Algeria", flag:"🇩🇿", picks:{ forward:["Mahrez", "Proven forward + pens", 7,"Al-Ahli SFC","0.56","0.82"], midfielder:["Maza", "Creative midfielder with goal threat", 8,"Bayer Leverkusen","0.56","0.82"], defender:["Mandi", "Budget defender", 2,"LOSC Lille","0.56","0.82"], goalkeeper:["Zidane", "Budget keeper in solid defense", 1,"Granada CF","0.56","0.82"], penalty:["Mahrez", "Nailed pen taker", 7,"Al-Ahli SFC","0.56","0.82"] } },
+      { group:"E", country:"Ecuador", flag:"🇪🇨", picks:{ forward:["Valencia", "Talisman + pens", 13,"Pachuca","0.56","0.82"], midfielder:["Caicedo", "Defcon monster", 23,"Chelsea","0.56","0.82"], defender:["Hincapie", "Proven defender in strong defence", 3,"Arsenal","0.56","0.82"], goalkeeper:["Galíndez", "Budget keeper in solid defense", 1,"Huracán","0.56","0.82"], penalty:["Valencia", "Nailed pen taker", 13,"Pachuca","0.56","0.82"] } },
+      { group:"G", country:"Egypt", flag:"🇪🇬", picks:{ forward:["Marmoush", "Proven forward", 22,"Manchester City","0.56","0.82"], midfielder:["Salah", "Talisman + pens", 10,"Liverpool","0.56","0.82"], defender:["Fathy", "Budget defender", 14,"Al-Arabi","0.56","0.82"], goalkeeper:["Shobeir", "Budget keeper", 1,"Al Ahly","0.56","0.82"], penalty:["Salah", "Nailed pen taker", 10,"Liverpool","0.56","0.82"] } },
+      { group:"H", country:"Spain", flag:"🇪🇸", picks:{ forward:["Oyarzabal", "Proven forward", 21,"Real Sociedad","0.56","0.82"], midfielder:["Yamal", "Talisman + pens", 19,"Barcelona","0.56","0.82"], defender:["Cucurella", "Elite defender with attack threat", 24,"Chelsea","0.56","0.82"], goalkeeper:["Simon", "Keeper in elite team", 1,"Athletic Club","0.56","0.82"], penalty:["Yamal", "Nailed pen taker", 19,"Barcelona","0.56","0.82"] } },
+      { group:"I", country:"France", flag:"🇫🇷", picks:{ forward:["Mbappe", "Elite forward + pens", 10,"Real Madrid","0.56","0.82"], midfielder:["Olise", "Elite midfielder", 11,"Bayern Munich","0.56","0.82"], defender:["Upamecano", "Elite defender with attack threat", 4,"Bayern Munich","0.56","0.82"], goalkeeper:["Maignan", "Keeper in elite team", 1,"AC Milan","0.56","0.82"], penalty:["Mbappe", "Nailed pen taker", 10,"Real Madrid","0.56","0.82"] } },
+      { group:"L", country:"Ghana", flag:"🇬🇭", picks:{ forward:["Ayew", "Budget forward + pens", 10,"Leicester City","0.56","0.82"], midfielder:["Semenyo", "Goal scoring winger", 9,"Bournemouth","0.56","0.82"], defender:["Djiku", "Budget defender with goal threat", 23,"Spartak Moscow","0.56","0.82"], goalkeeper:["Asare", "Budget keeper", 1,"Hearts of Oak","0.56","0.82"], penalty:["Ayew", "Captain on pens", 10,"Leicester City","0.56","0.82"] } },
+      { group:"L", country:"Croatia", flag:"🇭🇷", picks:{ forward:["Vlasic", "Budget forward", 13,"Torino","0.56","0.82"], midfielder:["Modric", "Talisman + pens", 10,"AC Milan","0.56","0.82"], defender:["Vuskovic", "Budget defender with goal threat", 5,"Hamburger SV","0.56","0.82"], goalkeeper:["Livakovic", "Budget keeper", 1,"Fenerbahçe","0.56","0.82"], penalty:["Modric", "Captain on pens", 10,"AC Milan","0.56","0.82"] } },
+      { group:"C", country:"Haiti", flag:"🇭🇹", picks:{ forward:["Nazon", "Talisman + pens", 9,"Esteghlal","0.56","0.82"], midfielder:["Providence", "Budget midfielder", 7,"FC Dallas","0.56","0.82"], defender:["Adé", "Budget defender", 4,"LDU Quito","0.56","0.82"], goalkeeper:["Placide", "Budget keeper", 1,"SC Bastia","0.56","0.82"], penalty:["Nazon", "Talisman + pens", 9,"Esteghlal","0.56","0.82"] } },
+      { group:"I", country:"Iraq", flag:"🇮🇶", picks:{ forward:["Hussein", "Talisman + pens", 18,"Fulham","0.56","0.82"], midfielder:["Bayesh", "Winger good for assists", 8,"Fulham","0.56","0.82"], defender:["Sulaka", "Budget defender", 5,"Fulham","0.56","0.82"], goalkeeper:["Hassan", "Budget keeper", 1,"Fulham","0.56","0.82"], penalty:["Hussein", "Talisman + pens", 18,"Fulham","0.56","0.82"] } },
+      { group:"G", country:"Iran", flag:"🇮🇷", picks:{ forward:["Taremi", "Talisman + pens", 9,"Olympiacos","0.56","0.82"], midfielder:["Ghoddos", "Assist machine", 14,"Al Ittihad Kalba","0.56","0.82"], defender:["Khalilzadeh", "Centre-back, strong aerial threat", 3,"Tractor SC","0.56","0.82"], goalkeeper:["Beiranvand", "Budget keeper", 1,"Tractor SC","0.56","0.82"], penalty:["Taremi", "Talisman + pens", 9,"Olympiacos","0.56","0.82"] } },
+      { group:"J", country:"Jordan", flag:"🇯🇴", picks:{ forward:["Tamari", "Budget forward", 10,"Rennes","0.56","0.82"], midfielder:["Faisal", "Pens", 13,"Al-Waab","0.56","0.82"], defender:["Nasib", "Centre-back, strong aerial threat", 5,"Al-Zawraa","0.56","0.82"], goalkeeper:["Abulaila", "Budget keeper", 1,"Al-Hussein SC","0.56","0.82"], penalty:["Faisal", "Recent penalty taker", 13,"Al-Waab","0.56","0.82"] } },
+      { group:"F", country:"Japan", flag:"🇯🇵", picks:{ forward:["Ueda", "Forward on pens", 9,"Feyenoord","0.56","0.82"], midfielder:["Mitoma", "Attacking winger", 7,"Brighton","0.56","0.82"], defender:["Ito", "Budget defender plays for Bayern", 21,"Bayern Munich","0.56","0.82"], goalkeeper:["Suzuki", "Budget keeper", 1,"Parma","0.56","0.82"], penalty:["Ueda", "Forward on pens", 9,"Feyenoord","0.56","0.82"] } },
+      { group:"A", country:"South Korea", flag:"🇰🇷", picks:{ forward:["Kant-In Lee", "Starting forward", 18,"Paris Saint-Germain","0.56","0.82"], midfielder:["Son", "Talisman + pens", 7,"Los Angeles FC","0.56","0.82"], defender:["Min-Jae Kim", "Budget defender plays for Bayern", 4,"Bayern Munich","0.56","0.82"], goalkeeper:["Sueng-Gyu Kim", "Budget keeper", 1,"FC Tokyo","0.56","0.82"], penalty:["Son", "Talisman + pens", 7,"Los Angeles FC","0.56","0.82"] } },
+      { group:"C", country:"Morocco", flag:"🇲🇦", picks:{ forward:["Ziyech", "On set pieces", 7,"Fulham","0.56","0.82"], midfielder:["Brahim Diaz", "Creative midfielder with goal threat", 10,"Real Madrid","0.56","0.82"], defender:["Hakimi", "Elite defender with attack threat", 2,"Paris Saint-Germain","0.56","0.82"], goalkeeper:["Bounou", "Keeper in strong defence", 1,"Al-Hilal","0.56","0.82"], penalty:["Diaz", "Took penalty in AFCON final", 10,"León","0.56","0.82"] } },
+      { group:"A", country:"Mexico", flag:"🇲🇽", picks:{ forward:["Raul Jimenez", "Proven forward + pens", 9,"Fulham","0.56","0.82"], midfielder:["Álvarez", "Most reliable to start", 4,"Fenerbahçe","0.56","0.82"], defender:["Montes", "Budget defender", 3,"Lokomotiv Moscow","0.56","0.82"], goalkeeper:["Rangel", "Budget keeper", 1,"Guadalajara","0.56","0.82"], penalty:["Raul Jimenez", "Excellent penalty record", 9,"Fulham","0.56","0.82"] } },
+      { group:"F", country:"Netherlands", flag:"🇳🇱", picks:{ forward:["Malen", "Proven forward", 18,"Aston Villa","0.56","0.82"], midfielder:["Gakpo", "Proven at international level + pens", 11,"Liverpool","0.56","0.82"], defender:["Dumfries", "Elite defender with attack threat", 22,"Inter Milan","0.56","0.82"], goalkeeper:["Verbruggen", "Keeper in elite team", 1,"Fulham","0.56","0.82"], penalty:["Gakpo", "Recent penalty taker", 11,"Liverpool","0.56","0.82"] } },
+      { group:"I", country:"Norway", flag:"🇳🇴", picks:{ forward:["Haaland", "Elite forward + pens", 9,"Manchester City","0.56","0.82"], midfielder:["Ødegaard", "On set pieces", 10,"Arsenal","0.56","0.82"], defender:["Ryerson", "Full-back with assist threat", 14,"Borussia Dortmund","0.56","0.82"], goalkeeper:["Nyland", "No.1 for Norway", 1,"Sevilla","0.56","0.82"], penalty:["Haaland", "Nailed penalty taker", 9,"Manchester City","0.56","0.82"] } },
+      { group:"G", country:"New Zealand", flag:"🇳🇿", picks:{ forward:["Wood", "Talisman + pens", 9,"Nottingham Forest","0.56","0.82"], midfielder:["Just", "Winger with goal threat", 11,"Motherwell","0.56","0.82"], defender:["Bindon", "Budget defender", 4,"Sheffield United","0.56","0.82"], goalkeeper:["Crocombe", "No.1 for New Zealand", 1,"Millwall","0.56","0.82"], penalty:["Wood", "Good penalty record at club and international level", 9,"Nottingham Forest","0.56","0.82"] } },
+      { group:"L", country:"Panama", flag:"🇵🇦", picks:{ forward:["Diaz", "Strong recent form + pens", 10,"León","0.56","0.82"], midfielder:["Carrasquilla", "Creative hub of the team", 8,"UNAM","0.56","0.82"], defender:["Murillo", "Budget defender with assist threat", 2,"Beşiktaş","0.56","0.82"], goalkeeper:["Mosquera", "Budget keeper", 1,"Al-Fayha","0.56","0.82"], penalty:["Diaz", "Recent penalty taker", 10,"León","0.56","0.82"] } },
+      { group:"K", country:"Portugal", flag:"🇵🇹", picks:{ forward:["Ronaldo", "Penalties", 7,"Al-Nassr","0.56","0.82"], midfielder:["Bruno", "Elite assists and set pieces", 8,"Manchester United","0.56","0.82"], defender:["Mendes", "Elite defender with attack threat", 19,"Paris Saint-Germain","0.56","0.82"], goalkeeper:["Diogo Costa", "Keeper in elite team", 1,"Porto","0.56","0.82"], penalty:["Ronaldo", "Historic penaltu taker", 7,"Al-Nassr","0.56","0.82"] } },
+      { group:"D", country:"Paraguay", flag:"🇵🇾", picks:{ forward:["Enciso", "Creative star + pens", 19,"Strasbourg","0.56","0.82"], midfielder:["Almirón", "Proven at international level", 10,"Atlanta United","0.56","0.82"], defender:["Gómez", "Heart of defence", 6,"Palmeiras","0.56","0.82"], goalkeeper:["Fernández", "Budget keeper", 1,"Cerro Porteño","0.56","0.82"], penalty:["Diaz", "Nailed penalty taker", 10,"León","0.56","0.82"] } },
+      { group:"B", country:"Qatar", flag:"🇶🇦", picks:{ forward:["Al Mannai", "Budget forward", 11,"Al-Shamal","0.56","0.82"], midfielder:["Afif", "Main threat + pens", 10,"Al Sadd","0.56","0.82"], defender:["Fathy", "Attacking defender", 14,"Al-Arabi","0.56","0.82"], goalkeeper:["Abunada", "Budget keeper", 1,"Al-Rayyan","0.56","0.82"], penalty:["Afif", "Nailed penalty taker", 10,"Al Sadd","0.56","0.82"] } },
+      { group:"H", country:"Saudi Arabia", flag:"🇸🇦", picks:{ forward:["Al-Buraikan", "Budget forward", 9,"Fulham","0.56","0.82"], midfielder:["Al-Dawsari", "Set pieces + pens", 10,"Fulham","0.56","0.82"], defender:["Al Tambakti", "Budget defender", 4,"Fulham","0.56","0.82"], goalkeeper:["Alaqidi", "Budget keeper", 1,"Fulham","0.56","0.82"], penalty:["Al-Dawsari", "Nailed penalty taker", 10,"Fulham","0.56","0.82"] } },
+      { group:"F", country:"Sweden", flag:"🇸🇪", picks:{ forward:["Gyokeres", "Talisman + pens", 9,"Fulham","0.56","0.82"], midfielder:["Nygren", "Attacking winger", 11,"Fulham","0.56","0.82"], defender:["Lindelöf", "Nailed defender", 3,"Fulham","0.56","0.82"], goalkeeper:["Johansson", "Budget keeper", 1,"Fulham","0.56","0.82"], penalty:["Gyokeres", "Great penalty record", 9,"Fulham","0.56","0.82"] } },
+      { group:"I", country:"Senegal", flag:"🇸🇳", picks:{ forward:["Mane", "Talisman + pens", 10,"Fulham","0.56","0.82"], midfielder:["Ndiaye", "Creative midfielder with goal threat", 13,"Fulham","0.56","0.82"], defender:["Diouf", "Attacking defender", 12,"Fulham","0.56","0.82"], goalkeeper:["Mendy", "Nailed keeper", 1,"Fulham","0.56","0.82"], penalty:["Mane", "Nailed penalty taker", 10,"Fulham","0.56","0.82"] } },
+      { group:"F", country:"Tunisia", flag:"🇹🇳", picks:{ forward:["Abdi", "Budget Forward on pens", 9,"Fulham","0.56","0.82"], midfielder:["Hannibal Mejbri", "Budget mid with assist threat", 10,"Fulham","0.56","0.82"], defender:["Talbi", "Budget defender", 4,"Fulham","0.56","0.82"], goalkeeper:["Dahmen", "Budget keeper", 1,"Fulham","0.56","0.82"], penalty:["Abdi", "Recent penalty taker", 9,"Fulham","0.56","0.82"] } },
+      { group:"D", country:"Türkiye", flag:"🇹🇷", picks:{ forward:["Aktürkoglu", "Budget forward", 7,"Fulham","0.56","0.82"], midfielder:["Guler", "Elite midfielder", 8,"Fulham","0.56","0.82"], defender:["Kadioglu", "Attacking wing-back", 20,"Fulham","0.56","0.82"], goalkeeper:["Çakir", "Budget keeper", 1,"Fulham","0.56","0.82"], penalty:["Çalhanoglu", "Takes penalties when fit", 10,"Fulham","0.56","0.82"] } },
+      { group:"D", country:"USA", flag:"🇺🇸", picks:{ forward:["Haji Wright", "Budget forward", 19,"Fulham","0.56","0.82"], midfielder:["McKennie", "Attacking winger", 8,"Fulham","0.56","0.82"], defender:["Richards", "Nailed defender", 3,"Fulham","0.56","0.82"], goalkeeper:["Freese", "Budget keeper", 1,"Fulham","0.56","0.82"], penalty:["Pulisic", "On penalties when not injured", 10,"Fulham","0.56","0.82"] } },
+      { group:"H", country:"Uruguay", flag:"🇺🇾", picks:{ forward:["Darwin", "Mid market forward", 9,"Fulham","0.56","0.82"], midfielder:["Valverde", "Elite midfielder", 15,"Fulham","0.56","0.82"], defender:["Araujo", "Barcelona defender", 4,"Fulham","0.56","0.82"], goalkeeper:["Rochet", "Budget keeper", 1,"Fulham","0.56","0.82"], penalty:["Valverde", "Recent penalty taker", 15,"Fulham","0.56","0.82"] } },
+      { group:"K", country:"Uzbekistan", flag:"🇺🇿", picks:{ forward:["Shomurodov", "Budget forward", 14,"Fulham","0.56","0.82"], midfielder:["Fayzullayev", "Budget midfielder", 22,"Fulham","0.56","0.82"], defender:["Khusanov", "Proven defender", 5,"Fulham","0.56","0.82"], goalkeeper:["Yusupov", "Budget keeper", 1,"Fulham","0.56","0.82"], penalty:["Shukurov", "Recent penalty taker", 7,"Fulham","0.56","0.82"] } },
+      { group:"A", country:"South Africa", flag:"🇿🇦", picks:{ forward:["Foster", "Burnley forward", 9,"Fulham","0.56","0.82"], midfielder:["Appollis", "Winger with assist threat + pens", 10,"Fulham","0.56","0.82"], defender:["Mbokazi", "Defcon defender", 4,"Fulham","0.56","0.82"], goalkeeper:["Williams", "Budget keeper", 1,"Fulham","0.56","0.82"], penalty:["Appollis", "Took pens at AFCON", 10,"Fulham","0.56","0.82"] } },
+      { group:"L", country:"England", flag:englandFlag, picks:{ forward:["Kane", "Elite forward + pens", 9,"Fulham","0.56","0.82"], midfielder:["Saka", "Elite winger with", 7,"Fulham","0.56","0.82"], defender:["Guehi", "Nailed defender in elite team", 6,"Fulham","0.56","0.82"], goalkeeper:["Pickford", "Keeper in elite team", 1,"Fulham","0.56","0.82"], penalty:["Kane", "Excellent penalty record", 9,"Fulham","0.56","0.82"] } },
+      { group:"C", country:"Scotland", flag:scotlandFlag, picks:{ forward:["Adams", "Budget forward", 10,"Fulham","0.56","0.82"], midfielder:["McTominay", "Elite winger + pens", 4,"Fulham","0.56","0.82"], defender:["Robertson", "Defender with attack threat", 3,"Fulham","0.56","0.82"], goalkeeper:["Gunn", "Budget keeper", 1,"Fulham","0.56","0.82"], penalty:["McTominay", "Recent penalty taker", 4,"Fulham","0.56","0.82"] } }
     ];
 
     const fifaRanks = {
@@ -1337,8 +1557,7 @@
           number: pick[2],
           club: pick[3] || 'Fulham',
           xGI: pick[4] || '0.56',
-          xGC: pick[4] || '0.82',
-          xGC2: pick[5] || '0.82'
+          xGC: pick[5] || '0.82'
         };
       }
 
@@ -1348,8 +1567,7 @@
         number: pick.number || 10,
         club: pick.club || 'Fulham',
         xGI: pick.xGI || '0.56',
-        xGC: pick.xGC || '0.82',
-        xGC2: pick.xGC2 || '0.82'
+        xGC: pick.xGC || '0.82'
       };
     }
 
@@ -1478,6 +1696,8 @@
               number: pick.number,
               club: pick.club,
               statLine: playerStatLine(label, pick),
+              xGI: parseFloat(pick.xGI || '0.56'),
+              xGC: parseFloat(pick.xGC || '0.82'),
               price: rolePrices[label] || '$5m'
             };
           })
@@ -1500,6 +1720,27 @@
         }
 
         if (sort === 'country') return a.team.country.localeCompare(b.team.country) || a.role.localeCompare(b.role);
+
+        if (sort === 'xgi') {
+          const aEligible = a.role !== 'Goalkeeper';
+          const bEligible = b.role !== 'Goalkeeper';
+
+          if (aEligible && !bEligible) return -1;
+          if (!aEligible && bEligible) return 1;
+
+          return b.xGI - a.xGI || a.name.localeCompare(b.name);
+        }
+
+        if (sort === 'xgc') {
+          const aEligible = a.role === 'Defender' || a.role === 'Goalkeeper';
+          const bEligible = b.role === 'Defender' || b.role === 'Goalkeeper';
+
+          if (aEligible && !bEligible) return -1;
+          if (!aEligible && bEligible) return 1;
+
+          return a.xGC - b.xGC || a.name.localeCompare(b.name);
+        }
+
         return a.team.group.localeCompare(b.team.group) || a.team.rank - b.team.rank || a.role.localeCompare(b.role);
       });
 
@@ -1525,16 +1766,16 @@
               </tr>
               <tr>
                 <th scope="row">xGI per 90</th>
-                <td>${player.role === 'Forward' || player.role === 'Midfielder' || player.role === 'Penalty taker' || player.role === 'Defender' ? (player.statLine.match(/([\d.]+) xGI/)?.[1] || '0.56') : '-'}</td>
+                <td>${player.role === 'Forward' || player.role === 'Midfielder' || player.role === 'Penalty taker' || player.role === 'Defender' ? ((player.statLine.match(/([\d.]+) xGI/)?.[1] || '0.56') + ' ⚽') : '-'}</td>
               </tr>
 
               <tr>
                 <th scope="row">xGC per 90</th>
-                <td>${player.role === 'Defender' || player.role === 'Goalkeeper' ? (player.statLine.match(/([\d.]+) xGC/)?.[1] || '0.82') : '-'}</td>
+                <td>${player.role === 'Defender' || player.role === 'Goalkeeper' ? ((player.statLine.match(/([\d.]+) xGC/)?.[1] || '0.82') + ' 🛡️') : '-'}</td>
               </tr>
               <tr>
                 <th scope="row">Club</th>
-                <td>${player.club || 'Fulham'}&nbsp;${englandFlag}</td>
+                <td>${player.club || 'Fulham'} ${clubFlag(player.club || "Fulham")}</td>
               </tr>
               <tr>
                 <th scope="row">Notes</th>
