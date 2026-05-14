@@ -1123,6 +1123,98 @@
   }
 </style>
 
+
+<style id="player-fixture-cards">
+  .player-fixtures {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .player-fixtures .section-title {
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.75rem;
+    font-weight: 900;
+    margin: 18px 0 10px;
+  }
+
+  .games {
+    display: grid;
+    gap: 10px;
+  }
+
+  .game {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(8,17,31,0.4);
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .game-top {
+    display: contents;
+  }
+
+  .opponent {
+    font-weight: 900;
+    font-size: 0.9rem;
+  }
+
+  .game-meta {
+    display: grid;
+    justify-items: end;
+    gap: 3px;
+    color: var(--muted);
+    font-size: 0.76rem;
+    line-height: 1;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .meta-value {
+    display: block;
+    color: var(--text);
+    font-size: 0.96rem;
+    font-weight: 850;
+    margin-top: 0;
+  }
+</style>
+
+
+
+
+
+
+<style id="shared-fixture-label-style-final">
+  .fixture-meta-label,
+  .player-fixture-matchday-label {
+    display: block !important;
+    margin: 0 0 4px !important;
+    color: var(--muted) !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    line-height: 1.1 !important;
+    text-transform: none !important;
+    opacity: 1 !important;
+  }
+</style>
+
+
+<style id="reduced-fixture-radius">
+.player-fixture,
+.fixture-item,
+.fixture-card,
+.player-fixtures .game,
+.player-fixtures .fixture {
+  border-radius: 8px !important;
+}
+</style>
+
 </head>
 <body>
   <header>
@@ -1388,6 +1480,81 @@
       return flags[club] || "🏳️";
     }
 
+    const fixtures = [
+      ['Thu','June 11','20:00','Mexico City 🇲🇽',22,'A',1,'🇲🇽','Mexico','South Africa','🇿🇦',15,60,45],
+      ['Thu','June 11','3:00','Monterrey 🇲🇽',27,'A',1,'🇰🇷','South Korea','Czechia','🇨🇿',25,38,13],
+      ['Fri','June 12','20:00','Toronto 🇨🇦',22,'B',1,'🇨🇦','Canada','Bosnia','🇧🇦',30,71,41],
+      ['Fri','June 12','2:00','Los Angeles 🇺🇸',17,'D',1,'🇺🇸','USA','Paraguay','🇵🇾',16,41,25],
+      ['Sat','June 13','20:00','Vancouver 🇨🇦',18,'B',1,'🇶🇦','Qatar','Switzerland','🇨🇭',56,19,37],
+      ['Sat','June 13','23:00','Miami 🇺🇸',28,'C',1,'🇧🇷','Brazil','Morocco','🇲🇦',6,8,2],
+      ['Sat','June 13','2:00','Dallas 🇺🇸',26,'C',1,'🇭🇹','Haiti','Scotland',scotlandFlag,83,43,40],
+      ['Sat','June 13','5:00','Seattle 🇺🇸',13,'D',1,'🇦🇺','Australia','Türkiye','🇹🇷',27,22,5],
+      ['Sun','June 14','18:00','New York 🇺🇸',27,'E',1,'🇩🇪','Germany','Curaçao','🇨🇼',10,81,71],
+      ['Sun','June 14','21:00','Boston 🇺🇸',24,'F',1,'🇳🇱','Netherlands','Japan','🇯🇵',7,18,11],
+      ['Sun','June 14','0:00','Houston 🇺🇸',28,'E',1,'🇨🇮','Ivory Coast','Ecuador','🇪🇨',34,23,11],
+      ['Sun','June 14','3:00','Atlanta 🇺🇸',24,'F',1,'🇸🇪','Sweden','Tunisia','🇹🇳',37,44,7],
+      ['Mon','June 15','17:00','Philadelphia 🇺🇸',28,'H',1,'🇪🇸','Spain','Cape Verde','🇨🇻',2,67,65],
+      ['Mon','June 15','20:00','Kansas City 🇺🇸',26,'G',1,'🇧🇪','Belgium','Egypt','🇪🇬',9,29,20],
+      ['Mon','June 15','23:00','Los Angeles 🇺🇸',19,'H',1,'🇸🇦','Saudi Arabia','Uruguay','🇺🇾',61,17,44],
+      ['Mon','June 15','2:00','San Francisco 🇺🇸',13,'G',1,'🇮🇷','Iran','New Zealand','🇳🇿',20,85,65],
+      ['Tue','June 16','20:00','New York 🇺🇸',27,'I',1,'🇫🇷','France','Senegal','🇸🇳',1,13,12],
+      ['Tue','June 16','23:00','Boston 🇺🇸',22,'I',1,'🇮🇶','Iraq','Norway','🇳🇴',58,31,27],
+      ['Tue','June 16','2:00','Houston 🇺🇸',27,'J',1,'🇦🇷','Argentina','Algeria','🇩🇿',3,28,25],
+      ['Tue','June 16','5:00','Dallas 🇺🇸',25,'J',1,'🇦🇹','Austria','Jordan','🇯🇴',24,64,40],
+      ['Wed','June 17','18:00','Seattle 🇺🇸',19,'K',1,'🇵🇹','Portugal','DR Congo','🇨🇩',5,46,41],
+      ['Wed','June 17','20:00','Toronto 🇨🇦',22,'L',1,englandFlag,'England','Croatia','🇭🇷',4,11,7],
+      ['Wed','June 17','23:00','Vancouver 🇨🇦',17,'L',1,'🇬🇭','Ghana','Panama','🇵🇦',72,33,39],
+      ['Wed','June 17','3:00','Los Angeles 🇺🇸',16,'K',1,'🇺🇿','Uzbekistan','Colombia','🇨🇴',49,12,37],
+      ['Thu','June 18','17:00','Monterrey 🇲🇽',32,'A',2,'🇨🇿','Czechia','South Africa','🇿🇦',38,60,22],
+      ['Thu','June 18','23:00','Toronto 🇨🇦',19,'B',2,'🇨🇭','Switzerland','Bosnia','🇧🇦',19,71,52],
+      ['Thu','June 18','20:00','Vancouver 🇨🇦',18,'B',2,'🇨🇦','Canada','Qatar','🇶🇦',30,56,26],
+      ['Thu','June 18','20:00','Mexico City 🇲🇽',22,'A',2,'🇲🇽','Mexico','South Korea','🇰🇷',15,25,10],
+      ['Fri','June 19','2:00','Los Angeles 🇺🇸',17,'D',2,'🇺🇸','USA','Australia','🇦🇺',16,27,11],
+      ['Fri','June 19','2:00','Dallas 🇺🇸',26,'C',2,scotlandFlag,'Scotland','Morocco','🇲🇦',43,8,35],
+      ['Fri','June 19','23:00','Miami 🇺🇸',28,'C',2,'🇧🇷','Brazil','Haiti','🇭🇹',6,83,77],
+      ['Fri','June 19','5:00','Seattle 🇺🇸',13,'D',2,'🇹🇷','Türkiye','Paraguay','🇵🇾',22,41,19],
+      ['Sat','June 20','18:00','Boston 🇺🇸',25,'F',2,'🇳🇱','Netherlands','Sweden','🇸🇪',7,37,30],
+      ['Sat','June 20','21:00','New York 🇺🇸',26,'E',2,'🇩🇪','Germany','Ivory Coast','🇨🇮',10,34,24],
+      ['Sat','June 20','1:00','Houston 🇺🇸',27,'E',2,'🇪🇨','Ecuador','Curaçao','🇨🇼',23,81,58],
+      ['Sat','June 20','5:00','Atlanta 🇺🇸',23,'F',2,'🇹🇳','Tunisia','Japan','🇯🇵',44,18,26],
+      ['Sun','June 21','23:00','Philadelphia 🇺🇸',24,'H',2,'🇪🇸','Spain','Saudi Arabia','🇸🇦',2,61,59],
+      ['Sun','June 21','20:00','Kansas City 🇺🇸',26,'G',2,'🇧🇪','Belgium','Iran','🇮🇷',9,20,11],
+      ['Sun','June 21','17:00','Los Angeles 🇺🇸',22,'H',2,'🇺🇾','Uruguay','Cape Verde','🇨🇻',17,67,50],
+      ['Sun','June 21','2:00','San Francisco 🇺🇸',13,'G',2,'🇳🇿','New Zealand','Egypt','🇪🇬',85,29,56],
+      ['Mon','June 22','18:00','Dallas 🇺🇸',33,'J',2,'🇦🇷','Argentina','Austria','🇦🇹',3,24,21],
+      ['Mon','June 22','1:00','New York 🇺🇸',25,'I',2,'🇫🇷','France','Iraq','🇮🇶',1,58,57],
+      ['Mon','June 22','22:00','Boston 🇺🇸',23,'I',2,'🇳🇴','Norway','Senegal','🇸🇳',31,13,18],
+      ['Mon','June 22','4:00','Houston 🇺🇸',26,'J',2,'🇯🇴','Jordan','Algeria','🇩🇿',64,28,36],
+      ['Tue','June 23','18:00','Seattle 🇺🇸',20,'K',2,'🇵🇹','Portugal','Uzbekistan','🇺🇿',5,49,44],
+      ['Tue','June 23','20:00','Toronto 🇨🇦',23,'L',2,englandFlag,'England','Ghana','🇬🇭',4,72,68],
+      ['Tue','June 23','17:00','Vancouver 🇨🇦',19,'L',2,'🇵🇦','Panama','Croatia','🇭🇷',33,11,22],
+      ['Tue','June 23','3:00','Los Angeles 🇺🇸',16,'K',2,'🇨🇴','Colombia','DR Congo','🇨🇩',12,46,34],
+      ['Wed','June 24','20:00','Toronto 🇨🇦',23,'B',3,'🇨🇭','Switzerland','Canada','🇨🇦',19,30,11],
+      ['Wed','June 24','20:00','Vancouver 🇨🇦',18,'B',3,'🇧🇦','Bosnia','Qatar','🇶🇦',71,56,15],
+      ['Wed','June 24','23:00','Miami 🇺🇸',28,'C',3,'🇲🇦','Morocco','Haiti','🇭🇹',8,83,75],
+      ['Wed','June 24','23:00','Dallas 🇺🇸',30,'C',3,scotlandFlag,'Scotland','Brazil','🇧🇷',43,6,37],
+      ['Wed','June 24','2:00','Monterrey 🇲🇽',27,'A',3,'🇿🇦','South Africa','South Korea','🇰🇷',60,25,35],
+      ['Wed','June 24','2:00','Mexico City 🇲🇽',18,'A',3,'🇨🇿','Czechia','Mexico','🇲🇽',38,15,23],
+      ['Thu','June 25','21:00','Houston 🇺🇸',28,'E',3,'🇨🇼','Curaçao','Ivory Coast','🇨🇮',81,34,47],
+      ['Thu','June 25','21:00','New York 🇺🇸',26,'E',3,'🇪🇨','Ecuador','Germany','🇩🇪',23,10,13],
+      ['Thu','June 25','19:00','Atlanta 🇺🇸',27,'F',3,'🇹🇳','Tunisia','Netherlands','🇳🇱',44,7,37],
+      ['Thu','June 25','19:00','Boston 🇺🇸',24,'F',3,'🇯🇵','Japan','Sweden','🇸🇪',18,37,19],
+      ['Thu','June 25','21:00','Los Angeles 🇺🇸',20,'D',3,'🇹🇷','Türkiye','USA','🇺🇸',22,16,6],
+      ['Thu','June 25','21:00','Seattle 🇺🇸',18,'D',3,'🇵🇾','Paraguay','Australia','🇦🇺',41,27,14],
+      ['Fri','June 26','23:00','New York 🇺🇸',24,'I',3,'🇳🇴','Norway','France','🇫🇷',31,1,30],
+      ['Fri','June 26','23:00','Boston 🇺🇸',22,'I',3,'🇸🇳','Senegal','Iraq','🇮🇶',13,58,45],
+      ['Fri','June 26','21:00','Philadelphia 🇺🇸',26,'H',3,'🇨🇻','Cape Verde','Saudi Arabia','🇸🇦',67,61,6],
+      ['Fri','June 26','21:00','Los Angeles 🇺🇸',20,'H',3,'🇺🇾','Uruguay','Spain','🇪🇸',17,2,15],
+      ['Fri','June 26','19:00','Kansas City 🇺🇸',27,'G',3,'🇳🇿','New Zealand','Belgium','🇧🇪',85,9,76],
+      ['Fri','June 26','19:00','San Francisco 🇺🇸',16,'G',3,'🇪🇬','Egypt','Iran','🇮🇷',29,20,9],
+      ['Sat','June 27','20:00','Toronto 🇨🇦',24,'L',3,'🇵🇦','Panama','England',englandFlag,33,4,29],
+      ['Sat','June 27','23:00','Vancouver 🇨🇦',18,'L',3,'🇭🇷','Croatia','Ghana','🇬🇭',11,72,61],
+      ['Sat','June 27','23:30','Los Angeles 🇺🇸',19,'K',3,'🇨🇴','Colombia','Portugal','🇵🇹',12,5,7],
+      ['Sat','June 27','23:30','Seattle 🇺🇸',17,'K',3,'🇨🇩','DR Congo','Uzbekistan','🇺🇿',46,49,3],
+      ['Sat','June 27','19:00','Houston 🇺🇸',30,'J',3,'🇩🇿','Algeria','Austria','🇦🇹',28,24,4],
+      ['Sat','June 27','19:00','Dallas 🇺🇸',33,'J',3,'🇯🇴','Jordan','Argentina','🇦🇷',64,3,61]
+    ];
+
     // Editable player values:
     // [name, note, shirtNumber, club, FBref 2025/26 club xGI per 90, FBref 2025/26 club xGC per 90]
     //
@@ -1483,7 +1650,80 @@
       France: 1, Spain: 2, Argentina: 3, England: 4, Portugal: 5, Brazil: 6, Netherlands: 7, Morocco: 8, Belgium: 9, Germany: 10, Croatia: 11, Colombia: 12, Senegal: 13, Mexico: 15, USA: 16, Uruguay: 17, Japan: 18, Switzerland: 19, Iran: 20, Türkiye: 22, Ecuador: 23, Austria: 24, 'South Korea': 25, Australia: 27, Algeria: 28, Egypt: 29, Canada: 30, Norway: 31, Panama: 33, 'Ivory Coast': 34, Sweden: 37, Czechia: 38, Paraguay: 41, Scotland: 43, Tunisia: 44, 'DR Congo': 46, Uzbekistan: 49, Qatar: 56, Iraq: 58, 'South Africa': 60, 'Saudi Arabia': 61, Jordan: 64, 'Cape Verde': 67, Bosnia: 71, Ghana: 72, Curaçao: 81, Haiti: 83, 'New Zealand': 85
     };
 
-    teams.forEach(team => { team.rank = fifaRanks[team.country] || 999; });
+    const fixtureCountryNames = {
+      'Bosnia and Herzegovina': 'Bosnia'
+    };
+
+    function fixtureCountryName(country) {
+      return fixtureCountryNames[country] || country;
+    }
+
+    const fixtureLookup = new Map();
+
+    function addPlayerFixture(team, flag, rank, group, fixture, opponent, opponentFlag, opponentRank) {
+      if (!fixtureLookup.has(team)) {
+        fixtureLookup.set(team, { team, flag, rank, group, games: [] });
+      }
+
+      fixtureLookup.get(team).games.push({ ...fixture, opponent, opponentFlag, opponentRank });
+    }
+
+    fixtures.forEach((row, index) => {
+      const fixture = {
+        index,
+        day: row[0], date: row[1], time: row[2], city: row[3], temp: row[4], group: row[5], matchday: row[6],
+        flag1: row[7], team1: row[8], team2: row[9], flag2: row[10], rank1: row[11], rank2: row[12], gap: row[13]
+      };
+
+      addPlayerFixture(fixture.team1, fixture.flag1, fixture.rank1, fixture.group, fixture, fixture.team2, fixture.flag2, fixture.rank2);
+      addPlayerFixture(fixture.team2, fixture.flag2, fixture.rank2, fixture.group, fixture, fixture.team1, fixture.flag1, fixture.rank1);
+    });
+
+    teams.forEach(team => {
+      const fixtureName = fixtureCountryName(team.country);
+      const fixtureData = fixtureLookup.get(fixtureName);
+
+      team.rank = fixtureData?.rank || fifaRanks[team.country] || fifaRanks[fixtureName] || 999;
+      team.fixtures = fixtureData?.games || [];
+    });
+
+    function gapClass(teamRank, opponentRank) {
+      const diff = opponentRank - teamRank;
+
+      if (diff >= 45) return 'gap-high';
+      if (diff >= 16) return 'gap-mid';
+      if (diff > -16) return 'gap-midlow';
+      if (diff > -45) return 'gap-low';
+      return 'gap-danger';
+    }
+
+    function renderPlayerFixtures(team) {
+      if (!team.fixtures?.length) return '';
+
+      return `
+        <section class="player-fixtures" aria-label="${team.country} fixtures">
+          <div class="section-title">Group games</div>
+          <div class="games">
+            ${team.fixtures.slice().sort((a, b) => a.matchday - b.matchday).map(game => `
+              <div class="game">
+                <div class="game-top">
+                  <div class="opponent">
+                    <span class="fixture-meta-label">Matchday ${game.matchday}</span>
+                    <span class="player-fixture-opponent">v ${game.opponent} ${game.opponentFlag}</span>
+                  </div>
+                </div>
+                <div class="game-meta">
+                  <span class="fixture-meta-label">Rank gap</span>
+                  <span class="meta-value ${gapClass(team.rank, game.opponentRank)}">
+                    ${game.opponentRank > team.rank ? '+' : '-'}${Math.abs(team.rank - game.opponentRank)}
+                  </span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+      `;
+    }
 
     const playerGrid = document.getElementById('playerGrid');
     const searchInput = document.getElementById('searchInput');
@@ -1814,6 +2054,8 @@
               </tr>
             </tbody>
           </table>
+
+          ${renderPlayerFixtures(player.team)}
         </article>
       `).join('');
 
