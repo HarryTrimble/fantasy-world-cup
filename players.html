@@ -1388,7 +1388,8 @@
   @media (max-width: 560px) {
     .profile-modal {
       padding: 12px;
-      align-items: flex-end;
+      align-items: center;
+      justify-content: center;
     }
 
     .profile-modal-card {
@@ -1832,7 +1833,7 @@
     ];
 
     // Editable player values:
-    // [name, note, shirtNumber, club, FBref 2025/26 club xGI per 90, FBref 2025/26 club xGC per 90]
+    // [name, note, shirtNumber, club, FBref 2025/26 club xGI per 90, FBref 2025/26 club xGC per 90, optional xG per 90, optional xA per 90]
     //
     // Edit xGI and xGC directly for every player below.
     //
@@ -2007,8 +2008,12 @@
         <table class="player-info-table" aria-label="${player.name} details">
           <tbody>
             <tr>
-              <th scope="row">xGI per 90</th>
-              <td>${player.role === 'FWD' || player.role === 'MID' || player.role === 'PENS' || player.role === 'DEF' ? ((player.statLine.match(/([\d.]+) xGI/)?.[1] || '0.56') + ' ⚽') : '-'}</td>
+              <th scope="row">xG per 90</th>
+              <td>${player.role === 'FWD' || player.role === 'MID' || player.role === 'PENS' || player.role === 'DEF' ? ((player.xG || '-') === '-' ? '-' : player.xG + ' ⚽') : '-'}</td>
+            </tr>
+            <tr>
+              <th scope="row">xA per 90</th>
+              <td>${player.role === 'FWD' || player.role === 'MID' || player.role === 'PENS' || player.role === 'DEF' ? ((player.xA || '-') === '-' ? '-' : player.xA + ' 🎯') : '-'}</td>
             </tr>
 
             <tr>
@@ -2161,7 +2166,9 @@
           number: pick[2],
           club: pick[3] || 'Fulham',
           xGI: pick[4] || '0.56',
-          xGC: pick[5] || '0.82'
+          xGC: pick[5] || '0.82',
+          xG: pick[6] || '-',
+          xA: pick[7] || '-'
         };
       }
 
@@ -2171,7 +2178,9 @@
         number: pick.number || 10,
         club: pick.club || 'Fulham',
         xGI: pick.xGI || '0.56',
-        xGC: pick.xGC || '0.82'
+        xGC: pick.xGC || '0.82',
+        xG: pick.xG || '-',
+        xA: pick.xA || '-'
       };
     }
 
@@ -2312,6 +2321,8 @@ const shortRole = role => ({
               statLine: playerStatLine(label, pick),
               xGI: parseFloat(pick.xGI || '0.56'),
               xGC: parseFloat(pick.xGC || '0.82'),
+              xG: pick.xG || '-',
+              xA: pick.xA || '-',
               price: rolePrices[label] || '$5m'
             };
           })
