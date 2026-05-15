@@ -7,6 +7,17 @@
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T6091676ZH"></script>
+
+  <div class="profile-modal" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle" aria-hidden="true">
+    <div class="profile-modal-card" role="document">
+      <div class="profile-modal-header">
+        <div class="profile-modal-title-row" id="profileModalHeader"></div>
+        <button class="profile-modal-close" type="button" id="profileModalClose" aria-label="Close full profile">×</button>
+      </div>
+      <div class="profile-modal-body" id="profileModalBody"></div>
+    </div>
+  </div>
+
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -1250,6 +1261,241 @@
 }
 </style>
 
+
+<style id="player-full-profile-modal">
+  
+  
+.full-profile-button {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-top: 14px !important;
+  padding: 12px 16px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  border-radius: 16px !important;
+  box-sizing: border-box !important;
+  border: 1px solid rgba(0,168,232,0.28) !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  color: #006c96 !important;
+  cursor: pointer !important;
+  font: inherit !important;
+  font-size: 0.88rem !important;
+  font-weight: 900 !important;
+}
+
+
+  .full-profile-button:hover,
+  .full-profile-button:focus-visible {
+    background: rgba(0,168,232,0.16);
+    border-color: rgba(0,168,232,0.42);
+    outline: none;
+  }
+
+  .full-profile-button:active {
+    transform: translateY(1px);
+  }
+
+  .profile-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    background: rgba(20,36,59,0.58);
+    backdrop-filter: blur(8px);
+  }
+
+  .profile-modal.is-open {
+    display: flex;
+  }
+
+  body.modal-open {
+    overflow: hidden;
+  }
+
+  .profile-modal-card {
+    width: min(720px, 100%);
+    max-height: min(88vh, 860px);
+    overflow: auto;
+    border-radius: 30px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,251,242,0.94));
+    border: 1px solid rgba(0,168,232,0.22);
+    box-shadow: 0 24px 70px rgba(20,36,59,0.28);
+  }
+
+  .profile-modal-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: start;
+    padding: 24px 28px;
+    border-bottom: 1px solid rgba(20,36,59,0.10);
+    background:
+      linear-gradient(135deg,
+        rgba(215,45,63,0.12),
+        rgba(255,255,255,0.04),
+        rgba(0,168,232,0.14));
+  }
+
+  .profile-modal-title-row {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 14px;
+    align-items: center;
+  }
+
+  .profile-modal-title {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    line-height: 1;
+    letter-spacing: -0.055em;
+    font-weight: 950;
+  }
+
+  .profile-modal-subtitle {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 0.94rem;
+    font-weight: 750;
+  }
+
+  .profile-modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(20,36,59,0.12);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.72);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .profile-modal-body {
+    padding: 0 28px 28px;
+  }
+
+  .profile-modal-body .player-info-table {
+    margin-bottom: 12px !important;
+  }
+
+  @media (max-width: 560px) {
+    .profile-modal {
+      padding: 12px;
+      align-items: flex-end;
+    }
+
+    .profile-modal-card {
+      max-height: 92vh;
+      border-radius: 24px;
+    }
+
+    .profile-modal-header {
+      padding: 20px;
+    }
+
+    .profile-modal-title-row {
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .profile-modal-body {
+      padding: 0 20px 22px;
+    }
+  }
+</style>
+
+
+<style id="collapsed-player-card-single-background-fix">
+  /* The collapsed card only contains the header content, so remove the old
+     table-card padding that was leaving a white strip at the bottom. */
+  .player-card.individual-player-card {
+    padding: 0 !important;
+    background:
+      linear-gradient(135deg,
+        rgba(215,45,63,0.12),
+        rgba(255,255,255,0.04),
+        rgba(0,168,232,0.14)) !important;
+  }
+
+  .player-card.individual-player-card .player-card-main {
+    margin: 0 !important;
+    min-height: 100% !important;
+    border-bottom: 0 !important;
+    border-radius: inherit !important;
+  }
+</style>
+
+
+<style id="final-collapsed-card-background-unify">
+  /* Stop CSS Grid stretching shorter player cards and exposing a second
+     background layer at the bottom of the collapsed card. */
+  #playerGrid.grid {
+    align-items: start !important;
+  }
+
+  .player-card.individual-player-card {
+    height: auto !important;
+    align-self: start !important;
+    padding: 0 !important;
+    background:
+      linear-gradient(135deg,
+        rgba(215,45,63,0.12),
+        rgba(255,255,255,0.04),
+        rgba(0,168,232,0.14)),
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,251,242,0.94)) !important;
+  }
+
+  .player-card.individual-player-card .player-card-main {
+    background: transparent !important;
+    margin: 0 !important;
+    border-bottom: 0 !important;
+    border-radius: inherit !important;
+  }
+</style>
+
+
+
+
+
+
+
+
+<style id="inline-shirt-layout-fix">
+.player-card-main {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+
+.player-inline-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+
+.player-shirt-wrap {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.player-copy {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+</style>
+
 </head>
 <body>
   <header>
@@ -1760,12 +2006,69 @@
       `;
     }
 
+
+    function renderPlayerInfoTable(player) {
+      return `
+        <table class="player-info-table" aria-label="${player.name} details">
+          <tbody>
+            <tr>
+              <th scope="row">xGI per 90</th>
+              <td>${player.role === 'FWD' || player.role === 'MID' || player.role === 'PENS' || player.role === 'DEF' ? ((player.statLine.match(/([\d.]+) xGI/)?.[1] || '0.56') + ' ⚽') : '-'}</td>
+            </tr>
+
+            <tr>
+              <th scope="row">xGC per 90</th>
+              <td>${player.role === 'DEF' || player.role === 'GK' ? ((player.statLine.match(/([\d.]+) xGC/)?.[1] || '0.82') + ' 🛡️') : '-'}</td>
+            </tr>
+            <tr>
+              <th scope="row">Club</th>
+              <td>${player.club || 'Fulham'} ${clubFlag(player.club || "Fulham")}</td>
+            </tr>
+            <tr>
+              <th scope="row">Notes</th>
+              <td>${player.why || 'No note added yet.'}</td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+    }
+
+    function openProfileModal(player) {
+      profileModalHeader.innerHTML = `
+        <div>${shirtSvg(player.team.country, player.number)}</div>
+        <div>
+          <h2 class="profile-modal-title" id="profileModalTitle">${player.name}</h2>
+          <div class="profile-modal-subtitle">${player.team.flag} ${player.team.country} <span class="player-meta-dot">•</span> ${shortRole(player.role)} <span class="player-meta-dot">•</span> ${player.price}</div>
+        </div>
+      `;
+
+      profileModalBody.innerHTML = `${renderPlayerInfoTable(player)}${renderPlayerFixtures(player.team)}`;
+      profileModal.classList.add('is-open');
+      profileModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      profileModalClose.focus();
+    }
+
+    function closeProfileModal() {
+      profileModal.classList.remove('is-open');
+      profileModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      profileModalHeader.innerHTML = '';
+      profileModalBody.innerHTML = '';
+    }
+
     const playerGrid = document.getElementById('playerGrid');
     const searchInput = document.getElementById('searchInput');
     const groupFilter = document.getElementById('groupFilter');
     const roleFilter = document.getElementById('roleFilter');
     const sortSelect = document.getElementById('sortSelect');
     const noResults = document.getElementById('noResults');
+    const profileModal = document.getElementById('profileModal');
+    const profileModalHeader = document.getElementById('profileModalHeader');
+    const profileModalBody = document.getElementById('profileModalBody');
+    const profileModalClose = document.getElementById('profileModalClose');
+    let currentPlayers = [];
+
 
     [...new Set(teams.map(t => t.group))].sort().forEach(group => groupFilter.add(new Option(`Group ${group}`, group)));
 
@@ -2060,39 +2363,33 @@ const shortRole = role => ({
         return a.team.group.localeCompare(b.team.group) || a.team.rank - b.team.rank || a.role.localeCompare(b.role);
       });
 
-      playerGrid.innerHTML = rows.map(player => `
+      currentPlayers = rows;
+
+      playerGrid.innerHTML = rows.map((player, index) => `
         <article class="player-card individual-player-card">
           <div class="player-card-main">
-            <div>${shirtSvg(player.team.country, player.number)}</div>
-            <div class="player-copy">
-              <div class="player-name">${player.name}</div>
-              <div class="player-country-subtitle">${player.team.flag} ${player.team.country} <span class="player-meta-dot">•</span> ${shortRole(player.role)} <span class="player-meta-dot">•</span> ${player.price}</div>
+            <div class="player-inline-header">
+              <div class="player-shirt-wrap">
+                ${shirtSvg(player.team.country, player.number)}
+              </div>
+
+              <div class="player-copy">
+                <div class="player-name">${player.name}</div>
+
+                <div class="player-country-subtitle">
+                  ${player.team.flag} ${player.team.country}
+                  <span class="player-meta-dot">•</span>
+                  ${shortRole(player.role)}
+                  <span class="player-meta-dot">•</span>
+                  ${player.price}
+                </div>
+              </div>
             </div>
+
+            <button class="full-profile-button" type="button" data-player-index="${index}" aria-label="Open full profile for ${player.name}">
+              Full profile
+            </button>
           </div>
-
-          <table class="player-info-table" aria-label="${player.name} details">
-            <tbody>
-              <tr>
-                <th scope="row">xGI per 90</th>
-                <td>${player.role === 'FWD' || player.role === 'MID' || player.role === 'PENS' || player.role === 'DEF' ? ((player.statLine.match(/([\d.]+) xGI/)?.[1] || '0.56') + ' ⚽') : '-'}</td>
-              </tr>
-
-              <tr>
-                <th scope="row">xGC per 90</th>
-                <td>${player.role === 'DEF' || player.role === 'GK' ? ((player.statLine.match(/([\d.]+) xGC/)?.[1] || '0.82') + ' 🛡️') : '-'}</td>
-              </tr>
-              <tr>
-                <th scope="row">Club</th>
-                <td>${player.club || 'Fulham'} ${clubFlag(player.club || "Fulham")}</td>
-              </tr>
-              <tr>
-                <th scope="row">Notes</th>
-                <td>${player.why || 'No note added yet.'}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          ${renderPlayerFixtures(player.team)}
         </article>
       `).join('');
 
@@ -2100,6 +2397,26 @@ const shortRole = role => ({
     }
 
     [searchInput, groupFilter, roleFilter, sortSelect].forEach(el => el.addEventListener('input', render));
+    playerGrid.addEventListener('click', event => {
+      const button = event.target.closest('.full-profile-button');
+      if (!button) return;
+
+      const player = currentPlayers[Number(button.dataset.playerIndex)];
+      if (player) openProfileModal(player);
+    });
+
+    profileModalClose.addEventListener('click', closeProfileModal);
+
+    profileModal.addEventListener('click', event => {
+      if (event.target === profileModal) closeProfileModal();
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && profileModal.classList.contains('is-open')) {
+        closeProfileModal();
+      }
+    });
+
     populateStats();
     render();
   </script>
