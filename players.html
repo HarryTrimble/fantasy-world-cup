@@ -667,8 +667,8 @@
   .hero-card {
     border-color: rgba(215,45,63,0.22) !important;
     background:
-      linear-gradient(90deg, transparent 72%, rgba(0,168,232,0.09)),
-      linear-gradient(180deg, rgba(255,250,240,0.96), rgba(255,255,255,0.98)) !important;
+      linear-gradient(90deg, rgba(0,168,232,0.09), transparent 28%),
+      linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,250,240,0.96)) !important;
   }
 
   .site-nav {
@@ -754,7 +754,7 @@
   .rank-pill,
   .tag {
     background: rgba(0,168,232,0.10) !important;
-    color: #1c1f26 !important;
+    color: #222222 !important;
     border-color: rgba(0,168,232,0.28) !important;
   }
 
@@ -775,7 +775,7 @@
   .rank-gap.mid,
   .gap-mid { color: #087b53 !important; }
   .rank-gap.high,
-  .gap-high { color: #1c1f26 !important; }
+  .gap-high { color: #222222 !important; }
   .gap-danger { color: var(--accent-red) !important; }
 
   .form-score.win { background: #0aa36b !important; }
@@ -857,7 +857,7 @@
   .player-meta-line span:not(.player-meta-separator) {
     background: rgba(0,168,232,0.10) !important;
     border-color: rgba(0,168,232,0.22) !important;
-    color: #1c1f26 !important;
+    color: #222222 !important;
   }
 
   /* Default stat line pill */
@@ -1275,13 +1275,13 @@
   align-items: center !important;
   border-radius: 16px !important;
   box-sizing: border-box !important;
-  border: 1px solid rgba(20,24,32,0.28) !important;
+  border: 1px solid rgba(20,20,20,0.38) !important;
   background: rgba(255, 255, 255, 0.82) !important;
-  color: #1c1f26 !important;
+  color: #222222 !important;
   cursor: pointer !important;
   font: inherit !important;
   font-size: 0.88rem !important;
-  font-weight: 900 !important;
+  font-weight: 650 !important;
 }
 
 
@@ -1334,9 +1334,7 @@
     align-items: start;
     padding: 24px 28px;
     border-bottom: 1px solid rgba(20,36,59,0.10);
-    background:
-      linear-gradient(90deg, transparent 72%, rgba(0,168,232,0.09)),
-      linear-gradient(180deg, rgba(255,250,240,0.96), rgba(255,255,255,0.98));
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)) !important;
   }
 
   .profile-modal-title-row {
@@ -1388,8 +1386,7 @@
   @media (max-width: 560px) {
     .profile-modal {
       padding: 12px;
-      align-items: center;
-      justify-content: center;
+      align-items: flex-end;
     }
 
     .profile-modal-card {
@@ -1445,9 +1442,7 @@
     height: auto !important;
     align-self: start !important;
     padding: 0 !important;
-    background:
-      linear-gradient(90deg, transparent 72%, rgba(0,168,232,0.09)),
-      linear-gradient(180deg, rgba(255,250,240,0.96), rgba(255,255,255,0.98)) !important;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)) !important;
   }
 
   .player-card.individual-player-card .player-card-main {
@@ -1833,15 +1828,15 @@
     ];
 
     // Editable player values:
-    // [name, note, shirtNumber, club, FBref 2025/26 club xGI per 90, FBref 2025/26 club xGC per 90, optional xG per 90, optional xA per 90]
+    // [name, note, shirtNumber, club, FBref 2025/26 club xGI per 90, FBref 2025/26 club xGC per 90]
     //
     // Edit xGI and xGC directly for every player below.
     //
     // Example:
     // forward:['Kane','Elite forward + pens',9,'Bayern Munich','0.85','1.12']
     //
-    // The 5th value = club xGI per 90
-    // The 6th value = club xGC per 90
+    // The 5th value = club xG per 90
+    // The 6th value = club xGC per 90. Optionally add xG/xA properties if using object-style picks.
     const teams = [
       { group:"J", country:"Argentina", flag:"🇦🇷", picks:{ forward:["Alvarez", "Elite attack", 9,"Atlético Madrid","0.56","0.82"], midfielder:["Messi", "Elite attack + pens + set pieces", 10,"Inter Miami","0.56","0.82"], defender:["Romero", "Starter + some attack threat", 13,"Tottenham Hotspur","0.56","0.82"], goalkeeper:["Martinez", "Starter when fit", 23,"Aston Villa","0.56","0.82"], penalty:["Messi", "Nailed pen taker", 10,"Inter Miami","0.56","0.82"] } },
       { group:"I", country:"Austria", flag:"🇦🇹", picks:{
@@ -1927,12 +1922,8 @@
       France: 1, Spain: 2, Argentina: 3, England: 4, Portugal: 5, Brazil: 6, Netherlands: 7, Morocco: 8, Belgium: 9, Germany: 10, Croatia: 11, Colombia: 12, Senegal: 13, Mexico: 15, USA: 16, Uruguay: 17, Japan: 18, Switzerland: 19, Iran: 20, Türkiye: 22, Ecuador: 23, Austria: 24, 'South Korea': 25, Australia: 27, Algeria: 28, Egypt: 29, Canada: 30, Norway: 31, Panama: 33, 'Ivory Coast': 34, Sweden: 37, Czechia: 38, Paraguay: 41, Scotland: 43, Tunisia: 44, 'DR Congo': 46, Uzbekistan: 49, Qatar: 56, Iraq: 58, 'South Africa': 60, 'Saudi Arabia': 61, Jordan: 64, 'Cape Verde': 67, Bosnia: 71, Ghana: 72, Curaçao: 81, Haiti: 83, 'New Zealand': 85
     };
 
-    const fixtureCountryNames = {
-      'Bosnia and Herzegovina': 'Bosnia'
-    };
-
     function fixtureCountryName(country) {
-      return fixtureCountryNames[country] || country;
+      return country;
     }
 
     const fixtureLookup = new Map();
@@ -2007,15 +1998,17 @@
       return `
         <table class="player-info-table" aria-label="${player.name} details">
           <tbody>
+            ${player.role === 'GK' ? '' : `
             <tr>
               <th scope="row">xG per 90</th>
-              <td>${player.role === 'FWD' || player.role === 'MID' || player.role === 'PENS' || player.role === 'DEF' ? ((player.xG || '-') === '-' ? '-' : player.xG + ' ⚽') : '-'}</td>
-            </tr>
-            <tr>
-              <th scope="row">xA per 90</th>
-              <td>${player.role === 'FWD' || player.role === 'MID' || player.role === 'PENS' || player.role === 'DEF' ? ((player.xA || '-') === '-' ? '-' : player.xA + ' 🎯') : '-'}</td>
+              <td>${(player.xG ?? player.xGI ?? 0.56).toFixed ? (player.xG ?? player.xGI ?? 0.56).toFixed(2) : (player.xG ?? player.xGI ?? '0.56')} ⚽</td>
             </tr>
 
+            <tr>
+              <th scope="row">xA per 90</th>
+              <td>${(player.xA ?? 0.00).toFixed ? (player.xA ?? 0.00).toFixed(2) : (player.xA ?? '0.00')} 🎯</td>
+            </tr>
+            `}
             <tr>
               <th scope="row">xGC per 90</th>
               <td>${player.role === 'DEF' || player.role === 'GK' ? ((player.statLine.match(/([\d.]+) xGC/)?.[1] || '0.82') + ' 🛡️') : '-'}</td>
@@ -2035,7 +2028,7 @@
 
     function openProfileModal(player) {
       profileModalHeader.innerHTML = `
-        <div>${shirtSvg(player.team.country, player.number)}</div>
+        <div>${playerShirtSvg(player)}</div>
         <div>
           <h2 class="profile-modal-title" id="profileModalTitle">${player.name}</h2>
           <div class="profile-modal-subtitle">${player.team.flag} ${player.team.country} <span class="player-meta-dot">•</span> ${shortRole(player.role)} <span class="player-meta-dot">•</span> ${player.price}</div>
@@ -2166,9 +2159,7 @@
           number: pick[2],
           club: pick[3] || 'Fulham',
           xGI: pick[4] || '0.56',
-          xGC: pick[5] || '0.82',
-          xG: pick[6] || '-',
-          xA: pick[7] || '-'
+          xGC: pick[5] || '0.82'
         };
       }
 
@@ -2178,9 +2169,7 @@
         number: pick.number || 10,
         club: pick.club || 'Fulham',
         xGI: pick.xGI || '0.56',
-        xGC: pick.xGC || '0.82',
-        xG: pick.xG || '-',
-        xA: pick.xA || '-'
+        xGC: pick.xGC || '0.82'
       };
     }
 
@@ -2200,9 +2189,410 @@
       return '';
     }
 
-    function shirtSvg(country, number) {
-      const kit = countryKit(country);
-      const numberColour = country === 'Paraguay' ? '#000000' : (kit.number || readableNumberColour(kit.torso));
+    // Editable goalkeeper kit colours.
+    // Each country below controls ONLY that country's GK shirt.
+    // Edit these hex values to change one keeper shirt without changing outfield shirts.
+    const goalkeeperKitColours = {
+      'Argentina': {
+        torso: '#201f22',
+        sleeves: '#201f22',
+        sleeveEnds: '#63d1ec',
+        collar: '#201f22',
+        bottomEdge: '#63d1ec',
+        number: '#ffffff'
+      },
+      'Austria': {
+        torso: '#84a805',
+        sleeves: '#84a805',
+        sleeveEnds: '#0b0d0a',
+        collar: '#0b0d0a',
+        bottomEdge: '#0b0d0a',
+        number: '#ffffff'
+      },
+      'Australia': {
+        torso: '#8054b9',
+        sleeves: '#8054b9',
+        sleeveEnds: '#8054b9',
+        collar: '#8054b9',
+        bottomEdge: '#8054b9',
+        number: '#ffffff'
+      },
+      'Bosnia': {
+        torso: '#da214d',
+        sleeves: '#da214d',
+        sleeveEnds: '#060a0d',
+        collar: '#060a0d',
+        bottomEdge: '#060a0d',
+        number: '#ffffff'
+      },
+      'Belgium': {
+        torso: '#1ccd68',
+        sleeves: '#1ccd68',
+        sleeveEnds: '#3b504e',
+        collar: '#1ccd68',
+        bottomEdge: '#3b504e',
+        number: '#3b504e'
+      },
+      'Brazil': {
+        torso: '#ef4444',
+        sleeves: '#7f1d1d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7f1d1d',
+        number: '#ffffff'
+      },
+      'Canada': {
+        torso: '#14b8a6',
+        sleeves: '#134e4a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#134e4a',
+        number: '#ffffff'
+      },
+      'DR Congo': {
+        torso: '#64748b',
+        sleeves: '#1e293b',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#1e293b',
+        number: '#ffffff'
+      },
+      'Switzerland': {
+        torso: '#38bdf8',
+        sleeves: '#0f172a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#0f172a',
+        number: '#ffffff'
+      },
+      'Ivory Coast': {
+        torso: '#22c55e',
+        sleeves: '#14532d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#14532d',
+        number: '#ffffff'
+      },
+      'Colombia': {
+        torso: '#f97316',
+        sleeves: '#7c2d12',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7c2d12',
+        number: '#ffffff'
+      },
+      'Cape Verde': {
+        torso: '#a855f7',
+        sleeves: '#581c87',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#581c87',
+        number: '#ffffff'
+      },
+      'Curaçao': {
+        torso: '#facc15',
+        sleeves: '#713f12',
+        sleeveEnds: '#111827',
+        collar: '#111827',
+        bottomEdge: '#713f12',
+        number: '#111827'
+      },
+      'Czechia': {
+        torso: '#ef4444',
+        sleeves: '#7f1d1d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7f1d1d',
+        number: '#ffffff'
+      },
+      'Germany': {
+        torso: '#14b8a6',
+        sleeves: '#134e4a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#134e4a',
+        number: '#ffffff'
+      },
+      'Algeria': {
+        torso: '#161719',
+        sleeves: '#161719',
+        sleeveEnds: '#161719',
+        collar: '#161719',
+        bottomEdge: '#161719',
+        number: '#ffffff'
+      },
+      'Ecuador': {
+        torso: '#38bdf8',
+        sleeves: '#0f172a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#0f172a',
+        number: '#ffffff'
+      },
+      'Egypt': {
+        torso: '#22c55e',
+        sleeves: '#14532d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#14532d',
+        number: '#ffffff'
+      },
+      'Spain': {
+        torso: '#f97316',
+        sleeves: '#7c2d12',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7c2d12',
+        number: '#ffffff'
+      },
+      'France': {
+        torso: '#a855f7',
+        sleeves: '#581c87',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#581c87',
+        number: '#ffffff'
+      },
+      'Ghana': {
+        torso: '#facc15',
+        sleeves: '#713f12',
+        sleeveEnds: '#111827',
+        collar: '#111827',
+        bottomEdge: '#713f12',
+        number: '#111827'
+      },
+      'Croatia': {
+        torso: '#ef4444',
+        sleeves: '#7f1d1d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7f1d1d',
+        number: '#ffffff'
+      },
+      'Haiti': {
+        torso: '#14b8a6',
+        sleeves: '#134e4a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#134e4a',
+        number: '#ffffff'
+      },
+      'Iraq': {
+        torso: '#64748b',
+        sleeves: '#1e293b',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#1e293b',
+        number: '#ffffff'
+      },
+      'Iran': {
+        torso: '#38bdf8',
+        sleeves: '#0f172a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#0f172a',
+        number: '#ffffff'
+      },
+      'Jordan': {
+        torso: '#22c55e',
+        sleeves: '#14532d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#14532d',
+        number: '#ffffff'
+      },
+      'Japan': {
+        torso: '#f97316',
+        sleeves: '#7c2d12',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7c2d12',
+        number: '#ffffff'
+      },
+      'South Korea': {
+        torso: '#a855f7',
+        sleeves: '#581c87',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#581c87',
+        number: '#ffffff'
+      },
+      'Morocco': {
+        torso: '#facc15',
+        sleeves: '#713f12',
+        sleeveEnds: '#111827',
+        collar: '#111827',
+        bottomEdge: '#713f12',
+        number: '#111827'
+      },
+      'Mexico': {
+        torso: '#ef4444',
+        sleeves: '#7f1d1d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7f1d1d',
+        number: '#ffffff'
+      },
+      'Netherlands': {
+        torso: '#14b8a6',
+        sleeves: '#134e4a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#134e4a',
+        number: '#ffffff'
+      },
+      'Norway': {
+        torso: '#64748b',
+        sleeves: '#1e293b',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#1e293b',
+        number: '#ffffff'
+      },
+      'New Zealand': {
+        torso: '#38bdf8',
+        sleeves: '#0f172a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#0f172a',
+        number: '#ffffff'
+      },
+      'Panama': {
+        torso: '#22c55e',
+        sleeves: '#14532d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#14532d',
+        number: '#ffffff'
+      },
+      'Portugal': {
+        torso: '#f97316',
+        sleeves: '#7c2d12',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7c2d12',
+        number: '#ffffff'
+      },
+      'Paraguay': {
+        torso: '#a855f7',
+        sleeves: '#581c87',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#581c87',
+        number: '#ffffff'
+      },
+      'Qatar': {
+        torso: '#facc15',
+        sleeves: '#713f12',
+        sleeveEnds: '#111827',
+        collar: '#111827',
+        bottomEdge: '#713f12',
+        number: '#111827'
+      },
+      'Saudi Arabia': {
+        torso: '#ef4444',
+        sleeves: '#7f1d1d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7f1d1d',
+        number: '#ffffff'
+      },
+      'Sweden': {
+        torso: '#14b8a6',
+        sleeves: '#134e4a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#134e4a',
+        number: '#ffffff'
+      },
+      'Senegal': {
+        torso: '#64748b',
+        sleeves: '#1e293b',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#1e293b',
+        number: '#ffffff'
+      },
+      'Tunisia': {
+        torso: '#38bdf8',
+        sleeves: '#0f172a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#0f172a',
+        number: '#ffffff'
+      },
+      'Türkiye': {
+        torso: '#22c55e',
+        sleeves: '#14532d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#14532d',
+        number: '#ffffff'
+      },
+      'USA': {
+        torso: '#f97316',
+        sleeves: '#7c2d12',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7c2d12',
+        number: '#ffffff'
+      },
+      'Uruguay': {
+        torso: '#a855f7',
+        sleeves: '#581c87',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#581c87',
+        number: '#ffffff'
+      },
+      'Uzbekistan': {
+        torso: '#facc15',
+        sleeves: '#713f12',
+        sleeveEnds: '#111827',
+        collar: '#111827',
+        bottomEdge: '#713f12',
+        number: '#111827'
+      },
+      'South Africa': {
+        torso: '#ef4444',
+        sleeves: '#7f1d1d',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#7f1d1d',
+        number: '#ffffff'
+      },
+      'England': {
+        torso: '#14b8a6',
+        sleeves: '#134e4a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#134e4a',
+        number: '#ffffff'
+      },
+      'Scotland': {
+        torso: '#64748b',
+        sleeves: '#1e293b',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#1e293b',
+        number: '#ffffff'
+      }
+    };
+
+    function goalkeeperKit(country) {
+      return goalkeeperKitColours[country] || {
+        torso: '#38bdf8',
+        sleeves: '#0f172a',
+        sleeveEnds: '#ffffff',
+        collar: '#ffffff',
+        bottomEdge: '#0f172a',
+        number: '#ffffff'
+      };
+    }
+
+    function shirtSvg(country, number, role) {
+      const kit = role === 'GK' ? goalkeeperKit(country) : countryKit(country);
+      const numberColour = kit.number || (country === 'Paraguay' ? '#000000' : readableNumberColour(kit.torso));
       const torsoClipId = `shirt-torso-${country.replace(/[^a-z0-9]/gi, '').toLowerCase()}-${number}-${Math.random().toString(36).slice(2)}`;
       const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.length === 5
         ? `<clipPath id="${torsoClipId}"><path d="M5311 7970 c-49 -73 -225 -238 -322 -302 -349 -231 -790 -317 -1229
@@ -2264,6 +2654,41 @@
       </svg>`;
     }
 
+
+    function goalkeeperShirtSvg(country, number) {
+      const kit = goalkeeperKit(country);
+      const numberColour = kit.number || (country === 'Paraguay' ? '#000000' : readableNumberColour(kit.torso));
+      const goalkeeperPaths = [
+        "M 668.165 159.996 C 673.574 163.862 682.867 177.74 687.551 183.535 C 809.793 334.757 1089.22 350.977 1235.59 225.317 C 1249.24 213.554 1262.04 200.826 1273.87 187.231 C 1280.88 179.119 1288.99 165.938 1297.08 159.936 C 1331.78 181.949 1375.78 216.357 1410.49 240.944 L 1498.54 303.862 C 1521.5 320.333 1552.79 342.173 1572.17 361.791 C 1604.89 394.903 1626.02 444.708 1625.69 491.412 C 1625.45 524.073 1616.06 557.093 1608.52 589.1 L 1571.08 743.52 C 1562.32 779.362 1549.41 825.954 1547.27 861.962 C 1545.71 888.192 1547.05 920.435 1546.76 947.067 L 1545.98 1154.98 L 1545.77 1645.49 C 1545.78 1730.28 1547.19 1819.55 1545.54 1903.97 L 1446.5 1904.02 L 418.976 1904.17 L 418.896 1207.15 L 418.406 979.289 C 418.287 940.383 419.525 899.475 417.479 860.856 C 415.614 825.666 404.603 788.915 396.464 754.646 L 356.305 587.684 C 349.663 559.162 341.318 528.312 339.462 499.371 C 338.692 485.258 339.749 471.103 342.606 457.26 C 349.555 423.607 365.317 392.403 388.279 366.838 C 411.249 341.32 472.546 300.549 503.354 278.223 L 598.891 209.549 C 621.288 193.37 645.322 175.341 668.165 159.996 z",
+        "M 616.019 23.8202 L 617.768 24.5874 C 619.193 29.3942 620.251 34.2864 621.411 39.1619 C 627.266 63.7698 635.195 87.8357 642.245 112.111 C 619.651 129.688 595.293 146.469 572.033 163.342 L 453.169 249.689 C 426.772 268.794 385.961 296.804 363.111 318.177 C 319.745 359.131 292.889 414.556 287.621 473.971 C 283.991 519.893 296.455 561.473 306.655 605.759 L 344.895 765.877 C 351.316 792.378 361.545 827.869 361.476 854.637 C 361.442 868.04 356.503 893.277 353.997 907.069 L 342.241 972.09 L 309.233 1158.66 C 303.091 1194.32 296.577 1230.37 291.822 1266.21 C 287.957 1295.34 287.24 1325.81 285.787 1355.26 C 283.713 1400.49 281.393 1445.71 278.825 1490.92 L 261.539 1797.27 C 259.257 1835.35 257.289 1873.45 255.632 1911.57 L 116.75 1911.65 C 83.5287 1911.69 48.0599 1912.32 15.0312 1911.12 L 15.0296 1338.5 L 15.024 1111.56 C 15.0251 1077.2 14.5936 1042.63 14.975 1008.29 C 15.312 977.947 19.6289 944.933 22.8791 914.631 C 27.985 862.085 35.2553 809.771 44.6715 757.824 C 49.6374 731.354 57.8779 701.095 64.6029 674.979 C 73.1914 640.347 82.072 605.788 91.2438 571.306 L 116.776 473.009 C 124.576 443.773 131.708 414.457 143.449 386.428 C 162.831 340.163 200.476 319.188 239.693 291.567 L 335.682 223.455 L 475.678 123.638 C 522.057 89.8053 568.841 56.5304 616.019 23.8202 z",
+        "M 1347.62 22.6433 C 1370.4 36.6973 1401.93 60.4203 1424.54 76.3417 L 1589.9 193.846 L 1715.11 282.803 C 1739.37 300.084 1767.64 319.206 1789.47 339.154 C 1819.32 366.429 1830.19 410.504 1840.06 447.856 C 1847.58 475.818 1854.79 503.863 1861.69 531.987 C 1873.55 577.104 1885.17 622.282 1896.55 667.52 C 1902.89 692.372 1910.87 719.758 1915.54 745.074 C 1932.87 839.11 1946.5 936.778 1948.4 1032.48 C 1948.92 1058.54 1948.38 1084.56 1948.36 1110.39 L 1948.33 1315.4 L 1948.4 1911.56 L 1848.18 1911.74 L 1707.19 1911.75 C 1707.03 1876.15 1702.68 1824.6 1700.71 1788.51 L 1687.57 1547.64 L 1678.56 1365.49 C 1676.57 1327.51 1675.24 1285.51 1669.81 1248.27 C 1663.96 1208.1 1656.43 1166.72 1649.27 1126.75 L 1620.34 963.577 L 1609 901.502 C 1606.54 887.917 1602.81 868.809 1602.53 855.318 C 1601.95 826.359 1611.82 794.456 1618.73 765.98 L 1657.45 607.078 C 1664.07 579.105 1674.08 540.666 1676.86 512.604 C 1678.57 494.711 1678.12 476.676 1675.5 458.893 C 1669.43 415.204 1648.26 369.008 1619.19 335.927 C 1589.73 302.405 1542.7 271.54 1505.81 244.882 L 1377.2 151.816 C 1359.28 138.811 1339.66 125.445 1322.23 112.178 C 1330.16 82.462 1339.61 53.529 1347.62 22.6433 z",
+        "M 806.669 1952.49 L 1545.03 1952.71 C 1545.2 1981.74 1545.22 2010.78 1545.08 2039.82 L 1163.5 2039.77 L 419.094 2039.79 C 418.946 2010.8 418.958 1981.8 419.128 1952.8 C 459.205 1951.84 502.1 1952.59 542.44 1952.58 L 806.669 1952.49 z",
+        "M 674.567 19.6214 C 684.145 22.1249 707.25 33.3651 718.164 37.9173 C 743.253 48.5149 768.963 57.5765 795.151 65.0518 C 928.354 103.219 1057.73 101.928 1189.66 58.9697 C 1209.55 52.4955 1229.12 45.0758 1248.3 36.7358 C 1259.57 31.9161 1278.27 23.1259 1289.34 19.6474 L 1290.63 19.2495 C 1289.77 58.4115 1268.79 106.819 1246.46 138.497 C 1129.72 307.542 790.164 296.896 698.762 106.005 C 686.524 80.4465 674.798 48.1895 674.567 19.6214 z",
+        "M 26.0236 1950.49 L 163.548 1950.43 C 193.856 1950.39 225.447 1949.87 255.653 1950.62 C 255.863 1968.4 255.853 1986.19 255.623 2003.97 L 243.819 2004.02 L 12.8848 2004.11 L 12.9652 1950.8 L 26.0236 1950.49 z",
+        "M 1715.92 1950.49 L 1851.64 1950.41 C 1882.8 1950.37 1918.37 1949.47 1949.23 1950.71 C 1949.51 1966.18 1950.21 1987.42 1949.4 2002.62 C 1947.26 2004.7 1947.23 2003.98 1943.25 2004.12 L 1707.08 2004.02 C 1707.04 1992.65 1706.13 1961.21 1707.49 1951.95 C 1709.76 1950.09 1712.76 1950.55 1715.92 1950.49 z"
+      ];
+      const fills = [
+        kit.torso,
+        kit.sleeves,
+        kit.sleeves,
+        kit.bottomEdge,
+        kit.collar,
+        kit.sleeveEnds,
+        kit.sleeveEnds
+      ];
+
+      return `<svg class="shirt goalkeeper-shirt" viewBox="0 0 1966 2048" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        ${goalkeeperPaths.map((path, index) => `<path d="${path}" fill="${fills[index] || kit.torso}"/>`).join('')}
+        <text x="983" y="1010" text-anchor="middle" dominant-baseline="middle" font-size="520" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${numberColour}" stroke="${country === 'Paraguay' ? 'transparent' : 'rgba(8,17,31,0.18)'}" stroke-width="${country === 'Paraguay' ? '0' : '18'}" paint-order="stroke">${number || 1}</text>
+      </svg>`;
+    }
+
+    function playerShirtSvg(player) {
+      return player.role === 'GK'
+        ? goalkeeperShirtSvg(player.team.country, player.number)
+        : shirtSvg(player.team.country, player.number, player.role);
+    }
+
     function populateStats() {
       const bestRank = Math.min(...teams.map(team => team.rank));
       const totalPicks = teams.reduce((total, team) => total + Object.keys(team.picks).length, 0);
@@ -2320,9 +2745,9 @@ const shortRole = role => ({
               club: pick.club,
               statLine: playerStatLine(label, pick),
               xGI: parseFloat(pick.xGI || '0.56'),
+              xG: parseFloat(pick.xG || pick.xGI || '0.56'),
+              xA: parseFloat(pick.xA || '0.00'),
               xGC: parseFloat(pick.xGC || '0.82'),
-              xG: pick.xG || '-',
-              xA: pick.xA || '-',
               price: rolePrices[label] || '$5m'
             };
           })
@@ -2376,7 +2801,7 @@ const shortRole = role => ({
           <div class="player-card-main">
             <div class="player-inline-header">
               <div class="player-shirt-wrap">
-                ${shirtSvg(player.team.country, player.number)}
+                ${playerShirtSvg(player)}
               </div>
 
               <div class="player-copy">
