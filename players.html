@@ -2088,7 +2088,14 @@
         'Spain': { torso:'#fa554e', sleeves:'#2a2c56', sleeveEnds:'#2a2c56', collar:'#2a2c56', bottomEdge:'#fa554e' },
         'France': { torso:'#233a9b', sleeves:'#233a9b', sleeveEnds:'#171942', collar:'#171942', bottomEdge:'#171942' },
         'Ghana': { torso:'#f1cf65', sleeves:'#f1cf65', sleeveEnds:'#006e61', collar:'#c73029', bottomEdge:'#35271f' },
-        'Croatia': { torso:'#d4d7e4', sleeves:'#e73e47', sleeveEnds:'#5082dd', collar:'#5082dd', bottomEdge:'#5082dd' },
+        'Croatia': {
+          torso:'#ffffff',
+          torsoChecks:true,
+          sleeves:'#e73e47',
+          sleeveEnds:'#5082dd',
+          collar:'#5082dd',
+          bottomEdge:'#5082dd'
+        },
         'Haiti': { torso:'#1c2a89', sleeves:'#1c2a89', sleeveEnds:'#9f2118', collar:'#9f2118', bottomEdge:'#1c2a89' },
         'Iraq': { torso:'#038235', sleeves:'#038235', sleeveEnds:'#038235', collar:'#038235', bottomEdge:'#038235' },
         'Iran': { torso:'#c4c4c4', sleeves:'#c4c4c4', sleeveEnds:'#567d50', collar:'#567d50', bottomEdge:'#567d50' },
@@ -2594,7 +2601,11 @@
       const kit = role === 'GK' ? goalkeeperKit(country) : countryKit(country);
       const numberColour = kit.number || (country === 'Paraguay' ? '#000000' : readableNumberColour(kit.torso));
       const torsoClipId = `shirt-torso-${country.replace(/[^a-z0-9]/gi, '').toLowerCase()}-${number}-${Math.random().toString(36).slice(2)}`;
-      const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.length === 5
+      const torsoPatternId = `${torsoClipId}-pattern`;
+      const torsoFill = kit.torsoChecks ? `url(#${torsoPatternId})` : kit.torso;
+
+
+const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.length === 5
         ? `<clipPath id="${torsoClipId}"><path d="M5311 7970 c-49 -73 -225 -238 -322 -302 -349 -231 -790 -317 -1229
 -86 -356 63 -674 243 -884 500 -32 39 -62 71 -67 71 -5 0 -138 -91 -296 -203
 -159 -112 -391 -276 -518 -364 -126 -89 -256 -185 -288 -213 -111 -100 -202
@@ -2608,7 +2619,17 @@
           </g>`
         : '';
 
+
       return `<svg class="shirt" viewBox="0 0 826 872" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        ${kit.torsoChecks ? `
+        <defs>
+          <pattern id="${torsoPatternId}" patternUnits="userSpaceOnUse" x="1300" y="0" width="1000" height="1000">
+            <rect x="0" y="0" width="500" height="500" fill="#e73e47"/>
+            <rect x="500" y="0" width="500" height="500" fill="#ffffff"/>
+            <rect x="0" y="500" width="500" height="500" fill="#ffffff"/>
+            <rect x="500" y="500" width="500" height="500" fill="#e73e47"/>
+          </pattern>
+        </defs>` : ''}
         <g transform="translate(0,872) scale(0.1,-0.1)" stroke="none">
           <path d="M5547 8505 c-9 -46 -31 -125 -47 -175 -17 -51 -30 -97 -30 -103 0 -7
 30 -32 66 -57 36 -25 91 -63 122 -86 31 -22 248 -175 482 -340 437 -307 530
@@ -2633,7 +2654,7 @@
 171 -701 185 -846 7 -76 11 -830 13 -2264 l2 -2150 2307 -3 2307 -2 4 2187 c3
 1996 4 2198 20 2298 19 128 74 362 237 1020 59 240 72 309 77 400 12 233 -71
 446 -238 613 -35 34 -167 135 -294 224 -126 88 -252 178 -280 198 -27 21 -158
-113 -290 205 -132 92 -247 174 -256 181 -24 21 -31 17 -68 -36z" fill="${kit.torso}"/>
+113 -290 205 -132 92 -247 174 -256 181 -24 21 -31 17 -68 -36z" fill="${torsoFill}"/>
           ${torsoStripeOverlay}
           <path d="M91 5088 c-4 -13 -18 -65 -31 -117 -20 -83 -21 -95 -8 -102 9 -5 184
 -120 389 -257 206 -137 415 -275 464 -307 50 -32 95 -62 102 -67 14 -11 130
