@@ -1827,96 +1827,2509 @@
       ['Sat','June 27','19:00','Dallas 🇺🇸',33,'J',3,'🇯🇴','Jordan','Argentina','🇦🇷',64,3,61]
     ];
 
-    // Editable player values:
-    // [name, note, shirtNumber, club, xG per 90, xA per 90, xGC per 90]
-    //
-    // Edit xG, xA and xGC directly for every player below.
-    //
-    // Example:
-    // forward:['Kane','Elite forward + pens',9,'Bayern Munich','0.45','0.27','1.32']
-    //
-    // The 5th value = xG per 90
-    // The 6th value = xA per 90
-    // The 7th value = xGC per 90. Optionally add xG/xA/xGC properties if using object-style picks.
+    // Editable player values.
+    // Each player is written as an object so you can edit one field at a time.
+    // xG, xA and xGC are stored for every player, even when some are hidden in the UI:
+    // - FWD, MID and PENS display xG + xA only.
+    // - DEF displays xG + xA + xGC.
+    // - GK displays xGC only.
     const teams = [
-      { group:"J", country:"Argentina", flag:"🇦🇷", picks:{ forward:["Alvarez", "Elite attack", 9, "Atlético Madrid", "0.45", "0.27", "1.32"], midfielder:["Messi", "Elite attack + pens + set pieces", 10, "Inter Miami", "0.45", "0.27", "1.32"], defender:["Romero", "Starter + some attack threat", 13, "Tottenham Hotspur", "0.45", "0.27", "1.32"], goalkeeper:["Martinez", "Starter when fit", 23, "Aston Villa", "0.45", "0.27", "1.32"], penalty:["Messi", "Nailed pen taker", 10, "Inter Miami", "0.45", "0.27", "1.32"] } },
-      { group:"I", country:"Austria", flag:"🇦🇹", picks:{
-      forward:["Sabitzer", "Leader + long shots", 9, "Borussia Dortmund", "0.45", "0.27", "1.32"],
-      midfielder:["Baumgartner", "Goal threat from midfield", 19, "RB Leipzig", "0.45", "0.27", "1.32"],
-      defender:["Alaba", "Experienced defender + set pieces", 8, "Real Madrid", "0.45", "0.27", "1.32"],
-      goalkeeper:["Schlager", "Reliable keeper", 1, "RB Salzburg", "0.45", "0.27", "1.32"],
-      penalty:["Sabitzer", "Likely penalty taker", 9, "Borussia Dortmund", "0.45", "0.27", "1.32"]
-    } },
-      { group:"H", country:"Australia", flag:"🇦🇺", picks:{
-      forward:["Goodwin", "Set pieces + goals", 23, "Adelaide United", "0.45", "0.27", "1.32"],
-      midfielder:["McGree", "Creative midfielder", 14, "Middlesbrough", "0.45", "0.27", "1.32"],
-      defender:["Souttar", "Set piece threat", 19, "Leicester City", "0.45", "0.27", "1.32"],
-      goalkeeper:["Ryan", "Veteran keeper", 1, "AZ Alkmaar", "0.45", "0.27", "1.32"],
-      penalty:["Goodwin", "Likely penalty taker", 23, "Adelaide United", "0.45", "0.27", "1.32"]
-    } },
-      { group:"H", country:"Bosnia", flag:"🇧🇦", picks:{
-      forward:["Dzeko", "Veteran striker + penalties", 11, "Schalke 04", "0.45", "0.27", "1.32"],
-      midfielder:["Bajraktarevic", "Young creative midfielder", 20, "PSV Eindhoven", "0.45", "0.27", "1.32"],
-      defender:["Ahmedhodžić", "Strong aerial defender", 5, "Feyenoord", "0.45", "0.27", "1.32"],
-      goalkeeper:["Vasilj", "Reliable goalkeeper", 1, "FC St. Pauli", "0.45", "0.27", "1.32"],
-      penalty:["Dzeko", "Nailed penalty taker", 11, "Schalke 04", "0.45", "0.27", "1.32"]
-    } },
-      { group:"E", country:"Belgium", flag:"🇧🇪", picks:{
-      forward:["De Ketelaere", "Creative forward with goal threat", 17, "Atalanta", "0.45", "0.27", "1.32"],
-      midfielder:["De Bruyne", "Creative engine + set pieces", 7, "Napoli", "0.45", "0.27", "1.32"],
-      defender:["Meunier", "Experienced attacking full-back", 15, "Lille", "0.45", "0.27", "1.32"],
-      goalkeeper:["Courtois", "Elite goalkeeper", 1, "Real Madrid", "0.45", "0.27", "1.32"],
-      penalty:["De Bruyne", "Likely penalty taker", 7, "Napoli", "0.45", "0.27", "1.32"]
-    } },
-      { group:"G", country:"Brazil", flag:"🇧🇷", picks:{
-      forward:["Vinicius", "Elite winger + goals", 7, "Real Madrid", "0.45", "0.27", "1.32"],
-      midfielder:["Guimarães", "Box-to-box midfielder", 8, "Newcastle United", "0.45", "0.27", "1.32"],
-      defender:["Gabriel", "Dominant centre-back", 6, "Arsenal", "0.45", "0.27", "1.32"],
-      goalkeeper:["Alisson", "Elite goalkeeper", 1, "Liverpool", "0.45", "0.27", "1.32"],
-      penalty:["Vinicius", "Likely penalty taker", 7, "Real Madrid", "0.45", "0.27", "1.32"]
-    } },
-      { group:"B", country:"Canada", flag:"🇨🇦", picks:{ forward:["Jonathan David", "Talisman + pens", 10, "Juventus", "0.45", "0.27", "1.32"], midfielder:["Buchanan", "Most nailed midfielder", 17, "Villarreal", "0.45", "0.27", "1.32"], defender:["Sigur", "Budget defender + goal threat", 3, "Hajduk Split", "0.45", "0.27", "1.32"], goalkeeper:["St. Clair", "Budget keeper", 1, "Minnesota United", "0.45", "0.27", "1.32"], penalty:["Jonathan David", "Nailed pen taker", 10, "Juventus", "0.45", "0.27", "1.32"] } },
-      { group:"K", country:"DR Congo", flag:"🇨🇩", picks:{ forward:["Wissa", "Budget forward + pens", 20, "Newcastle United", "0.45", "0.27", "1.32"], midfielder:["Bongonda", "Budget midfielder", 10, "Spartak Moscow", "0.45", "0.27", "1.32"], defender:["Tuanzebe", "Budget defender", 6, "Burnley", "0.45", "0.27", "1.32"], goalkeeper:["Mpasi-Nzau", "Budget keeper", 1, "Le Havre", "0.45", "0.27", "1.32"], penalty:["Wissa", "No nailed on pens", 20, "Newcastle United", "0.45", "0.27", "1.32"] } },
-      { group:"B", country:"Switzerland", flag:"🇨🇭", picks:{ forward:["Ndoye", "Good attack threat", 19, "Nottingham Forest", "0.45", "0.27", "1.32"], midfielder:["Xhaka", "Talisman + pens", 10, "Sunderland", "0.45", "0.27", "1.32"], defender:["Akanji", "Budget defender", 5, "Inter Milan", "0.45", "0.27", "1.32"], goalkeeper:["Kobel", "Budget keeper", 1, "Borussia Dortmund", "0.45", "0.27", "1.32"], penalty:["Xhaka", "Nailed pen taker", 10, "Sunderland", "0.45", "0.27", "1.32"] } },
-      { group:"E", country:"Ivory Coast", flag:"🇨🇮", picks:{ forward:["Guessand", "Budget forward", 22, "Crystal Palace", "0.45", "0.27", "1.32"], midfielder:["Guessand", "Defcon midfileder", 22, "Crystal Palace", "0.45", "0.27", "1.32"], defender:["N'Dicka", "Budget defender", 21, "Roma", "0.45", "0.27", "1.32"], goalkeeper:["Fofana", "Budget keeper", 1, "Porto", "0.45", "0.27", "1.32"], penalty:["Kessie", "Typical penalty taker", 8, "Al-Ahli", "0.45", "0.27", "1.32"] } },
-      { group:"K", country:"Colombia", flag:"🇨🇴", picks:{ forward:["Luis Diaz", "Elite forward", 7, "Bayern Munich", "0.45", "0.27", "1.32"], midfielder:["Rodriguez", "Talisman + pens", 10, "Fulham", "0.45", "0.27", "1.32"], defender:["Munoz", "Attacking defender", 21, "Crystal Palace", "0.45", "0.27", "1.32"], goalkeeper:["Ospina", "Budget keeper", 1, "Atlético Nacional", "0.45", "0.27", "1.32"], penalty:["Rodriguez", "Historical pen taker", 10, "Fulham", "0.45", "0.27", "1.32"] } },
-      { group:"H", country:"Cape Verde", flag:"🇨🇻", picks:{ forward:["Livramento", "Budget forward", 9, "Casa Pia", "0.45", "0.27", "1.32"], midfielder:["Rodrigues", "Budget midfielder on pens", 10, "Apollon Limassol", "0.45", "0.27", "1.32"], defender:["Moreira", "Budget defender", 5, "Columbus Crew", "0.45", "0.27", "1.32"], goalkeeper:["Vozinha", "Budget keeper", 1, "Chaves", "0.45", "0.27", "1.32"], penalty:["Rodrigues", "Recent penalty keeper", 10, "Apollon Limassol", "0.45", "0.27", "1.32"] } },
-      { group:"E", country:"Curaçao", flag:"🇨🇼", picks:{ forward:["Locadia", "Budget forward", 9, "Miami FC", "0.45", "0.27", "1.32"], midfielder:["J Bacuna", "Budget midfielder", 10, "Gaziantep", "0.45", "0.27", "1.32"], defender:["van Eijma", "Budget defender", 4, "RKC Waalwijk", "0.45", "0.27", "1.32"], goalkeeper:["Room", "Budget keeper", 1, "Miami FC", "0.45", "0.27", "1.32"], penalty:["L Bacuna", "Regular", 7, "Iğdır FK", "0.45", "0.27", "1.32"] } },
-      { group:"A", country:"Czechia", flag:"🇨🇿", picks:{ forward:["Schick", "Proven forward + pens", 10, "Bayer Leverkusen", "0.45", "0.27", "1.32"], midfielder:["Soucek", "Budget midfielder with set piece threat", 22, "West Ham United", "0.45", "0.27", "1.32"], defender:["Krejcí", "Budget defender", 7, "Wolves", "0.45", "0.27", "1.32"], goalkeeper:["Kovar", "Budget keeper", 1, "PSV Eindhoven", "0.45", "0.27", "1.32"], penalty:["Schick", "Nailed pen taker", 10, "Bayer Leverkusen", "0.45", "0.27", "1.32"] } },
-      { group:"E", country:"Germany", flag:"🇩🇪", picks:{ forward:["Havertz", "Proven forward + pens", 7, "Arsenal", "0.45", "0.27", "1.32"], midfielder:["Wirtz", "Creative midfielder with goal threat", 17, "Liverpool", "0.45", "0.27", "1.32"], defender:["Tah", "DEF with set piece threat", 4, "Bayern Munich", "0.45", "0.27", "1.32"], goalkeeper:["Neuer", "Elite keeper", 1, "Bayern Munich", "0.45", "0.27", "1.32"], penalty:["Havertz", "Nailed pen taker", 7, "Arsenal", "0.45", "0.27", "1.32"] } },
-      { group:"J", country:"Algeria", flag:"🇩🇿", picks:{ forward:["Mahrez", "Proven forward + pens", 7, "Al-Ahli SFC", "0.45", "0.27", "1.32"], midfielder:["Maza", "Creative midfielder with goal threat", 8, "Bayer Leverkusen", "0.45", "0.27", "1.32"], defender:["Mandi", "Budget defender", 2, "LOSC Lille", "0.45", "0.27", "1.32"], goalkeeper:["Zidane", "Budget keeper in solid defense", 1, "Granada CF", "0.45", "0.27", "1.32"], penalty:["Mahrez", "Nailed pen taker", 7, "Al-Ahli SFC", "0.45", "0.27", "1.32"] } },
-      { group:"E", country:"Ecuador", flag:"🇪🇨", picks:{ forward:["Valencia", "Talisman + pens", 13, "Pachuca", "0.45", "0.27", "1.32"], midfielder:["Caicedo", "Defcon monster", 23, "Chelsea", "0.45", "0.27", "1.32"], defender:["Hincapie", "Proven defender in strong defence", 3, "Arsenal", "0.45", "0.27", "1.32"], goalkeeper:["Galíndez", "Budget keeper in solid defense", 1, "Huracán", "0.45", "0.27", "1.32"], penalty:["Valencia", "Nailed pen taker", 13, "Pachuca", "0.45", "0.27", "1.32"] } },
-      { group:"G", country:"Egypt", flag:"🇪🇬", picks:{ forward:["Marmoush", "Proven forward", 22, "Manchester City", "0.45", "0.27", "1.32"], midfielder:["Salah", "Talisman + pens", 10, "Liverpool", "0.45", "0.27", "1.32"], defender:["Fathy", "Budget defender", 14, "Al-Arabi", "0.45", "0.27", "1.32"], goalkeeper:["Shobeir", "Budget keeper", 1, "Al Ahly", "0.45", "0.27", "1.32"], penalty:["Salah", "Nailed pen taker", 10, "Liverpool", "0.45", "0.27", "1.32"] } },
-      { group:"H", country:"Spain", flag:"🇪🇸", picks:{ forward:["Oyarzabal", "Proven forward", 21, "Real Sociedad", "0.45", "0.27", "1.32"], midfielder:["Yamal", "Talisman + pens", 19, "Barcelona", "0.45", "0.27", "1.32"], defender:["Cucurella", "Elite defender with attack threat", 24, "Chelsea", "0.45", "0.27", "1.32"], goalkeeper:["Simon", "Keeper in elite team", 1, "Athletic Club", "0.45", "0.27", "1.32"], penalty:["Yamal", "Nailed pen taker", 19, "Barcelona", "0.45", "0.27", "1.32"] } },
-      { group:"I", country:"France", flag:"🇫🇷", picks:{ forward:["Mbappe", "Elite forward + pens", 10, "Real Madrid", "0.45", "0.27", "1.32"], midfielder:["Olise", "Elite midfielder", 11, "Bayern Munich", "0.45", "0.27", "1.32"], defender:["Upamecano", "Elite defender with attack threat", 4, "Bayern Munich", "0.45", "0.27", "1.32"], goalkeeper:["Maignan", "Keeper in elite team", 1, "AC Milan", "0.45", "0.27", "1.32"], penalty:["Mbappe", "Nailed pen taker", 10, "Real Madrid", "0.45", "0.27", "1.32"] } },
-      { group:"L", country:"Ghana", flag:"🇬🇭", picks:{ forward:["Ayew", "Budget forward + pens", 10, "Leicester City", "0.45", "0.27", "1.32"], midfielder:["Semenyo", "Goal scoring winger", 9, "Bournemouth", "0.45", "0.27", "1.32"], defender:["Djiku", "Budget defender with goal threat", 23, "Spartak Moscow", "0.45", "0.27", "1.32"], goalkeeper:["Asare", "Budget keeper", 1, "Hearts of Oak", "0.45", "0.27", "1.32"], penalty:["Ayew", "Captain on pens", 10, "Leicester City", "0.45", "0.27", "1.32"] } },
-      { group:"L", country:"Croatia", flag:"🇭🇷", picks:{ forward:["Vlasic", "Budget forward", 13, "Torino", "0.45", "0.27", "1.32"], midfielder:["Modric", "Talisman + pens", 10, "AC Milan", "0.45", "0.27", "1.32"], defender:["Vuskovic", "Budget defender with goal threat", 5, "Hamburger SV", "0.45", "0.27", "1.32"], goalkeeper:["Livakovic", "Budget keeper", 1, "Fenerbahçe", "0.45", "0.27", "1.32"], penalty:["Modric", "Captain on pens", 10, "AC Milan", "0.45", "0.27", "1.32"] } },
-      { group:"C", country:"Haiti", flag:"🇭🇹", picks:{ forward:["Nazon", "Talisman + pens", 9, "Esteghlal", "0.45", "0.27", "1.32"], midfielder:["Providence", "Budget midfielder", 7, "FC Dallas", "0.45", "0.27", "1.32"], defender:["Adé", "Budget defender", 4, "LDU Quito", "0.45", "0.27", "1.32"], goalkeeper:["Placide", "Budget keeper", 1, "SC Bastia", "0.45", "0.27", "1.32"], penalty:["Nazon", "Talisman + pens", 9, "Esteghlal", "0.45", "0.27", "1.32"] } },
-      { group:"I", country:"Iraq", flag:"🇮🇶", picks:{ forward:["Hussein", "Talisman + pens", 18, "Fulham", "0.45", "0.27", "1.32"], midfielder:["Bayesh", "Winger good for assists", 8, "Fulham", "0.45", "0.27", "1.32"], defender:["Sulaka", "Budget defender", 5, "Fulham", "0.45", "0.27", "1.32"], goalkeeper:["Hassan", "Budget keeper", 1, "Fulham", "0.45", "0.27", "1.32"], penalty:["Hussein", "Talisman + pens", 18, "Fulham", "0.45", "0.27", "1.32"] } },
-      { group:"G", country:"Iran", flag:"🇮🇷", picks:{ forward:["Taremi", "Talisman + pens", 9, "Olympiacos", "0.45", "0.27", "1.32"], midfielder:["Ghoddos", "Assist machine", 14, "Al Ittihad Kalba", "0.45", "0.27", "1.32"], defender:["Khalilzadeh", "Centre-back, strong aerial threat", 3, "Tractor SC", "0.45", "0.27", "1.32"], goalkeeper:["Beiranvand", "Budget keeper", 1, "Tractor SC", "0.45", "0.27", "1.32"], penalty:["Taremi", "Talisman + pens", 9, "Olympiacos", "0.45", "0.27", "1.32"] } },
-      { group:"J", country:"Jordan", flag:"🇯🇴", picks:{ forward:["Tamari", "Budget forward", 10, "Rennes", "0.45", "0.27", "1.32"], midfielder:["Faisal", "Pens", 13, "Al-Waab", "0.45", "0.27", "1.32"], defender:["Nasib", "Centre-back, strong aerial threat", 5, "Al-Zawraa", "0.45", "0.27", "1.32"], goalkeeper:["Abulaila", "Budget keeper", 1, "Al-Hussein SC", "0.45", "0.27", "1.32"], penalty:["Faisal", "Recent penalty taker", 13, "Al-Waab", "0.45", "0.27", "1.32"] } },
-      { group:"F", country:"Japan", flag:"🇯🇵", picks:{ forward:["Ueda", "FWD on pens", 9, "Feyenoord", "0.45", "0.27", "1.32"], midfielder:["Mitoma", "Attacking winger", 7, "Brighton", "0.45", "0.27", "1.32"], defender:["Ito", "Budget defender plays for Bayern", 21, "Bayern Munich", "0.45", "0.27", "1.32"], goalkeeper:["Suzuki", "Budget keeper", 1, "Parma", "0.45", "0.27", "1.32"], penalty:["Ueda", "FWD on pens", 9, "Feyenoord", "0.45", "0.27", "1.32"] } },
-      { group:"A", country:"South Korea", flag:"🇰🇷", picks:{ forward:["Kant-In Lee", "Starting forward", 18, "Paris Saint-Germain", "0.45", "0.27", "1.32"], midfielder:["Son", "Talisman + pens", 7, "Los Angeles FC", "0.45", "0.27", "1.32"], defender:["Min-Jae Kim", "Budget defender plays for Bayern", 4, "Bayern Munich", "0.45", "0.27", "1.32"], goalkeeper:["Sueng-Gyu Kim", "Budget keeper", 1, "FC Tokyo", "0.45", "0.27", "1.32"], penalty:["Son", "Talisman + pens", 7, "Los Angeles FC", "0.45", "0.27", "1.32"] } },
-      { group:"C", country:"Morocco", flag:"🇲🇦", picks:{ forward:["Ziyech", "On set pieces", 7, "Fulham", "0.45", "0.27", "1.32"], midfielder:["Brahim Diaz", "Creative midfielder with goal threat", 10, "Real Madrid", "0.45", "0.27", "1.32"], defender:["Hakimi", "Elite defender with attack threat", 2, "Paris Saint-Germain", "0.45", "0.27", "1.32"], goalkeeper:["Bounou", "Keeper in strong defence", 1, "Al-Hilal", "0.45", "0.27", "1.32"], penalty:["Diaz", "Took penalty in AFCON final", 10, "León", "0.45", "0.27", "1.32"] } },
-      { group:"A", country:"Mexico", flag:"🇲🇽", picks:{ forward:["Raul Jimenez", "Proven forward + pens", 9, "Fulham", "0.45", "0.27", "1.32"], midfielder:["Álvarez", "Most reliable to start", 4, "Fenerbahçe", "0.45", "0.27", "1.32"], defender:["Montes", "Budget defender", 3, "Lokomotiv Moscow", "0.45", "0.27", "1.32"], goalkeeper:["Rangel", "Budget keeper", 1, "Guadalajara", "0.45", "0.27", "1.32"], penalty:["Raul Jimenez", "Excellent penalty record", 9, "Fulham", "0.45", "0.27", "1.32"] } },
-      { group:"F", country:"Netherlands", flag:"🇳🇱", picks:{ forward:["Malen", "Proven forward", 18, "Aston Villa", "0.45", "0.27", "1.32"], midfielder:["Gakpo", "Proven at international level + pens", 11, "Liverpool", "0.45", "0.27", "1.32"], defender:["Dumfries", "Elite defender with attack threat", 22, "Inter Milan", "0.45", "0.27", "1.32"], goalkeeper:["Verbruggen", "Keeper in elite team", 1, "Fulham", "0.45", "0.27", "1.32"], penalty:["Gakpo", "Recent penalty taker", 11, "Liverpool", "0.45", "0.27", "1.32"] } },
-      { group:"I", country:"Norway", flag:"🇳🇴", picks:{ forward:["Haaland", "Elite forward + pens", 9, "Manchester City", "0.45", "0.27", "1.32"], midfielder:["Ødegaard", "On set pieces", 10, "Arsenal", "0.45", "0.27", "1.32"], defender:["Ryerson", "Full-back with assist threat", 14, "Borussia Dortmund", "0.45", "0.27", "1.32"], goalkeeper:["Nyland", "No.1 for Norway", 1, "Sevilla", "0.45", "0.27", "1.32"], penalty:["Haaland", "Nailed penalty taker", 9, "Manchester City", "0.45", "0.27", "1.32"] } },
-      { group:"G", country:"New Zealand", flag:"🇳🇿", picks:{ forward:["Wood", "Talisman + pens", 9, "Nottingham Forest", "0.45", "0.27", "1.32"], midfielder:["Just", "Winger with goal threat", 11, "Motherwell", "0.45", "0.27", "1.32"], defender:["Bindon", "Budget defender", 4, "Sheffield United", "0.45", "0.27", "1.32"], goalkeeper:["Crocombe", "No.1 for New Zealand", 1, "Millwall", "0.45", "0.27", "1.32"], penalty:["Wood", "Good penalty record at club and international level", 9, "Nottingham Forest", "0.45", "0.27", "1.32"] } },
-      { group:"L", country:"Panama", flag:"🇵🇦", picks:{ forward:["Diaz", "Strong recent form + pens", 10, "León", "0.45", "0.27", "1.32"], midfielder:["Carrasquilla", "Creative hub of the team", 8, "UNAM", "0.45", "0.27", "1.32"], defender:["Murillo", "Budget defender with assist threat", 2, "Beşiktaş", "0.45", "0.27", "1.32"], goalkeeper:["Mosquera", "Budget keeper", 1, "Al-Fayha", "0.45", "0.27", "1.32"], penalty:["Diaz", "Recent penalty taker", 10, "León", "0.45", "0.27", "1.32"] } },
-      { group:"K", country:"Portugal", flag:"🇵🇹", picks:{ forward:["Ronaldo", "Penalties", 7, "Al-Nassr", "0.45", "0.27", "1.32"], midfielder:["Bruno", "Elite assists and set pieces", 8, "Manchester United", "0.45", "0.27", "1.32"], defender:["Mendes", "Elite defender with attack threat", 19, "Paris Saint-Germain", "0.45", "0.27", "1.32"], goalkeeper:["Diogo Costa", "Keeper in elite team", 1, "Porto", "0.45", "0.27", "1.32"], penalty:["Ronaldo", "Historic penaltu taker", 7, "Al-Nassr", "0.45", "0.27", "1.32"] } },
-      { group:"D", country:"Paraguay", flag:"🇵🇾", picks:{ forward:["Enciso", "Creative star + pens", 19, "Strasbourg", "0.45", "0.27", "1.32"], midfielder:["Almirón", "Proven at international level", 10, "Atlanta United", "0.45", "0.27", "1.32"], defender:["Gómez", "Heart of defence", 6, "Palmeiras", "0.45", "0.27", "1.32"], goalkeeper:["Fernández", "Budget keeper", 1, "Cerro Porteño", "0.45", "0.27", "1.32"], penalty:["Diaz", "Nailed penalty taker", 10, "León", "0.45", "0.27", "1.32"] } },
-      { group:"B", country:"Qatar", flag:"🇶🇦", picks:{ forward:["Al Mannai", "Budget forward", 11, "Al-Shamal", "0.45", "0.27", "1.32"], midfielder:["Afif", "Main threat + pens", 10, "Al Sadd", "0.45", "0.27", "1.32"], defender:["Fathy", "Attacking defender", 14, "Al-Arabi", "0.45", "0.27", "1.32"], goalkeeper:["Abunada", "Budget keeper", 1, "Al-Rayyan", "0.45", "0.27", "1.32"], penalty:["Afif", "Nailed penalty taker", 10, "Al Sadd", "0.45", "0.27", "1.32"] } },
-      { group:"H", country:"Saudi Arabia", flag:"🇸🇦", picks:{ forward:["Al-Buraikan", "Budget forward", 9, "Al-Ahli", "0.45", "0.27", "1.32"], midfielder:["Al-Dawsari", "Set pieces + pens", 10, "Al-Hilal", "0.45", "0.27", "1.32"], defender:["Al Tambakti", "Budget defender", 4, "Al-Hilal", "0.45", "0.27", "1.32"], goalkeeper:["Alaqidi", "Budget keeper", 1, "Al-Nassr", "0.45", "0.27", "1.32"], penalty:["Al-Dawsari", "Nailed penalty taker", 10, "Al-Hilal", "0.45", "0.27", "1.32"] } },
-      { group:"F", country:"Sweden", flag:"🇸🇪", picks:{ forward:["Gyokeres", "Talisman + pens", 9, "Arsenal", "0.45", "0.27", "1.32"], midfielder:["Nygren", "Attacking winger", 11, "Celtic", "0.45", "0.27", "1.32"], defender:["Lindelöf", "Nailed defender", 3, "Aston Villa", "0.45", "0.27", "1.32"], goalkeeper:["Johansson", "Budget keeper", 1, "Stoke City", "0.45", "0.27", "1.32"], penalty:["Gyokeres", "Great penalty record", 9, "Arsenal", "0.45", "0.27", "1.32"] } },
-      { group:"I", country:"Senegal", flag:"🇸🇳", picks:{ forward:["Mane", "Talisman + pens", 10, "Al-Nassr", "0.45", "0.27", "1.32"], midfielder:["Ndiaye", "Creative midfielder with goal threat", 13, "Everton", "0.45", "0.27", "1.32"], defender:["Diouf", "Attacking defender", 12, "West Ham United", "0.45", "0.27", "1.32"], goalkeeper:["Mendy", "Nailed keeper", 1, "Al-Ahli", "0.45", "0.27", "1.32"], penalty:["Mane", "Nailed penalty taker", 10, "Al-Nassr", "0.45", "0.27", "1.32"] } },
-      { group:"F", country:"Tunisia", flag:"🇹🇳", picks:{ forward:["Abdi", "Budget FWD on pens", 9, "OGC Nice", "0.45", "0.27", "1.32"], midfielder:["Hannibal Mejbri", "Budget mid with assist threat", 10, "Burnley", "0.45", "0.27", "1.32"], defender:["Talbi", "Budget defender", 4, "Sunderland", "0.45", "0.27", "1.32"], goalkeeper:["Dahmen", "Budget keeper", 1, "Sfaxien", "0.45", "0.27", "1.32"], penalty:["Abdi", "Recent penalty taker", 9, "OGC Nice", "0.45", "0.27", "1.32"] } },
-      { group:"D", country:"Türkiye", flag:"🇹🇷", picks:{ forward:["Aktürkoglu", "Budget forward", 7, "Fenerbahçe", "0.45", "0.27", "1.32"], midfielder:["Guler", "Elite midfielder", 8, "Real Madrid", "0.45", "0.27", "1.32"], defender:["Kadioglu", "Attacking wing-back", 20, "Brighton", "0.45", "0.27", "1.32"], goalkeeper:["Çakir", "Budget keeper", 1, "Galatasaray", "0.45", "0.27", "1.32"], penalty:["Çalhanoglu", "Takes penalties when fit", 10, "Inter Milan", "0.45", "0.27", "1.32"] } },
-      { group:"D", country:"USA", flag:"🇺🇸", picks:{ forward:["Haji Wright", "Budget forward", 19, "Coventry City", "0.45", "0.27", "1.32"], midfielder:["McKennie", "Attacking winger", 8, "Juventus", "0.45", "0.27", "1.32"], defender:["Richards", "Nailed defender", 3, "Crystal Palace", "0.45", "0.27", "1.32"], goalkeeper:["Freese", "Budget keeper", 1, "New York City FC", "0.45", "0.27", "1.32"], penalty:["Pulisic", "On penalties when not injured", 10, "AC Milan", "0.45", "0.27", "1.32"] } },
-      { group:"H", country:"Uruguay", flag:"🇺🇾", picks:{ forward:["Darwin", "Mid market forward", 9, "Al-Hilal", "0.45", "0.27", "1.32"], midfielder:["Valverde", "Elite midfielder", 15, "Real Madrid", "0.45", "0.27", "1.32"], defender:["Araujo", "Barcelona defender", 4, "Barcelona", "0.45", "0.27", "1.32"], goalkeeper:["Rochet", "Budget keeper", 1, "Internacional", "0.45", "0.27", "1.32"], penalty:["Valverde", "Recent penalty taker", 15, "Real Madrid", "0.45", "0.27", "1.32"] } },
-      { group:"K", country:"Uzbekistan", flag:"🇺🇿", picks:{ forward:["Shomurodov", "Budget forward", 14, "İstanbul Başakşehir", "0.45", "0.27", "1.32"], midfielder:["Fayzullayev", "Budget midfielder", 22, "İstanbul Başakşehir", "0.45", "0.27", "1.32"], defender:["Khusanov", "Proven defender", 5, "Manchester City", "0.45", "0.27", "1.32"], goalkeeper:["Yusupov", "Budget keeper", 1, "Navbahor Namangan", "0.45", "0.27", "1.32"], penalty:["Shukurov", "Recent penalty taker", 7, "Baniyas", "0.45", "0.27", "1.32"] } },
-      { group:"A", country:"South Africa", flag:"🇿🇦", picks:{ forward:["Foster", "Burnley forward", 9, "Burnley", "0.45", "0.27", "1.32"], midfielder:["Appollis", "Winger with assist threat + pens", 10, "Orlando Pirates", "0.45", "0.27", "1.32"], defender:["Mbokazi", "Defcon defender", 4, "Orlando Pirates", "0.45", "0.27", "1.32"], goalkeeper:["Williams", "Budget keeper", 1, "Mamelodi Sundowns", "0.45", "0.27", "1.32"], penalty:["Appollis", "Took pens at AFCON", 10, "Orlando Pirates", "0.45", "0.27", "1.32"] } },
-      { group:"L", country:"England", flag:englandFlag, picks:{ forward:["Kane", "Elite forward + pens", 9, "Bayern Munich", "0.45", "0.27", "1.32"], midfielder:["Saka", "Elite winger with", 7, "Arsenal", "0.45", "0.27", "1.32"], defender:["Guehi", "Nailed defender in elite team", 6, "Manchester City", "0.45", "0.27", "1.32"], goalkeeper:["Pickford", "Keeper in elite team", 1, "Everton", "0.45", "0.27", "1.32"], penalty:["Kane", "Excellent penalty record", 9, "Bayern Munich", "0.45", "0.27", "1.32"] } },
-      { group:"C", country:"Scotland", flag:scotlandFlag, picks:{ forward:["Adams", "Budget forward", 10, "Torino", "0.45", "0.27", "1.32"], midfielder:["McTominay", "Elite winger + pens", 4, "Napoli", "0.45", "0.27", "1.32"], defender:["Robertson", "DEF with attack threat", 3, "Liverpool", "0.45", "0.27", "1.32"], goalkeeper:["Gunn", "Budget keeper", 1, "Nottingham Forest", "0.45", "0.27", "1.32"], penalty:["McTominay", "Recent penalty taker", 4, "Napoli", "0.45", "0.27", "1.32"] } }
+      {
+        group: "J",
+        country: "Argentina",
+        flag: "🇦🇷",
+        picks: {
+          forward: {
+            name: "Alvarez",
+            why: "Elite attack",
+            number: 9,
+            club: "Atlético Madrid",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Messi",
+            why: "Elite attack + pens + set pieces",
+            number: 10,
+            club: "Inter Miami",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Romero",
+            why: "Starter + some attack threat",
+            number: 13,
+            club: "Tottenham Hotspur",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Martinez",
+            why: "Starter when fit",
+            number: 23,
+            club: "Aston Villa",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Messi",
+            why: "Nailed pen taker",
+            number: 10,
+            club: "Inter Miami",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "I",
+        country: "Austria",
+        flag: "🇦🇹",
+        picks: {
+          forward: {
+            name: "Sabitzer",
+            why: "Leader + long shots",
+            number: 9,
+            club: "Borussia Dortmund",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Baumgartner",
+            why: "Goal threat from midfield",
+            number: 19,
+            club: "RB Leipzig",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Alaba",
+            why: "Experienced defender + set pieces",
+            number: 8,
+            club: "Real Madrid",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Schlager",
+            why: "Reliable keeper",
+            number: 1,
+            club: "RB Salzburg",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Sabitzer",
+            why: "Likely penalty taker",
+            number: 9,
+            club: "Borussia Dortmund",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "H",
+        country: "Australia",
+        flag: "🇦🇺",
+        picks: {
+          forward: {
+            name: "Goodwin",
+            why: "Set pieces + goals",
+            number: 23,
+            club: "Adelaide United",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "McGree",
+            why: "Creative midfielder",
+            number: 14,
+            club: "Middlesbrough",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Souttar",
+            why: "Set piece threat",
+            number: 19,
+            club: "Leicester City",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Ryan",
+            why: "Veteran keeper",
+            number: 1,
+            club: "AZ Alkmaar",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Goodwin",
+            why: "Likely penalty taker",
+            number: 23,
+            club: "Adelaide United",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "H",
+        country: "Bosnia",
+        flag: "🇧🇦",
+        picks: {
+          forward: {
+            name: "Dzeko",
+            why: "Veteran striker + penalties",
+            number: 11,
+            club: "Schalke 04",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Bajraktarevic",
+            why: "Young creative midfielder",
+            number: 20,
+            club: "PSV Eindhoven",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Ahmedhodžić",
+            why: "Strong aerial defender",
+            number: 5,
+            club: "Feyenoord",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Vasilj",
+            why: "Reliable goalkeeper",
+            number: 1,
+            club: "FC St. Pauli",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Dzeko",
+            why: "Nailed penalty taker",
+            number: 11,
+            club: "Schalke 04",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "E",
+        country: "Belgium",
+        flag: "🇧🇪",
+        picks: {
+          forward: {
+            name: "De Ketelaere",
+            why: "Creative forward with goal threat",
+            number: 17,
+            club: "Atalanta",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "De Bruyne",
+            why: "Creative engine + set pieces",
+            number: 7,
+            club: "Napoli",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Meunier",
+            why: "Experienced attacking full-back",
+            number: 15,
+            club: "Lille",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Courtois",
+            why: "Elite goalkeeper",
+            number: 1,
+            club: "Real Madrid",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "De Bruyne",
+            why: "Likely penalty taker",
+            number: 7,
+            club: "Napoli",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "G",
+        country: "Brazil",
+        flag: "🇧🇷",
+        picks: {
+          forward: {
+            name: "Vinicius",
+            why: "Elite winger + goals",
+            number: 7,
+            club: "Real Madrid",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Guimarães",
+            why: "Box-to-box midfielder",
+            number: 8,
+            club: "Newcastle United",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Gabriel",
+            why: "Dominant centre-back",
+            number: 6,
+            club: "Arsenal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Alisson",
+            why: "Elite goalkeeper",
+            number: 1,
+            club: "Liverpool",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Vinicius",
+            why: "Likely penalty taker",
+            number: 7,
+            club: "Real Madrid",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "B",
+        country: "Canada",
+        flag: "🇨🇦",
+        picks: {
+          forward: {
+            name: "Jonathan David",
+            why: "Talisman + pens",
+            number: 10,
+            club: "Juventus",
+            xG: "0.45",
+            xA: "0.09",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Buchanan",
+            why: "Most nailed midfielder",
+            number: 17,
+            club: "Villarreal",
+            xG: "0.10",
+            xA: "0.10",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Sigur",
+            why: "Budget defender + goal threat",
+            number: 3,
+            club: "Hajduk Split",
+            xG: "0.04",
+            xA: "0.08",
+            xGC: "0.77"
+          },
+          goalkeeper: {
+            name: "St. Clair",
+            why: "Budget keeper",
+            number: 1,
+            club: "Minnesota United",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "2.00"
+          },
+          penalty: {
+            name: "Jonathan David",
+            why: "Nailed pen taker",
+            number: 10,
+            club: "Juventus",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "K",
+        country: "DR Congo",
+        flag: "🇨🇩",
+        picks: {
+          forward: {
+            name: "Wissa",
+            why: "Budget forward + pens",
+            number: 20,
+            club: "Newcastle United",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Bongonda",
+            why: "Budget midfielder",
+            number: 10,
+            club: "Spartak Moscow",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Tuanzebe",
+            why: "Budget defender",
+            number: 6,
+            club: "Burnley",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Mpasi-Nzau",
+            why: "Budget keeper",
+            number: 1,
+            club: "Le Havre",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Wissa",
+            why: "No nailed on pens",
+            number: 20,
+            club: "Newcastle United",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "B",
+        country: "Switzerland",
+        flag: "🇨🇭",
+        picks: {
+          forward: {
+            name: "Ndoye",
+            why: "Good attack threat",
+            number: 19,
+            club: "Nottingham Forest",
+            xG: "0.08",
+            xA: "0.12",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Xhaka",
+            why: "Talisman + pens",
+            number: 10,
+            club: "Sunderland",
+            xG: "0.03",
+            xA: "0.11",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Akanji",
+            why: "Budget defender",
+            number: 5,
+            club: "Inter Milan",
+            xG: "0.07",
+            xA: "0.04",
+            xGC: "0.90"
+          },
+          goalkeeper: {
+            name: "Kobel",
+            why: "Budget keeper",
+            number: 1,
+            club: "Borussia Dortmund",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.03"
+          },
+          penalty: {
+            name: "Xhaka",
+            why: "Nailed pen taker",
+            number: 10,
+            club: "Sunderland",
+            xG: "0.03",
+            xA: "0.11",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "E",
+        country: "Ivory Coast",
+        flag: "🇨🇮",
+        picks: {
+          forward: {
+            name: "Guessand",
+            why: "Budget forward",
+            number: 22,
+            club: "Crystal Palace",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Guessand",
+            why: "Defcon midfileder",
+            number: 22,
+            club: "Crystal Palace",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "N'Dicka",
+            why: "Budget defender",
+            number: 21,
+            club: "Roma",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Fofana",
+            why: "Budget keeper",
+            number: 1,
+            club: "Porto",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Kessie",
+            why: "Typical penalty taker",
+            number: 8,
+            club: "Al-Ahli",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "K",
+        country: "Colombia",
+        flag: "🇨🇴",
+        picks: {
+          forward: {
+            name: "Luis Diaz",
+            why: "Elite forward",
+            number: 7,
+            club: "Bayern Munich",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Rodriguez",
+            why: "Talisman + pens",
+            number: 10,
+            club: "Fulham",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Munoz",
+            why: "Attacking defender",
+            number: 21,
+            club: "Crystal Palace",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Ospina",
+            why: "Budget keeper",
+            number: 1,
+            club: "Atlético Nacional",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Rodriguez",
+            why: "Historical pen taker",
+            number: 10,
+            club: "Fulham",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "H",
+        country: "Cape Verde",
+        flag: "🇨🇻",
+        picks: {
+          forward: {
+            name: "Livramento",
+            why: "Budget forward",
+            number: 9,
+            club: "Casa Pia",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Rodrigues",
+            why: "Budget midfielder on pens",
+            number: 10,
+            club: "Apollon Limassol",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Moreira",
+            why: "Budget defender",
+            number: 5,
+            club: "Columbus Crew",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Vozinha",
+            why: "Budget keeper",
+            number: 1,
+            club: "Chaves",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Rodrigues",
+            why: "Recent penalty keeper",
+            number: 10,
+            club: "Apollon Limassol",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "E",
+        country: "Curaçao",
+        flag: "🇨🇼",
+        picks: {
+          forward: {
+            name: "Locadia",
+            why: "Budget forward",
+            number: 9,
+            club: "Miami FC",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "J Bacuna",
+            why: "Budget midfielder",
+            number: 10,
+            club: "Gaziantep",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "van Eijma",
+            why: "Budget defender",
+            number: 4,
+            club: "RKC Waalwijk",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Room",
+            why: "Budget keeper",
+            number: 1,
+            club: "Miami FC",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "L Bacuna",
+            why: "Regular",
+            number: 7,
+            club: "Iğdır FK",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "A",
+        country: "Czechia",
+        flag: "🇨🇿",
+        picks: {
+          forward: {
+            name: "Schick",
+            why: "Proven forward + pens",
+            number: 10,
+            club: "Bayer Leverkusen",
+            xG: "0.76",
+            xA: "0.13",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Soucek",
+            why: "Budget midfielder with set piece threat",
+            number: 22,
+            club: "West Ham United",
+            xG: "0.21",
+            xA: "0.02",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Krejcí",
+            why: "Budget defender",
+            number: 7,
+            club: "Wolves",
+            xG: "0.09",
+            xA: "0.06",
+            xGC: "1.58"
+          },
+          goalkeeper: {
+            name: "Kovar",
+            why: "Budget keeper",
+            number: 1,
+            club: "PSV Eindhoven",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.33"
+          },
+          penalty: {
+            name: "Schick",
+            why: "Nailed pen taker",
+            number: 10,
+            club: "Bayer Leverkusen",
+            xG: "0.76",
+            xA: "0.13",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "E",
+        country: "Germany",
+        flag: "🇩🇪",
+        picks: {
+          forward: {
+            name: "Havertz",
+            why: "Proven forward + pens",
+            number: 7,
+            club: "Arsenal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Wirtz",
+            why: "Creative midfielder with goal threat",
+            number: 17,
+            club: "Liverpool",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Tah",
+            why: "DEF with set piece threat",
+            number: 4,
+            club: "Bayern Munich",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Neuer",
+            why: "Elite keeper",
+            number: 1,
+            club: "Bayern Munich",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Havertz",
+            why: "Nailed pen taker",
+            number: 7,
+            club: "Arsenal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "J",
+        country: "Algeria",
+        flag: "🇩🇿",
+        picks: {
+          forward: {
+            name: "Mahrez",
+            why: "Proven forward + pens",
+            number: 7,
+            club: "Al-Ahli SFC",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Maza",
+            why: "Creative midfielder with goal threat",
+            number: 8,
+            club: "Bayer Leverkusen",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Mandi",
+            why: "Budget defender",
+            number: 2,
+            club: "LOSC Lille",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Zidane",
+            why: "Budget keeper in solid defense",
+            number: 1,
+            club: "Granada CF",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Mahrez",
+            why: "Nailed pen taker",
+            number: 7,
+            club: "Al-Ahli SFC",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "E",
+        country: "Ecuador",
+        flag: "🇪🇨",
+        picks: {
+          forward: {
+            name: "Valencia",
+            why: "Talisman + pens",
+            number: 13,
+            club: "Pachuca",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Caicedo",
+            why: "Defcon monster",
+            number: 23,
+            club: "Chelsea",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Hincapie",
+            why: "Proven defender in strong defence",
+            number: 3,
+            club: "Arsenal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Galíndez",
+            why: "Budget keeper in solid defense",
+            number: 1,
+            club: "Huracán",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Valencia",
+            why: "Nailed pen taker",
+            number: 13,
+            club: "Pachuca",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "G",
+        country: "Egypt",
+        flag: "🇪🇬",
+        picks: {
+          forward: {
+            name: "Marmoush",
+            why: "Proven forward",
+            number: 22,
+            club: "Manchester City",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Salah",
+            why: "Talisman + pens",
+            number: 10,
+            club: "Liverpool",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Fathy",
+            why: "Budget defender",
+            number: 14,
+            club: "Al-Arabi",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Shobeir",
+            why: "Budget keeper",
+            number: 1,
+            club: "Al Ahly",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Salah",
+            why: "Nailed pen taker",
+            number: 10,
+            club: "Liverpool",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "H",
+        country: "Spain",
+        flag: "🇪🇸",
+        picks: {
+          forward: {
+            name: "Oyarzabal",
+            why: "Proven forward",
+            number: 21,
+            club: "Real Sociedad",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Yamal",
+            why: "Talisman + pens",
+            number: 19,
+            club: "Barcelona",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Cucurella",
+            why: "Elite defender with attack threat",
+            number: 24,
+            club: "Chelsea",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Simon",
+            why: "Keeper in elite team",
+            number: 1,
+            club: "Athletic Club",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Yamal",
+            why: "Nailed pen taker",
+            number: 19,
+            club: "Barcelona",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "I",
+        country: "France",
+        flag: "🇫🇷",
+        picks: {
+          forward: {
+            name: "Mbappe",
+            why: "Elite forward + pens",
+            number: 10,
+            club: "Real Madrid",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Olise",
+            why: "Elite midfielder",
+            number: 11,
+            club: "Bayern Munich",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Upamecano",
+            why: "Elite defender with attack threat",
+            number: 4,
+            club: "Bayern Munich",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Maignan",
+            why: "Keeper in elite team",
+            number: 1,
+            club: "AC Milan",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Mbappe",
+            why: "Nailed pen taker",
+            number: 10,
+            club: "Real Madrid",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "L",
+        country: "Ghana",
+        flag: "🇬🇭",
+        picks: {
+          forward: {
+            name: "Ayew",
+            why: "Budget forward + pens",
+            number: 10,
+            club: "Leicester City",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Semenyo",
+            why: "Goal scoring winger",
+            number: 9,
+            club: "Bournemouth",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Djiku",
+            why: "Budget defender with goal threat",
+            number: 23,
+            club: "Spartak Moscow",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Asare",
+            why: "Budget keeper",
+            number: 1,
+            club: "Hearts of Oak",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Ayew",
+            why: "Captain on pens",
+            number: 10,
+            club: "Leicester City",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "L",
+        country: "Croatia",
+        flag: "🇭🇷",
+        picks: {
+          forward: {
+            name: "Vlasic",
+            why: "Budget forward",
+            number: 13,
+            club: "Torino",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Modric",
+            why: "Talisman + pens",
+            number: 10,
+            club: "AC Milan",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Vuskovic",
+            why: "Budget defender with goal threat",
+            number: 5,
+            club: "Hamburger SV",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Livakovic",
+            why: "Budget keeper",
+            number: 1,
+            club: "Fenerbahçe",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Modric",
+            why: "Captain on pens",
+            number: 10,
+            club: "AC Milan",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "C",
+        country: "Haiti",
+        flag: "🇭🇹",
+        picks: {
+          forward: {
+            name: "Nazon",
+            why: "Talisman + pens",
+            number: 9,
+            club: "Esteghlal",
+            xG: "0.19",
+            xA: "0.19",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Providence",
+            why: "Budget midfielder",
+            number: 7,
+            club: "FC Dallas",
+            xG: "0.18",
+            xA: "0.20",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Adé",
+            why: "Budget defender",
+            number: 4,
+            club: "LDU Quito",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.03"
+          },
+          goalkeeper: {
+            name: "Placide",
+            why: "Budget keeper",
+            number: 1,
+            club: "SC Bastia",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.04"
+          },
+          penalty: {
+            name: "Nazon",
+            why: "Talisman + pens",
+            number: 9,
+            club: "Esteghlal",
+            xG: "0.18",
+            xA: "0.20",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "I",
+        country: "Iraq",
+        flag: "🇮🇶",
+        picks: {
+          forward: {
+            name: "Hussein",
+            why: "Talisman + pens",
+            number: 18,
+            club: "Fulham",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Bayesh",
+            why: "Winger good for assists",
+            number: 8,
+            club: "Fulham",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Sulaka",
+            why: "Budget defender",
+            number: 5,
+            club: "Fulham",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Hassan",
+            why: "Budget keeper",
+            number: 1,
+            club: "Fulham",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Hussein",
+            why: "Talisman + pens",
+            number: 18,
+            club: "Fulham",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "G",
+        country: "Iran",
+        flag: "🇮🇷",
+        picks: {
+          forward: {
+            name: "Taremi",
+            why: "Talisman + pens",
+            number: 9,
+            club: "Olympiacos",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Ghoddos",
+            why: "Assist machine",
+            number: 14,
+            club: "Al Ittihad Kalba",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Khalilzadeh",
+            why: "Centre-back, strong aerial threat",
+            number: 3,
+            club: "Tractor SC",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Beiranvand",
+            why: "Budget keeper",
+            number: 1,
+            club: "Tractor SC",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Taremi",
+            why: "Talisman + pens",
+            number: 9,
+            club: "Olympiacos",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "J",
+        country: "Jordan",
+        flag: "🇯🇴",
+        picks: {
+          forward: {
+            name: "Tamari",
+            why: "Budget forward",
+            number: 10,
+            club: "Rennes",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Faisal",
+            why: "Pens",
+            number: 13,
+            club: "Al-Waab",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Nasib",
+            why: "Centre-back, strong aerial threat",
+            number: 5,
+            club: "Al-Zawraa",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Abulaila",
+            why: "Budget keeper",
+            number: 1,
+            club: "Al-Hussein SC",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Faisal",
+            why: "Recent penalty taker",
+            number: 13,
+            club: "Al-Waab",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "F",
+        country: "Japan",
+        flag: "🇯🇵",
+        picks: {
+          forward: {
+            name: "Ueda",
+            why: "FWD on pens",
+            number: 9,
+            club: "Feyenoord",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Mitoma",
+            why: "Attacking winger",
+            number: 7,
+            club: "Brighton",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Ito",
+            why: "Budget defender plays for Bayern",
+            number: 21,
+            club: "Bayern Munich",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Suzuki",
+            why: "Budget keeper",
+            number: 1,
+            club: "Parma",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Ueda",
+            why: "FWD on pens",
+            number: 9,
+            club: "Feyenoord",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "A",
+        country: "South Korea",
+        flag: "🇰🇷",
+        picks: {
+          forward: {
+            name: "Kant-In Lee",
+            why: "Starting forward",
+            number: 18,
+            club: "Paris Saint-Germain",
+            xG: "0.16",
+            xA: "0.33",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Son",
+            why: "Talisman + pens",
+            number: 7,
+            club: "Los Angeles FC",
+            xG: "0.24",
+            xA: "0.28",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Min-Jae Kim",
+            why: "Budget defender",
+            number: 4,
+            club: "Bayern Munich",
+            xG: "0.08",
+            xA: "0.08",
+            xGC: "1.35"
+          },
+          goalkeeper: {
+            name: "Sueng-Gyu Kim",
+            why: "Budget keeper",
+            number: 1,
+            club: "FC Tokyo",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "0.94"
+          },
+          penalty: {
+            name: "Son",
+            why: "Talisman + pens",
+            number: 7,
+            club: "Los Angeles FC",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "C",
+        country: "Morocco",
+        flag: "🇲🇦",
+        picks: {
+          forward: {
+            name: "Ziyech",
+            why: "On set pieces",
+            number: 7,
+            club: "Wydad AC",
+            xG: "0.42",
+            xA: "0.21",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Brahim Diaz",
+            why: "Creative midfielder with goal threat",
+            number: 10,
+            club: "Real Madrid",
+            xG: "0.09",
+            xA: "0.18",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Hakimi",
+            why: "Elite defender with attack threat",
+            number: 2,
+            club: "Paris Saint-Germain",
+            xG: "0.16",
+            xA: "0.15",
+            xGC: "0.92"
+          },
+          goalkeeper: {
+            name: "Bounou",
+            why: "Keeper in strong defence",
+            number: 1,
+            club: "Al-Hilal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "0.83"
+          },
+          penalty: {
+            name: "Brahim Diaz",
+            why: "Took penalty in AFCON final",
+            number: 10,
+            club: "Real Madrid",
+            xG: "0.09",
+            xA: "0.18",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "A",
+        country: "Mexico",
+        flag: "🇲🇽",
+        picks: {
+          forward: {
+            name: "Raul Jimenez",
+            why: "Proven forward + pens",
+            number: 9,
+            club: "Fulham",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Álvarez",
+            why: "Most reliable to start",
+            number: 4,
+            club: "Fenerbahçe",
+            xG: "0.08",
+            xA: "0.04",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Montes",
+            why: "Budget defender",
+            number: 3,
+            club: "Lokomotiv Moscow",
+            xG: "0.16",
+            xA: "0.08",
+            xGC: "1.43"
+          },
+          goalkeeper: {
+            name: "Rangel",
+            why: "Budget keeper",
+            number: 1,
+            club: "Guadalajara",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Raul Jimenez",
+            why: "Excellent penalty record",
+            number: 9,
+            club: "Fulham",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "F",
+        country: "Netherlands",
+        flag: "🇳🇱",
+        picks: {
+          forward: {
+            name: "Malen",
+            why: "Proven forward",
+            number: 18,
+            club: "Aston Villa",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Gakpo",
+            why: "Proven at international level + pens",
+            number: 11,
+            club: "Liverpool",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Dumfries",
+            why: "Elite defender with attack threat",
+            number: 22,
+            club: "Inter Milan",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Verbruggen",
+            why: "Keeper in elite team",
+            number: 1,
+            club: "Fulham",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Gakpo",
+            why: "Recent penalty taker",
+            number: 11,
+            club: "Liverpool",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "I",
+        country: "Norway",
+        flag: "🇳🇴",
+        picks: {
+          forward: {
+            name: "Haaland",
+            why: "Elite forward + pens",
+            number: 9,
+            club: "Manchester City",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Ødegaard",
+            why: "On set pieces",
+            number: 10,
+            club: "Arsenal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Ryerson",
+            why: "Full-back with assist threat",
+            number: 14,
+            club: "Borussia Dortmund",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Nyland",
+            why: "No.1 for Norway",
+            number: 1,
+            club: "Sevilla",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Haaland",
+            why: "Nailed penalty taker",
+            number: 9,
+            club: "Manchester City",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "G",
+        country: "New Zealand",
+        flag: "🇳🇿",
+        picks: {
+          forward: {
+            name: "Wood",
+            why: "Talisman + pens",
+            number: 9,
+            club: "Nottingham Forest",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Just",
+            why: "Winger with goal threat",
+            number: 11,
+            club: "Motherwell",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Bindon",
+            why: "Budget defender",
+            number: 4,
+            club: "Sheffield United",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Crocombe",
+            why: "No.1 for New Zealand",
+            number: 1,
+            club: "Millwall",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Wood",
+            why: "Good penalty record at club and international level",
+            number: 9,
+            club: "Nottingham Forest",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "L",
+        country: "Panama",
+        flag: "🇵🇦",
+        picks: {
+          forward: {
+            name: "Diaz",
+            why: "Strong recent form + pens",
+            number: 10,
+            club: "León",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Carrasquilla",
+            why: "Creative hub of the team",
+            number: 8,
+            club: "UNAM",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Murillo",
+            why: "Budget defender with assist threat",
+            number: 2,
+            club: "Beşiktaş",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Mosquera",
+            why: "Budget keeper",
+            number: 1,
+            club: "Al-Fayha",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Diaz",
+            why: "Recent penalty taker",
+            number: 10,
+            club: "León",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "K",
+        country: "Portugal",
+        flag: "🇵🇹",
+        picks: {
+          forward: {
+            name: "Ronaldo",
+            why: "Penalties",
+            number: 7,
+            club: "Al-Nassr",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Bruno",
+            why: "Elite assists and set pieces",
+            number: 8,
+            club: "Manchester United",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Mendes",
+            why: "Elite defender with attack threat",
+            number: 19,
+            club: "Paris Saint-Germain",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Diogo Costa",
+            why: "Keeper in elite team",
+            number: 1,
+            club: "Porto",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Ronaldo",
+            why: "Historic penaltu taker",
+            number: 7,
+            club: "Al-Nassr",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "D",
+        country: "Paraguay",
+        flag: "🇵🇾",
+        picks: {
+          forward: {
+            name: "Enciso",
+            why: "Creative star + pens",
+            number: 19,
+            club: "Strasbourg",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Almirón",
+            why: "Proven at international level",
+            number: 10,
+            club: "Atlanta United",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Gómez",
+            why: "Heart of defence",
+            number: 6,
+            club: "Palmeiras",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Fernández",
+            why: "Budget keeper",
+            number: 1,
+            club: "Cerro Porteño",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Diaz",
+            why: "Nailed penalty taker",
+            number: 10,
+            club: "León",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "B",
+        country: "Qatar",
+        flag: "🇶🇦",
+        picks: {
+          forward: {
+            name: "Al Mannai",
+            why: "Budget forward",
+            number: 11,
+            club: "Al-Shamal",
+            xG: "0.32",
+            xA: "0.10",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Afif",
+            why: "Main threat + pens",
+            number: 10,
+            club: "Al Sadd",
+            xG: "0.65",
+            xA: "0.55",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Fathy",
+            why: "Attacking defender",
+            number: 14,
+            club: "Al-Arabi",
+            xG: "0.02",
+            xA: "0.17",
+            xGC: "1.71"
+          },
+          goalkeeper: {
+            name: "Abunada",
+            why: "Budget keeper",
+            number: 1,
+            club: "Al-Rayyan",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Afif",
+            why: "Nailed penalty taker",
+            number: 10,
+            club: "Al Sadd",
+            xG: "0.65",
+            xA: "0.55",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "H",
+        country: "Saudi Arabia",
+        flag: "🇸🇦",
+        picks: {
+          forward: {
+            name: "Al-Buraikan",
+            why: "Budget forward",
+            number: 9,
+            club: "Al-Ahli",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Al-Dawsari",
+            why: "Set pieces + pens",
+            number: 10,
+            club: "Al-Hilal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Al Tambakti",
+            why: "Budget defender",
+            number: 4,
+            club: "Al-Hilal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Alaqidi",
+            why: "Budget keeper",
+            number: 1,
+            club: "Al-Nassr",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Al-Dawsari",
+            why: "Nailed penalty taker",
+            number: 10,
+            club: "Al-Hilal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "F",
+        country: "Sweden",
+        flag: "🇸🇪",
+        picks: {
+          forward: {
+            name: "Gyokeres",
+            why: "Talisman + pens",
+            number: 9,
+            club: "Arsenal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Nygren",
+            why: "Attacking winger",
+            number: 11,
+            club: "Celtic",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Lindelöf",
+            why: "Nailed defender",
+            number: 3,
+            club: "Aston Villa",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Johansson",
+            why: "Budget keeper",
+            number: 1,
+            club: "Stoke City",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Gyokeres",
+            why: "Great penalty record",
+            number: 9,
+            club: "Arsenal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "I",
+        country: "Senegal",
+        flag: "🇸🇳",
+        picks: {
+          forward: {
+            name: "Mane",
+            why: "Talisman + pens",
+            number: 10,
+            club: "Al-Nassr",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Ndiaye",
+            why: "Creative midfielder with goal threat",
+            number: 13,
+            club: "Everton",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Diouf",
+            why: "Attacking defender",
+            number: 12,
+            club: "West Ham United",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Mendy",
+            why: "Nailed keeper",
+            number: 1,
+            club: "Al-Ahli",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Mane",
+            why: "Nailed penalty taker",
+            number: 10,
+            club: "Al-Nassr",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "F",
+        country: "Tunisia",
+        flag: "🇹🇳",
+        picks: {
+          forward: {
+            name: "Abdi",
+            why: "Budget FWD on pens",
+            number: 9,
+            club: "OGC Nice",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Hannibal Mejbri",
+            why: "Budget mid with assist threat",
+            number: 10,
+            club: "Burnley",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Talbi",
+            why: "Budget defender",
+            number: 4,
+            club: "Sunderland",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Dahmen",
+            why: "Budget keeper",
+            number: 1,
+            club: "Sfaxien",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Abdi",
+            why: "Recent penalty taker",
+            number: 9,
+            club: "OGC Nice",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "D",
+        country: "Türkiye",
+        flag: "🇹🇷",
+        picks: {
+          forward: {
+            name: "Aktürkoglu",
+            why: "Budget forward",
+            number: 7,
+            club: "Fenerbahçe",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Guler",
+            why: "Elite midfielder",
+            number: 8,
+            club: "Real Madrid",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Kadioglu",
+            why: "Attacking wing-back",
+            number: 20,
+            club: "Brighton",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Çakir",
+            why: "Budget keeper",
+            number: 1,
+            club: "Galatasaray",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Çalhanoglu",
+            why: "Takes penalties when fit",
+            number: 10,
+            club: "Inter Milan",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "D",
+        country: "USA",
+        flag: "🇺🇸",
+        picks: {
+          forward: {
+            name: "Haji Wright",
+            why: "Budget forward",
+            number: 19,
+            club: "Coventry City",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "McKennie",
+            why: "Attacking winger",
+            number: 8,
+            club: "Juventus",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Richards",
+            why: "Nailed defender",
+            number: 3,
+            club: "Crystal Palace",
+            xG: "0.08",
+            xA: "0.04",
+            xGC: "1.27"
+          },
+          goalkeeper: {
+            name: "Freese",
+            why: "Budget keeper",
+            number: 1,
+            club: "New York City FC",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.38"
+          },
+          penalty: {
+            name: "Pulisic",
+            why: "On penalties when not injured",
+            number: 10,
+            club: "AC Milan",
+            xG: "0.44",
+            xA: "0.24",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "H",
+        country: "Uruguay",
+        flag: "🇺🇾",
+        picks: {
+          forward: {
+            name: "Darwin",
+            why: "Mid market forward",
+            number: 9,
+            club: "Al-Hilal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Valverde",
+            why: "Elite midfielder",
+            number: 15,
+            club: "Real Madrid",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Araujo",
+            why: "Barcelona defender",
+            number: 4,
+            club: "Barcelona",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Rochet",
+            why: "Budget keeper",
+            number: 1,
+            club: "Internacional",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Valverde",
+            why: "Recent penalty taker",
+            number: 15,
+            club: "Real Madrid",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "K",
+        country: "Uzbekistan",
+        flag: "🇺🇿",
+        picks: {
+          forward: {
+            name: "Shomurodov",
+            why: "Budget forward",
+            number: 14,
+            club: "İstanbul Başakşehir",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Fayzullayev",
+            why: "Budget midfielder",
+            number: 22,
+            club: "İstanbul Başakşehir",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Khusanov",
+            why: "Proven defender",
+            number: 5,
+            club: "Manchester City",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Yusupov",
+            why: "Budget keeper",
+            number: 1,
+            club: "Navbahor Namangan",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Shukurov",
+            why: "Recent penalty taker",
+            number: 7,
+            club: "Baniyas",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "A",
+        country: "South Africa",
+        flag: "🇿🇦",
+        picks: {
+          forward: {
+            name: "Foster",
+            why: "Burnley forward",
+            number: 9,
+            club: "Burnley",
+            xG: "0.21",
+            xA: "0.03",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Appollis",
+            why: "Winger with assist threat + pens",
+            number: 10,
+            club: "Orlando Pirates",
+            xG: "0.36",
+            xA: "0.22",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Mbokazi",
+            why: "Defcon defender",
+            number: 4,
+            club: "Orlando Pirates",
+            xG: "0.09",
+            xA: "0.01",
+            xGC: "1.41"
+          },
+          goalkeeper: {
+            name: "Williams",
+            why: "Budget keeper",
+            number: 1,
+            club: "Mamelodi Sundowns",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "0.72"
+          },
+          penalty: {
+            name: "Appollis",
+            why: "Took pens at AFCON",
+            number: 10,
+            club: "Orlando Pirates",
+            xG: "0.36",
+            xA: "0.22",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "L",
+        country: "England",
+        flag: englandFlag,
+        picks: {
+          forward: {
+            name: "Kane",
+            why: "Elite forward + pens",
+            number: 9,
+            club: "Bayern Munich",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "Saka",
+            why: "Elite winger with",
+            number: 7,
+            club: "Arsenal",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Guehi",
+            why: "Nailed defender in elite team",
+            number: 6,
+            club: "Manchester City",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          goalkeeper: {
+            name: "Pickford",
+            why: "Keeper in elite team",
+            number: 1,
+            club: "Everton",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          },
+          penalty: {
+            name: "Kane",
+            why: "Excellent penalty record",
+            number: 9,
+            club: "Bayern Munich",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "1.32"
+          }
+        }
+      },
+      {
+        group: "C",
+        country: "Scotland",
+        flag: scotlandFlag,
+        picks: {
+          forward: {
+            name: "Adams",
+            why: "Budget forward",
+            number: 10,
+            club: "Torino",
+            xG: "0.26",
+            xA: "0.10",
+            xGC: "1.32"
+          },
+          midfielder: {
+            name: "McTominay",
+            why: "Elite winger + pens",
+            number: 4,
+            club: "Napoli",
+            xG: "0.35",
+            xA: "0.05",
+            xGC: "1.32"
+          },
+          defender: {
+            name: "Robertson",
+            why: "DEF with attack threat",
+            number: 3,
+            club: "Liverpool",
+            xG: "0.09",
+            xA: "0.09",
+            xGC: "1.34"
+          },
+          goalkeeper: {
+            name: "Gunn",
+            why: "Budget keeper",
+            number: 1,
+            club: "Nottingham Forest",
+            xG: "0.45",
+            xA: "0.27",
+            xGC: "Not enough minutes"
+          },
+          penalty: {
+            name: "McTominay",
+            why: "Recent penalty taker",
+            number: 4,
+            club: "Napoli",
+            xG: "0.35",
+            xA: "0.05",
+            xGC: "1.32"
+          }
+        }
+      }
     ];
 
     const fifaRanks = {
