@@ -510,8 +510,7 @@
   th,
   .team-header,
   .country-header {
-    background:
-      linear-gradient(90deg, rgba(0,168,232,0.10), rgba(255,255,255,0.72), rgba(215,45,63,0.08)) !important;
+    background: rgba(255,255,255,0.72) !important;
     border-color: rgba(0,168,232,0.18) !important;
   }
 
@@ -605,17 +604,91 @@
       <select id="matchdayFilter"><option value="">All matchdays</option><option value="1">Matchday 1</option><option value="2">Matchday 2</option><option value="3">Matchday 3</option></select>
       <select id="groupFilter"><option value="">All groups</option></select>
       <select id="sortSelect"><option value="schedule">Schedule</option><option value="gap-desc">Rank gap</option></select>
-      <select id="fixtureViewSelect"><option value="all">All fixtures</option><option value="group">Group fixtures</option><option value="knockout">Knockout fixtures</option></select>
+      <select id="fixtureViewSelect"><option value="all">All fixtures</option><option value="group">Group fixtures</option><option value="knockout">Knockout fixtures</option><option value="not-started">Not started</option></select>
     </section>
 
     <section class="table-card" id="groupFixtures">
       <div class="table-topbar"><div class="table-title">Fixtures</div><div class="count"><span id="visibleCount">0</span> showing</div></div>
-      <div class="table-wrap"><table><thead><tr><th>Fixture</th><th>Date</th><th>Time</th><th>FIFA Ranks</th><th>Gap</th><th>Group</th><th>MD</th><th>City</th><th>Temp</th></tr></thead><tbody id="fixtureBody"></tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th>Fixture</th><th>Date</th><th>Time</th><th>Final Score</th><th>FIFA Ranks</th><th>Gap</th><th>Group</th><th>MD</th><th>City</th><th>Temp</th></tr></thead><tbody id="fixtureBody"></tbody></table></div>
       <div class="no-results" id="noResults">No fixtures match those filters.</div>
     </section>
   </main>
 
   <footer>Built for fantasy planning: ranking gaps highlight potential captaincy and clean-sheet angles.</footer>
+
+  <style>
+    .score-cell { font-weight: 900; font-size: 1rem; white-space: nowrap; }
+    .score-result { color: var(--accent); letter-spacing: .04em; }
+    .score-live {
+      color: #ff5f5f;
+      animation: pulse 1.4s ease-in-out infinite;
+      font-weight: 900;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+    .score-tbd { color: var(--muted); font-weight: 500; }
+  </style>
+
+  <script>
+    // ─── Google Sheets scores config ──────────────────────────────────────────
+    const SCORES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT25bsZnXsAi2yDvkYUZqDHUv_X16VVOak0jRgw5eJah3kG0Qnc1QryFlCunJA6Z6ObEer5Tj1XRohN/pub?output=csv';
+
+    function normName(n) {
+      const map = {
+        'türkiye': 'turkey', 'turkiye': 'turkey',
+        'czechia': 'czech republic',
+        "côte d'ivoire": 'ivory coast', "cote d'ivoire": 'ivory coast',
+        'ivory coast': 'ivory coast',
+      };
+      const s = (n || '').toLowerCase().trim();
+      return map[s] || s;
+    }
+
+    window._scoreMap = {};
+    window._scoresLoaded = false;
+
+    async function loadScores() {
+      try {
+        const res = await fetch(SCORES_CSV_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = await res.text();
+        const lines = text.trim().split('\n').slice(1); // skip header row
+        lines.forEach(line => {
+          const cols = line.split(',');
+          if (cols.length < 3) return;
+          const team1 = cols[0].trim().replace(/^"|"$/g, '');
+          const team2 = cols[1].trim().replace(/^"|"$/g, '');
+          const score = cols[2].trim().replace(/^"|"$/g, '');
+          if (!score || !score.includes('-')) return;
+          const [s1, s2] = score.split('-').map(s => parseInt(s.trim(), 10));
+          if (isNaN(s1) || isNaN(s2)) return;
+          const a = normName(team1);
+          const b = normName(team2);
+          const key = [a, b].sort().join('|');
+          window._scoreMap[key] = { s1, s2, teamA: a, teamB: b };
+        });
+        window._scoresLoaded = true;
+        if (typeof renderGroupFixtures === 'function') renderGroupFixtures();
+      } catch(e) { console.warn('Score fetch failed:', e); }
+    }
+
+    // Refresh once per hour
+    loadScores();
+    setInterval(loadScores, 60 * 60 * 1000);
+
+    function getScoreHtml(team1, team2) {
+      if (!window._scoresLoaded) return '<span class="score-tbd">—</span>';
+      const a   = normName(team1);
+      const b   = normName(team2);
+      const key = [a, b].sort().join('|');
+      const e   = window._scoreMap[key];
+      if (!e) return '<span class="score-tbd">—</span>';
+      const s1  = a === e.teamA ? e.s1 : e.s2;
+      const s2  = a === e.teamA ? e.s2 : e.s1;
+      return `<span class="score-result">${s1}–${s2}</span>`;
+    }
+
+    loadScores();
+  </script>
 
   <script>
     const englandFlag = '<img class="flag-img" alt="England flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg">';
@@ -750,11 +823,12 @@
 
       let rows = [];
 
-      if (fixtureView === 'all' || fixtureView === 'group') {
+      if (fixtureView === 'all' || fixtureView === 'group' || fixtureView === 'not-started') {
         let groupRows = fixtures.filter(f =>
           (!group || f.group === group) &&
           (!matchday || String(f.matchday) === matchday) &&
-          (!query || f.team1.toLowerCase().includes(query) || f.team2.toLowerCase().includes(query))
+          (!query || f.team1.toLowerCase().includes(query) || f.team2.toLowerCase().includes(query)) &&
+          (fixtureView !== 'not-started' || !window._scoreMap[[normName(f.team1), normName(f.team2)].sort().join('|')])
         );
 
         groupRows.sort((a, b) => sort === 'gap-desc' ? b.gap - a.gap : a.index - b.index);
@@ -762,7 +836,8 @@
         rows.push(...groupRows.map(f => {
           const gapClass = f.gap <= 15 ? 'low' : f.gap <= 30 ? 'midlow' : f.gap <= 45 ? 'mid' : 'high';
           const tempClass = f.temp >= 28 ? 'temp-hot' : f.temp <= 17 ? 'temp-cool' : '';
-          return `<tr class="fixture-row"><td class="fixture" data-label="Fixture"><span class="team">${f.flag1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${f.flag2}</span></td><td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td></tr>`;
+          const scoreHtml = getScoreHtml(f.team1, f.team2, f.date);
+          return `<tr class="fixture-row"><td class="fixture" data-label="Fixture"><span class="team">${f.flag1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${f.flag2}</span></td><td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Final Score" class="score-cell">${scoreHtml}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td></tr>`;
         }));
       }
 
@@ -771,7 +846,7 @@
           const searchable = `${f[0]} ${f[2]} ${f[3]} ${f[4]} ${f[5]}`.toLowerCase();
           return !query || searchable.includes(query);
         }).map(f => {
-          return `<tr class="fixture-row knockout-row"><td class="fixture" data-label="Fixture">${f[0]}</td><td data-label="Date">${f[1]}</td><td data-label="Time">${f[2]}</td><td data-label="Ranks">—</td><td data-label="Gap">—</td><td data-label="Group"><span class="pill">KO</span></td><td data-label="Matchday"><span class="pill matchday">${f[3]}</span></td><td data-label="City">${f[5]}</td><td data-label="Temp">—</td></tr>`;
+          return `<tr class="fixture-row knockout-row"><td class="fixture" data-label="Fixture">${f[0]}</td><td data-label="Date">${f[1]}</td><td data-label="Time">${f[2]}</td><td data-label="Final Score" class="score-cell">—</td><td data-label="Ranks">—</td><td data-label="Gap">—</td><td data-label="Group"><span class="pill">KO</span></td><td data-label="Matchday"><span class="pill matchday">${f[3]}</span></td><td data-label="City">${f[5]}</td><td data-label="Temp">—</td></tr>`;
         });
 
         rows.push(...knockoutRows);
