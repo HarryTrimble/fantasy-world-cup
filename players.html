@@ -1529,7 +1529,7 @@
       <select id="groupFilter"><option value="">All groups</option></select>
       <select id="roleFilter"><option value="">All roles</option><option>FWD</option><option>MID</option><option>DEF</option><option>GK</option><option>PENS</option></select>
       <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option>
-              <option value="price">Sort by price</option><option value="xgi">Sort by expected goal involvements</option><option value="xgc">Sort by expected goals conceded</option></select>
+              <option value="price">Sort by price</option><option value="xg">Sort by expected goals (xG)</option><option value="xa">Sort by expected assists (xA)</option><option value="xgc">Sort by expected goals conceded (xGC)</option></select>
     </section>
 
     <section class="grid" id="playerGrid"></section>
@@ -1537,216 +1537,175 @@
   </main>
 
   <script>
-    const englandFlag = '<img class="flag-img" style="width:1em;height:1em;vertical-align:-0.1em" alt="England flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg">';
-    const scotlandFlag = '<img class="flag-img" style="width:1em;height:1em;vertical-align:-0.1em" alt="Scotland flag" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg">';
+    const englandFlag = '<img class="flag-img" style="width:1.4em;height:0.9em;vertical-align:-0.1em;border-radius:2px" alt="England flag" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+CiAgPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjMwIiBmaWxsPSJ3aGl0ZSIvPgogIDxyZWN0IHg9IjI1IiB3aWR0aD0iMTAiIGhlaWdodD0iMzAiIGZpbGw9IiNDRjA5MUIiLz4KICA8cmVjdCB5PSIxMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjQ0YwOTFCIi8+Cjwvc3ZnPgo=">';
+    const scotlandFlag = '<img class="flag-img" style="width:1.4em;height:0.9em;vertical-align:-0.1em;border-radius:2px" alt="Scotland flag" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MCAzMCI+CiAgPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjMwIiBmaWxsPSIjMDAzREE1Ii8+CiAgPGxpbmUgeDE9IjAiIHkxPSIwIiB4Mj0iNjAiIHkyPSIzMCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI2Ii8+CiAgPGxpbmUgeDE9IjYwIiB5MT0iMCIgeDI9IjAiIHkyPSIzMCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI2Ii8+Cjwvc3ZnPgo=">';
 
     function clubFlag(club) {
       const flags = {
-        "Atlético Madrid":"🇪🇸",
-        "Inter Miami":"🇺🇸",
-        "Al-Ahli SFC":"🇸🇦",
-        "Bayer Leverkusen":"🇩🇪",
-        "LOSC Lille":"🇫🇷",
-        "Granada CF":"🇪🇸",
-
-        "Al-Wehda":"🇸🇦",
-        "Middlesbrough":englandFlag,
-        "Leicester City":englandFlag,
-        "AZ Alkmaar":"🇳🇱",
-        "Adelaide United":"🇦🇺",
-
-        "Borussia Dortmund":"🇩🇪",
-        "RB Leipzig":"🇩🇪",
-        "Real Madrid":"🇪🇸",
-        "RB Salzburg":"🇦🇹",
-
-        "Atalanta":"🇮🇹",
-        "Napoli":"🇮🇹",
-        "Lille":"🇫🇷",
-
-        "Schalke 04":"🇩🇪",
-        "PSV Eindhoven":"🇳🇱",
-        "Feyenoord":"🇳🇱",
-
-        "Real Madrid":"🇪🇸",
-        "Newcastle United":englandFlag,
+        // England
         "Arsenal":englandFlag,
-        "Chelsea":englandFlag,
-
-        "Pachuca":"🇲🇽",
-        "Huracán":"🇦🇷",
-
-        "Pyramids FC":"🇪🇬",
-        "Al Ahly":"🇪🇬",
-
-        "Real Sociedad":"🇪🇸",
-        "Barcelona":"🇪🇸",
-        "Athletic Club":"🇪🇸",
-        "AC Milan":"🇮🇹",
-
+        "Aston Villa":englandFlag,
         "Bournemouth":englandFlag,
-        "Hearts of Oak":"🇬🇭",
-
-        "Torino":"🇮🇹",
-        "Hamburger SV":"🇩🇪",
-        "Esteghlal":"🇮🇷",
-        "FC Dallas":"🇺🇸",
-        "LDU Quito":"🇪🇨",
-        "SC Bastia":"🇫🇷",
-
-        "Olympiacos":"🇬🇷",
-        "Al Ittihad Kalba":"🇦🇪",
-        "Tractor SC":"🇮🇷",
-
-        "Rennes":"🇫🇷",
-        "Al-Waab":"🇶🇦",
-        "Al-Zawraa":"🇮🇶",
-        "Al-Hussein SC":"🇯🇴",
-
         "Brighton":englandFlag,
-        "Parma":"🇮🇹",
-
-        "Paris Saint-Germain":"🇫🇷",
-        "Los Angeles FC":"🇺🇸",
-        "Al-Shabab":"🇸🇦",
-        "FC Tokyo":"🇯🇵",
-        "Wydad AC":"🇲🇦",
-
-        "Lokomotiv Moscow":"🇷🇺",
-        "Guadalajara":"🇲🇽",
-
-
-
-
-
-
-
-
-
-
+        "Burnley":englandFlag,
+        "Chelsea":englandFlag,
+        "Coventry City":englandFlag,
+        "Crystal Palace":englandFlag,
+        "Everton":englandFlag,
+        "Fulham":englandFlag,
+        "Leicester City":englandFlag,
         "Liverpool":englandFlag,
         "Manchester City":englandFlag,
-
-        "Juventus":"🇮🇹",
-        "Villarreal":"🇪🇸",
-        "Hajduk Split":"🇭🇷",
-        "Minnesota United":"🇺🇸",
-
-        "Spartak Moscow":"🇷🇺",
-        "Burnley":englandFlag,
-        "Le Havre":"🇫🇷",
-
+        "Manchester Cit":englandFlag,
+        "Manchester United":englandFlag,
+        "Middlesbrough":englandFlag,
+        "Millwall":englandFlag,
+        "Newcastle United":englandFlag,
         "Nottingham Forest":englandFlag,
+        "Sheffield United":englandFlag,
+        "Stoke City":englandFlag,
         "Sunderland":englandFlag,
-        "Inter Milan":"🇮🇹",
-
-        "Crystal Palace":englandFlag,
-        "Roma":"🇮🇹",
-        "Porto":"🇵🇹",
-        "Strasbourg":"🇫🇷",
-        "Atlanta United":"🇺🇸",
-        "Palmeiras":"🇧🇷",
-        "Cerro Porteño":"🇵🇾",
-
-        "Al-Shamal":"🇶🇦",
-        "Al Sadd":"🇶🇦",
-        "Al-Arabi":"🇶🇦",
-        "Al-Rayyan":"🇶🇦",
-
-
-        "Al-Ahli":"🇸🇦",
-        "Al-Hilal":"🇸🇦",
-        "Al-Nassr":"🇸🇦",
-
-        "Bayern Munich":"🇩🇪",
-        "Atlético Nacional":"🇨🇴",
-
-        "Casa Pia":"🇵🇹",
-        "Apollon Limassol":"🇨🇾",
-        "Columbus Crew":"🇺🇸",
-        "Chaves":"🇵🇹",
-
-        "Miami FC":"🇺🇸",
-        "Gaziantep":"🇹🇷",
-        "RKC Waalwijk":"🇳🇱",
-        "Iğdır FK":"🇹🇷",
-
-        "Everton":englandFlag,
+        "Tottenham Hotspur":englandFlag,
         "West Ham United":englandFlag,
         "Wolves":englandFlag,
-
-
-
-
-
-
-
-
-
-        "FC St. Pauli":"🇩🇪",
-
-
-
-
-        "Tottenham Hotspur":englandFlag,
-        "Aston Villa":englandFlag,
-        "Sevilla":"🇪🇸",
-
-        "Motherwell":scotlandFlag,
-        "Sheffield United":englandFlag,
-        "Millwall":englandFlag,
-
-        "León":"🇲🇽",
-        "UNAM":"🇲🇽",
-        "Beşiktaş":"🇹🇷",
-        "Al-Fayha":"🇸🇦",
-
-        "Manchester United":englandFlag,
-        "Porto":"🇵🇹",
-        "Strasbourg":"🇫🇷",
-        "Atlanta United":"🇺🇸",
-        "Palmeiras":"🇧🇷",
-        "Cerro Porteño":"🇵🇾",
-
-        "Al-Shamal":"🇶🇦",
-        "Al Sadd":"🇶🇦",
-        "Al-Arabi":"🇶🇦",
-        "Al-Rayyan":"🇶🇦",
-
-
-
-
-
-        "Bayern Munich":"🇩🇪",
-        "İstanbul Başakşehir":"🇹🇷",
-        "Navbahor Namangan":"🇺🇿",
-        "Baniyas":"🇦🇪",
-        "Orlando Pirates":"🇿🇦",
-        "Mamelodi Sundowns":"🇿🇦",
-        "Fulham":englandFlag,
+        // Scotland
         "Celtic":scotlandFlag,
-        "Stoke City":englandFlag,
-        "Everton":englandFlag,
+        "Motherwell":scotlandFlag,
+        // Spain
+        "Athletic Club":"🇪🇸",
+        "Atlético Madrid":"🇪🇸",
+        "Barcelona":"🇪🇸",
+        "Granada CF":"🇪🇸",
+        "Real Madrid":"🇪🇸",
+        "Real Sociedad":"🇪🇸",
+        "Sevilla":"🇪🇸",
+        "Villarreal":"🇪🇸",
+        // Germany
+        "Bayer Leverkusen":"🇩🇪",
+        "Bayern Munich":"🇩🇪",
+        "Borussia Dortmund":"🇩🇪",
+        "FC St. Pauli":"🇩🇪",
+        "Hamburger SV":"🇩🇪",
+        "RB Leipzig":"🇩🇪",
+        "Schalke 04":"🇩🇪",
+        // Italy
+        "AC Milan":"🇮🇹",
+        "Atalanta":"🇮🇹",
+        "Inter Milan":"🇮🇹",
+        "Juventus":"🇮🇹",
+        "Napoli":"🇮🇹",
+        "Parma":"🇮🇹",
+        "Roma":"🇮🇹",
+        "Torino":"🇮🇹",
+        // France
+        "Le Havre":"🇫🇷",
+        "Lille":"🇫🇷",
+        "LOSC Lille":"🇫🇷",
         "OGC Nice":"🇫🇷",
-        "Sfaxien":"🇹🇳",
+        "Paris Saint-Germain":"🇫🇷",
+        "Rennes":"🇫🇷",
+        "SC Bastia":"🇫🇷",
+        "Strasbourg":"🇫🇷",
+        // Netherlands
+        "AZ Alkmaar":"🇳🇱",
+        "Feyenoord":"🇳🇱",
+        "PSV Eindhoven":"🇳🇱",
+        "RKC Waalwijk":"🇳🇱",
+        // Portugal
+        "Casa Pia":"🇵🇹",
+        "Chaves":"🇵🇹",
+        "Porto":"🇵🇹",
+        // Turkey
+        "Beşiktaş":"🇹🇷",
         "Fenerbahçe":"🇹🇷",
         "Galatasaray":"🇹🇷",
-        "Coventry City":englandFlag,
-        "New York City FC":"🇺🇸",
-        "Internacional":"🇧🇷",
-        "Aston Villa":englandFlag,
-        "Arsenal":englandFlag,
-        "Al-Nassr":"🇸🇦",
-        "Al-Hilal":"🇸🇦",
-        "Burnley":englandFlag,
-        "Sunderland":englandFlag,
-        "Inter Milan":"🇮🇹",
-        "Real Madrid":"🇪🇸",
-        "Brighton":englandFlag,
+        "Gaziantep":"🇹🇷",
+        "Iğdır FK":"🇹🇷",
+        "İstanbul Başakşehir":"🇹🇷",
+        "Rizespor":"🇹🇷",
         "Trabzonspor":"🇹🇷",
-        "Barcelona":"🇪🇸",
-        "West Ham United":englandFlag,
-        "Al-Ahli":"🇸🇦"
+        // USA
+        "Atlanta United":"🇺🇸",
+        "Columbus Crew":"🇺🇸",
+        "FC Dallas":"🇺🇸",
+        "Inter Miami":"🇺🇸",
+        "Los Angeles FC":"🇺🇸",
+        "Miami FC":"🇺🇸",
+        "Minnesota United":"🇺🇸",
+        "New York City FC":"🇺🇸",
+        // Brazil
+        "Internacional":"🇧🇷",
+        "Palmeiras":"🇧🇷",
+        // Argentina
+        "Huracán":"🇦🇷",
+        // Colombia
+        "Atlético Nacional":"🇨🇴",
+        // Mexico
+        "Guadalajara":"🇲🇽",
+        "León":"🇲🇽",
+        "Pachuca":"🇲🇽",
+        "UNAM":"🇲🇽",
+        // Ecuador
+        "LDU Quito":"🇪🇨",
+        // Paraguay
+        "Cerro Porteño":"🇵🇾",
+        // Croatia
+        "Hajduk Split":"🇭🇷",
+        // Austria
+        "RB Salzburg":"🇦🇹",
+        // Greece
+        "Olympiacos":"🇬🇷",
+        // Cyprus
+        "Apollon Limassol":"🇨🇾",
+        // Russia
+        "Lokomotiv Moscow":"🇷🇺",
+        "Spartak Moscow":"🇷🇺",
+        // Uzbekistan
+        "Navbahor Namangan":"🇺🇿",
+        // Japan
+        "FC Tokyo":"🇯🇵",
+        // Australia
+        "Adelaide United":"🇦🇺",
+        // Morocco
+        "Wydad AC":"🇲🇦",
+        // Tunisia
+        "Sfaxien":"🇹🇳",
+        // Ghana
+        "Hearts of Oak":"🇬🇭",
+        // South Africa
+        "Mamelodi Sundowns":"🇿🇦",
+        "Orlando Pirates":"🇿🇦",
+        // Egypt
+        "Al Ahly":"🇪🇬",
+        // Iran
+        "Esteghlal":"🇮🇷",
+        "Tractor SC":"🇮🇷",
+        // Iraq
+        "Al Shorta":"🇮🇶",
+        "Al-Zawraa":"🇮🇶",
+        // Jordan
+        "Al-Hussein SC":"🇯🇴",
+        // Qatar
+        "Al Sadd":"🇶🇦",
+        "Al-Arabi":"🇶🇦",
+        "Al-Karma":"🇶🇦",
+        "Al-Rayyan":"🇶🇦",
+        "Al-Shamal":"🇶🇦",
+        "Al-Waab":"🇶🇦",
+        "Al-Wakrah":"🇶🇦",
+        // Saudi Arabia
+        "Al-Ahli":"🇸🇦",
+        "Al-Ahli SFC":"🇸🇦",
+        "Al-Fayha":"🇸🇦",
+        "Al-Hilal":"🇸🇦",
+        "Al-Nassr":"🇸🇦",
+        "Al-Shabab":"🇸🇦",
+        "Al-Wehda":"🇸🇦",
+        // UAE
+        "Al Ittihad Kalba":"🇦🇪",
+        "Al-Dhafra":"🇦🇪",
+        "Baniyas":"🇦🇪",
+        "Dibba Al Fujairah":"🇦🇪",
       };
 
       return flags[club] || "🏳️";
@@ -4489,7 +4448,7 @@
         'Bosnia': { torso:'#014ac5', sleeves:'#014ac5', sleeveEnds:'#f7c807', collar:'#f7c807', bottomEdge:'#f7c807' },
         'Belgium': { torso:'#fc4949', sleeves:'#fc4949', sleeveEnds:'#2d1f1f', collar:'#fed159', bottomEdge:'#2d1f1f' },
         'Brazil': { torso:'#FFBF00', sleeves:'#FFBF00', sleeveEnds:'#04587b', collar:'#E1C16E', bottomEdge:'#04587b' },
-        'Canada': { torso:'#a80119', sleeves:'#a80119', sleeveEnds:'#da0a27', collar:'#da0a27', bottomEdge:'#da0a27' },
+        'Canada': { torso:'#a80119', torsoGradient:['#e8384f','#6b0010'], sleeves:'#a80119', sleeveEnds:'#da0a27', collar:'#da0a27', bottomEdge:'#da0a27' },
         'DR Congo': { torso:'#55a1da', sleeves:'#55a1da', sleeveEnds:'#a52c24', collar:'#a52c24', bottomEdge:'#a52c24' },
         'Switzerland': { torso:'#d80317', sleeves:'#d80317', sleeveEnds:'#d80317', collar:'#d80317', bottomEdge:'#d80317' },
         'Ivory Coast': { torso:'#f25700', sleeves:'#f25700', sleeveEnds:'#00906d', collar:'#00906d', bottomEdge:'#f25700' },
@@ -5028,7 +4987,8 @@
       const numberColour = kit.number || (country === 'Paraguay' ? '#000000' : readableNumberColour(kit.torso));
       const torsoClipId = `shirt-torso-${country.replace(/[^a-z0-9]/gi, '').toLowerCase()}-${number}-${Math.random().toString(36).slice(2)}`;
       const torsoPatternId = `${torsoClipId}-pattern`;
-      const torsoFill = kit.torsoChecks ? `url(#${torsoPatternId})` : kit.torso;
+      const torsoGradientId = `${torsoClipId}-gradient`;
+      const torsoFill = kit.torsoChecks ? `url(#${torsoPatternId})` : (kit.torsoGradient ? `url(#${torsoGradientId})` : kit.torso);
 
 
 const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.length === 5
@@ -5047,14 +5007,18 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
 
 
       return `<svg class="shirt" viewBox="0 0 826 872" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-        ${kit.torsoChecks ? `
+        ${(kit.torsoChecks || kit.torsoGradient) ? `
         <defs>
-          <pattern id="${torsoPatternId}" patternUnits="userSpaceOnUse" x="1300" y="0" width="1000" height="1000">
+          ${kit.torsoChecks ? `<pattern id="${torsoPatternId}" patternUnits="userSpaceOnUse" x="1300" y="0" width="1000" height="1000">
             <rect x="0" y="0" width="500" height="500" fill="#e73e47"/>
             <rect x="500" y="0" width="500" height="500" fill="#ffffff"/>
             <rect x="0" y="500" width="500" height="500" fill="#ffffff"/>
             <rect x="500" y="500" width="500" height="500" fill="#e73e47"/>
-          </pattern>
+          </pattern>` : ''}
+          ${kit.torsoGradient ? `<linearGradient id="${torsoGradientId}" x1="0" y1="8000" x2="0" y2="450" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="${kit.torsoGradient[0]}"/>
+            <stop offset="100%" stop-color="${kit.torsoGradient[1]}"/>
+          </linearGradient>` : ''}
         </defs>` : ''}
         <g transform="translate(0,872) scale(0.1,-0.1)" stroke="none">
           <path d="M5547 8505 c-9 -46 -31 -125 -47 -175 -17 -51 -30 -97 -30 -103 0 -7
@@ -5219,14 +5183,24 @@ const shortRole = role => ({
 
         if (sort === 'country') return a.team.country.localeCompare(b.team.country) || a.role.localeCompare(b.role);
 
-        if (sort === 'xgi') {
+        if (sort === 'xg') {
           const aEligible = a.role !== 'GK';
           const bEligible = b.role !== 'GK';
 
           if (aEligible && !bEligible) return -1;
           if (!aEligible && bEligible) return 1;
 
-          return b.xGI - a.xGI || a.name.localeCompare(b.name);
+          return b.xG - a.xG || a.name.localeCompare(b.name);
+        }
+
+        if (sort === 'xa') {
+          const aEligible = a.role !== 'GK';
+          const bEligible = b.role !== 'GK';
+
+          if (aEligible && !bEligible) return -1;
+          if (!aEligible && bEligible) return 1;
+
+          return b.xA - a.xA || a.name.localeCompare(b.name);
         }
 
         if (sort === 'xgc') {
