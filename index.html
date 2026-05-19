@@ -304,11 +304,11 @@
       header, main { padding: 20px 12px; }
 
       header {
-        padding-bottom: 6px;
+        padding-bottom: 10px;
       }
 
       main {
-        padding-top: 4px;
+        padding-top: 10px;
       }
       .hero-card { border-radius: 28px; padding: 26px; }
       h1 { font-size: clamp(2.2rem, 13vw, 3.7rem); }
@@ -316,8 +316,8 @@
       .stat-grid { display: none; }
       .controls { grid-template-columns: 1fr; position: static; gap: 10px; padding: 12px; border-radius: 22px; }
       input, select { border-radius: 999px; padding: 13px 16px; }
-      .table-card { overflow: visible; background: transparent; border: 0; box-shadow: none; backdrop-filter: none; }
-      .table-topbar { border: 1px solid var(--border); border-radius: 22px; margin-bottom: 14px; background: rgba(255,255,255,.06); }
+      .table-card { overflow: visible; background: transparent !important; border: 0 !important; box-shadow: none !important; backdrop-filter: none; }
+      .table-topbar { border: 1px solid var(--border); border-radius: 22px; margin-bottom: 6px; background: rgba(255,255,255,.06); }
       .table-wrap { overflow-x: visible; }
       table { min-width: 100%; border-collapse: separate; border-spacing: 0 20px; }
       thead { display: none; }
@@ -560,6 +560,8 @@
   .form-score.loss { background: #d72d3f !important; }
 
   @media (max-width: 560px) {
+    .table-card { background: transparent !important; border: 0 !important; box-shadow: none !important; overflow: visible !important; }
+
     tbody tr,
     .recommend-row {
       background:
@@ -567,6 +569,8 @@
       border-color: rgba(0,168,232,0.22) !important;
       box-shadow: var(--shadow) !important;
     }
+
+    tr:hover td { background: transparent !important; }
 
     tbody td.fixture { border-bottom-color: rgba(20,36,59,0.14) !important; }
     tbody td.fixture::before,
@@ -617,8 +621,8 @@
   <footer>Built for fantasy planning: ranking gaps highlight potential captaincy and clean-sheet angles.</footer>
 
   <style>
-    .score-cell { font-weight: 900; font-size: 1rem; white-space: nowrap; }
-    .score-result { color: var(--accent); letter-spacing: .04em; }
+    .score-cell { font-weight: 950; font-size: 1.45rem; white-space: nowrap; letter-spacing: -.04em; }
+    .score-result { color: var(--accent); }
     .score-live {
       color: #ff5f5f;
       animation: pulse 1.4s ease-in-out infinite;
