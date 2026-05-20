@@ -990,6 +990,11 @@
     height: 52px !important;
   }
 
+  .stat-card .shirt {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
   .player-card-main .player-name {
     color: var(--text) !important;
     font-size: clamp(1.15rem, 2vw, 1.55rem) !important;
@@ -1503,22 +1508,10 @@
       </div>
 
       <section class="stats-grid" aria-label="Player stats">
-        <div class="stat-card">
-          <div class="stat-value" id="totalTeams">0</div>
-          <div class="stat-label">Countries covered</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="totalPicks">0</div>
-          <div class="stat-label">Player recommendations</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="topRank">0</div>
-          <div class="stat-label">Best FIFA rank</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">5</div>
-          <div class="stat-label">Roles per country</div>
-        </div>
+        <div class="stat-card" id="statCard0"></div>
+        <div class="stat-card" id="statCard1"></div>
+        <div class="stat-card" id="statCard2"></div>
+        <div class="stat-card" id="statCard3"></div>
       </section>
     </section>
   </header>
@@ -1819,7 +1812,7 @@
           defender: {
             name: "Romero",
             why: "Starter + some attack threat",
-            number: 13,
+            number: 26,
             club: "Tottenham Hotspur",
             xG: "0.06",
             xA: "0.06",
@@ -1853,7 +1846,7 @@
           forward: {
             name: "Arnautovic",
             why: "Goal threat from midfield",
-            number: 19,
+            number: 7,
             club: "RB Leipzig",
             xG: "0.63",
             xA: "0.72",
@@ -1862,7 +1855,7 @@
           midfielder: {
             name: "Sabitzer",
             why: "Leader + long shots",
-            number: 9,
+            number: 8,
             club: "Borussia Dortmund",
             xG: "0.06",
             xA: "0.11",
@@ -1871,7 +1864,7 @@
           defender: {
             name: "Alaba",
             why: "Experienced defender + set pieces",
-            number: 8,
+            number: 6,
             club: "Real Madrid",
             xG: "0.05",
             xA: "0.02",
@@ -1889,7 +1882,7 @@
           penalty: {
             name: "Sabitzer",
             why: "Likely penalty taker",
-            number: 9,
+            number: 8,
             club: "Borussia Dortmund",
             xG: "0.06",
             xA: "0.11",
@@ -1905,7 +1898,7 @@
           forward: {
             name: "Goodwin",
             why: "Set pieces + goals",
-            number: 23,
+            number: 11,
             club: "Adelaide United",
             xG: "0.26",
             xA: "0.14",
@@ -1914,7 +1907,7 @@
           midfielder: {
             name: "Metcalfe",
             why: "Creative midfielder",
-            number: 14,
+            number: 19,
             club: "Middlesbrough",
             xG: "0.10",
             xA: "0.10",
@@ -1923,7 +1916,7 @@
           defender: {
             name: "Circati",
             why: "Set piece threat",
-            number: 19,
+            number: 6,
             club: "Parma",
             xG: "0.04",
             xA: "0.02",
@@ -1941,7 +1934,7 @@
           penalty: {
             name: "Goodwin",
             why: "Likely penalty taker",
-            number: 23,
+            number: 11,
             club: "Adelaide United",
             xG: "0.26",
             xA: "0.14",
@@ -2027,7 +2020,7 @@
           defender: {
             name: "Meunier",
             why: "Experienced attacking full-back",
-            number: 15,
+            number: 2,
             club: "Lille",
             xG: "0.06",
             xA: "0.26",
@@ -2183,7 +2176,7 @@
           defender: {
             name: "Tuanzebe",
             why: "Budget defender",
-            number: 6,
+            number: 5,
             club: "Burnley",
             xG: "0.05",
             xA: "0.01",
@@ -2269,7 +2262,7 @@
           forward: {
             name: "Guessand",
             why: "Budget forward",
-            number: 22,
+            number: 9,
             club: "Crystal Palace",
             xG: "0.45",
             xA: "0.27",
@@ -2287,7 +2280,7 @@
           defender: {
             name: "N'Dicka",
             why: "Budget defender",
-            number: 21,
+            number: 3,
             club: "Roma",
             xG: "0.07",
             xA: "0.27",
@@ -2339,7 +2332,7 @@
           defender: {
             name: "Munoz",
             why: "Attacking defender",
-            number: 21,
+            number: 2,
             club: "Crystal Palace",
             xG: "0.09",
             xA: "0.15",
@@ -2382,7 +2375,7 @@
           midfielder: {
             name: "Lopes Cabral",
             why: "Budget midfielder",
-            number: 10,
+            number: 19,
             club: "Benfica",
             xG: "0.24",
             xA: "0.31",
@@ -2486,7 +2479,7 @@
           midfielder: {
             name: "Soucek",
             why: "Budget midfielder with set piece threat",
-            number: 22,
+            number: 6,
             club: "West Ham United",
             xG: "0.21",
             xA: "0.02",
@@ -2495,7 +2488,7 @@
           defender: {
             name: "Krejcí",
             why: "Budget defender",
-            number: 7,
+            number: 5,
             club: "Wolves",
             xG: "0.09",
             xA: "0.06",
@@ -2529,7 +2522,7 @@
           forward: {
             name: "Havertz",
             why: "Proven forward + pens",
-            number: 7,
+            number: 9,
             club: "Arsenal",
             xG: "0.49",
             xA: "0.03",
@@ -2538,7 +2531,7 @@
           midfielder: {
             name: "Wirtz",
             why: "Creative midfielder with goal threat",
-            number: 17,
+            number: 10,
             club: "Liverpool",
             xG: "0.24",
             xA: "0.20",
@@ -2547,7 +2540,7 @@
           defender: {
             name: "Tah",
             why: "DEF with set piece threat",
-            number: 4,
+            number: 5,
             club: "Bayern Munich",
             xG: "0.03",
             xA: "0.08",
@@ -2565,7 +2558,7 @@
           penalty: {
             name: "Havertz",
             why: "Nailed pen taker",
-            number: 7,
+            number: 9,
             club: "Arsenal",
             xG: "0.49",
             xA: "0.03",
@@ -2642,7 +2635,7 @@
           midfielder: {
             name: "Caicedo",
             why: "Defcon monster",
-            number: 23,
+            number: 14,
             club: "Chelsea",
             xG: "0.05",
             xA: "0.08",
@@ -2703,7 +2696,7 @@
           defender: {
             name: "Fathy",
             why: "Budget defender",
-            number: 14,
+            number: 3,
             club: "Al-Wakrah",
             xG: "0.19",
             xA: "0.10",
@@ -2737,7 +2730,7 @@
           forward: {
             name: "Oyarzabal",
             why: "Proven forward",
-            number: 21,
+            number: 17,
             club: "Real Sociedad",
             xG: "0.51",
             xA: "0.12",
@@ -2746,7 +2739,7 @@
           midfielder: {
             name: "Yamal",
             why: "Talisman + pens",
-            number: 19,
+            number: 11,
             club: "Barcelona",
             xG: "0.51",
             xA: "0.40",
@@ -2755,7 +2748,7 @@
           defender: {
             name: "Cucurella",
             why: "Elite defender with attack threat",
-            number: 24,
+            number: 20,
             club: "Chelsea",
             xG: "0.08",
             xA: "0.08",
@@ -2773,7 +2766,7 @@
           penalty: {
             name: "Yamal",
             why: "Nailed pen taker",
-            number: 19,
+            number: 11,
             club: "Barcelona",
             xG: "0.51",
             xA: "0.40",
@@ -2850,7 +2843,7 @@
           midfielder: {
             name: "Semenyo",
             why: "Goal scoring winger",
-            number: 9,
+            number: 11,
             club: "Bournemouth",
             xG: "0.32",
             xA: "0.09",
@@ -2859,7 +2852,7 @@
           defender: {
             name: "Djiku",
             why: "Budget defender with goal threat",
-            number: 23,
+            number: 3,
             club: "Spartak Moscow",
             xG: "0.45",
             xA: "0.27",
@@ -2893,7 +2886,7 @@
           forward: {
             name: "Perisic",
             why: "Budget forward",
-            number: 13,
+            number: 4,
             club: "PSV Eindhoven",
             xG: "0.20",
             xA: "0.32",
@@ -3171,7 +3164,7 @@
           defender: {
             name: "Ito",
             why: "Budget defender",
-            number: 21,
+            number: 19,
             club: "Bayern Munich",
             xG: "0.45",
             xA: "0.27",
@@ -3214,7 +3207,7 @@
           midfielder: {
             name: "Kant-In Lee",
             why: "Starting forward",
-            number: 18,
+            number: 17,
             club: "Paris Saint-Germain",
             xG: "0.16",
             xA: "0.33",
@@ -3223,7 +3216,7 @@
           defender: {
             name: "Min-Jae Kim",
             why: "Budget defender",
-            number: 4,
+            number: 3,
             club: "Bayern Munich",
             xG: "0.08",
             xA: "0.08",
@@ -3318,7 +3311,7 @@
           midfielder: {
             name: "Álvarez",
             why: "Most reliable to start",
-            number: 4,
+            number: 14,
             club: "Fenerbahçe",
             xG: "0.08",
             xA: "0.04",
@@ -3361,7 +3354,7 @@
           forward: {
             name: "Malen",
             why: "Proven forward",
-            number: 18,
+            number: 9,
             club: "Aston Villa",
             xG: "0.57",
             xA: "0.05",
@@ -3379,7 +3372,7 @@
           defender: {
             name: "Dumfries",
             why: "Elite defender with attack threat",
-            number: 22,
+            number: 2,
             club: "Inter Milan",
             xG: "0.23",
             xA: "0.06",
@@ -3431,7 +3424,7 @@
           defender: {
             name: "Ryerson",
             why: "Full-back with assist threat",
-            number: 14,
+            number: 2,
             club: "Borussia Dortmund",
             xG: "0.04",
             xA: "0.40",
@@ -3691,7 +3684,7 @@
           defender: {
             name: "Fathy",
             why: "Attacking defender",
-            number: 14,
+            number: 3,
             club: "Al-Arabi",
             xG: "0.02",
             xA: "0.17",
@@ -3786,7 +3779,7 @@
           midfielder: {
             name: "Ayari",
             why: "Attacking winger",
-            number: 11,
+            number: 19,
             club: "Brighton",
             xG: "0.13",
             xA: "0.05",
@@ -3847,7 +3840,7 @@
           defender: {
             name: "Diouf",
             why: "Attacking defender",
-            number: 12,
+            number: 2,
             club: "West Ham United",
             xG: "0.02",
             xA: "0.09",
@@ -3951,7 +3944,7 @@
           defender: {
             name: "Kadioglu",
             why: "Attacking wing-back",
-            number: 20,
+            number: 3,
             club: "Brighton",
             xG: "0.06",
             xA: "0.08",
@@ -3969,7 +3962,7 @@
           penalty: {
             name: "Çalhanoglu",
             why: "Takes penalties when fit",
-            number: 10,
+            number: 22,
             club: "Inter Milan",
             xG: "0.31",
             xA: "0.19",
@@ -3985,7 +3978,7 @@
           forward: {
             name: "Haji Wright",
             why: "Budget forward",
-            number: 19,
+            number: 11,
             club: "Coventry City",
             xG: "0.64",
             xA: "0.05",
@@ -3994,7 +3987,7 @@
           midfielder: {
             name: "McKennie",
             why: "Attacking winger",
-            number: 8,
+            number: 6,
             club: "Juventus",
             xG: "0.25",
             xA: "0.19",
@@ -4089,7 +4082,7 @@
           forward: {
             name: "Shomurodov",
             why: "Budget forward",
-            number: 14,
+            number: 9,
             club: "İstanbul Başakşehir",
             xG: "0.47",
             xA: "0.10",
@@ -4098,7 +4091,7 @@
           midfielder: {
             name: "Fayzullayev",
             why: "Budget midfielder",
-            number: 22,
+            number: 10,
             club: "İstanbul Başakşehir",
             xG: "0.33",
             xA: "0.28",
@@ -4461,8 +4454,8 @@
         'Ecuador': { torso:'#f6ce01', sleeves:'#f6ce01', sleeveEnds:'#09192e', collar:'#09192e', bottomEdge:'#09192e' },
         'Egypt': { torso:'#d4212a', sleeves:'#d4212a', sleeveEnds:'#26211e', collar:'#26211e', bottomEdge:'#26211e' },
         'Spain': { torso:'#fa554e', sleeves:'#2a2c56', sleeveEnds:'#2a2c56', collar:'#2a2c56', bottomEdge:'#fa554e' },
-        'France': { torso:'#233a9b', sleeves:'#233a9b', sleeveEnds:'#171942', collar:'#171942', bottomEdge:'#171942' },
-        'Ghana': { torso:'#f1cf65', sleeves:'#f1cf65', sleeveEnds:'#006e61', collar:'#c73029', bottomEdge:'#35271f' },
+        'France': { torso:'#0d1b6e', torsoGradient:['#3355cc','#0d1b6e'], sleeves:'#2244bb', sleeveEnds:'#0d1b6e', collar:'#080f3d', bottomEdge:'#0d1b6e' },
+        'Ghana': { torso:'#f1cf65', sleeves:'#c9a227', sleeveEnds:'#006e61', collar:'#c73029', bottomEdge:'#35271f' },
         'Croatia': {
           torso:'#ffffff',
           torsoChecks:true,
@@ -4472,30 +4465,30 @@
           bottomEdge:'#5082dd'
         },
         'Haiti': { torso:'#1c2a89', sleeves:'#1c2a89', sleeveEnds:'#9f2118', collar:'#9f2118', bottomEdge:'#1c2a89' },
-        'Iraq': { torso:'#038235', sleeves:'#038235', sleeveEnds:'#038235', collar:'#038235', bottomEdge:'#038235' },
-        'Iran': { torso:'#c4c4c4', sleeves:'#c4c4c4', sleeveEnds:'#567d50', collar:'#567d50', bottomEdge:'#567d50' },
+        'Iraq': { torso:'#038235', sleeves:'#025c25', sleeveEnds:'#111111', collar:'#111111', bottomEdge:'#038235' },
+        'Iran': { torso:'#f0f0f0', torsoGradient:['#f5f5f5','#d8d8d8'], sleeves:'#e8e8e8', sleeveEnds:'#c9b96e', collar:'#1a5c2a', bottomEdge:'#1a5c2a' },
         'Jordan': { torso:'#e8e8e8', sleeves:'#e8e8e8', sleeveEnds:'#a60426', collar:'#a60426', bottomEdge:'#a60426' },
         'Japan': { torso:'#1e1f58', sleeves:'#1e1f58', sleeveEnds:'#1e1f58', collar:'#1e1f58', bottomEdge:'#1e1f58' },
-        'South Korea': { torso:'#ef4444', sleeves:'#ef4444', sleeveEnds:'#09090a', collar:'#09090a', bottomEdge:'#09090a' },
+        'South Korea': { torso:'#d0021b', torsoRadialGradient:['#ff2233','#b50015'], sleeves:'#cc1020', sleeveEnds:'#cc1020', collar:'#cc1020', bottomEdge:'#111111' },
         'Morocco': { torso:'#d70d20', sleeves:'#d70d20', sleeveEnds:'#008148', collar:'#008148', bottomEdge:'#008148' },
-        'Mexico': { torso:'#004738', sleeves:'#004738', sleeveEnds:'#d1002c', collar:'#d1002c', bottomEdge:'#d1002c' },
+        'Mexico': { torso:'#0e7a42', torsoRadialGradient:['#1db864','#085c30'], sleeves:'#0e7a42', sleeveEnds:'#d1002c', collar:'#d1002c', bottomEdge:'#085c30' },
         'Netherlands': { torso:'#ea662a', sleeves:'#ea662a', sleeveEnds:'#0f0b06', collar:'#0f0b06', bottomEdge:'#ea662a' },
         'Norway': { torso:'#e5082a', sleeves:'#051030', sleeveEnds:'#e5082a', collar:'#051030', bottomEdge:'#051030' },
         'New Zealand': { torso:'#232122', sleeves:'#232122', sleeveEnds:'#232122', collar:'#232122', bottomEdge:'#232122' },
         'Panama': { torso:'#e7362c', sleeves:'#e7362c', sleeveEnds:'#0a1112', collar:'#e7362c', bottomEdge:'#e7362c' },
-        'Portugal': { torso:'#ae2631', sleeves:'#ae2631', sleeveEnds:'#027775', collar:'#027775', bottomEdge:'#ae2631' },
+        'Portugal': { torso:'#ae2631', torsoWave:'#e04050', sleeves:'#ae2631', sleeveEnds:'#027775', collar:'#027775', bottomEdge:'#ae2631' },
         'Paraguay': { torso:'#ffffff', torsoStripes:['#ee7f80', '#ffffff', '#ee7f80', '#ffffff', '#ee7f80'], sleeves:'#ee7f80', sleeveEnds:'#1d3a94', collar:'#1d3a94', bottomEdge:'#ee7f80' },
         'Qatar': { torso:'#8c2829', sleeves:'#8c2829', sleeveEnds:'#8c2829', collar:'#8c2829', bottomEdge:'#8c2829' },
-        'Saudi Arabia': { torso:'#1b4741', sleeves:'#1b4741', sleeveEnds:'#5353a2', collar:'#5353a2', bottomEdge:'#5353a2' },
+        'Saudi Arabia': { torso:'#0a4a2a', torsoRadialGradient:['#0f6637','#062a18'], sleeves:'#0a4a2a', sleeveEnds:'#9b8fc0', collar:'#9b8fc0', bottomEdge:'#0a4a2a' },
         'Sweden': { torso:'#f9db55', sleeves:'#f9db55', sleeveEnds:'#2656b3', collar:'#2656b3', bottomEdge:'#2563eb' },
         'Senegal': { torso:'#dedde2', sleeves:'#dedde2', sleeveEnds:'#067164', collar:'#067164', bottomEdge:'#067164' },
         'Tunisia': { torso:'#f2332b', sleeves:'#f2332b', sleeveEnds:'#f2332b', collar:'#f2332b', bottomEdge:'#f2332b' },
         'Türkiye': { torso:'#cf030c', sleeves:'#cf030c', sleeveEnds:'#cf030c', collar:'#cf030c', bottomEdge:'#cf030c' },
-        'USA': { torso:'#e8e8e8', sleeves:'#e8e8e8', sleeveEnds:'#e22f35', collar:'#2e3543', bottomEdge:'#2e3543' },
+        'USA': { torso:'#f0f0f0', torsoGradient:['#ffffff','#d0d8e8'], sleeves:'#d0d8e8', sleeveEnds:'#1a3a9c', collar:'#1a3a9c', bottomEdge:'#1a3a9c' },
         'Uruguay': { torso:'#c7dafa', sleeves:'#c7dafa', sleeveEnds:'#111827', collar:'#353b51', bottomEdge:'#c7dafa' },
         'Uzbekistan': { torso:'#0454c0', sleeves:'#0454c0', sleeveEnds:'#2c8835', collar:'#2c8835', bottomEdge:'#ee0e2a' },
         'South Africa': { torso:'#f6cf5b', sleeves:'#f6cf5b', sleeveEnds:'#0f926b', collar:'#0f926b', bottomEdge:'#f6cf5b' },
-        'England': { torso:'#ffffff', sleeves:'#ffffff', sleeveEnds:'#2c2843', collar:'#e22e4b', bottomEdge:'#2c2843' },
+        'England': { torso:'#ffffff', torsoGradient:['#e8e8e8','#ffffff'], sleeves:'#dcdcdc', sleeveEnds:'#c8102e', collar:'#1a1f5e', bottomEdge:'#c8102e' },
         'Scotland': { torso:'#2e3453', sleeves:'#2e3453', sleeveEnds:'#2e3453', collar:'#2e3453', bottomEdge:'#2e3453' }
       };
 
@@ -4586,394 +4579,203 @@
     // Edit these hex values to change one keeper shirt without changing outfield shirts.
     const goalkeeperKitColours = {
       'Algeria': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Argentina': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Austria': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Australia': {
-        torso: '#FF69B4',
-        sleeves: '#FF69B4',
-        sleeveEnds: '#FF69B4',
-        collar: '#F8C8DC',
-        bottomEdge: '#FF69B4',
-        number: '#000000'
+        torso: '#FF69B4', torsoGradient: ['#ffaacc', '#e03080'],
+        sleeves: '#FF69B4', sleeveEnds: '#FF69B4', collar: '#F8C8DC', bottomEdge: '#FF69B4', number: '#000000'
       },
       'Bosnia': {
-        torso: '#FF69B4',
-        sleeves: '#FF69B4',
-        sleeveEnds: '#FF69B4',
-        collar: '#F8C8DC',
-        bottomEdge: '#FF69B4',
-        number: '#000000'
+        torso: '#FF69B4', torsoGradient: ['#ffaacc', '#e03080'],
+        sleeves: '#FF69B4', sleeveEnds: '#FF69B4', collar: '#F8C8DC', bottomEdge: '#FF69B4', number: '#000000'
       },
       'Belgium': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Brazil': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Canada': {
-        torso: '#FF7F50',
-        sleeves: '#FF7F50',
-        sleeveEnds: '#FF7F50',
-        collar: '#FAD5A5',
-        bottomEdge: '#FF7F50',
-        number: '#000000'
+        torso: '#FF7F50', torsoGradient: ['#ffaa80', '#cc4a18'],
+        sleeves: '#FF7F50', sleeveEnds: '#FF7F50', collar: '#FAD5A5', bottomEdge: '#FF7F50', number: '#000000'
       },
       'DR Congo': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Switzerland': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Ivory Coast': {
-        torso: '#1B1212',
-        sleeves: '#1B1212',
-        sleeveEnds: '#1B1212',
-        collar: '#A9A9A9',
-        bottomEdge: '#1B1212',
-        number: '#ffffff'
+        torso: '#1B1212', torsoGradient: ['#555555', '#0d0d0d'],
+        sleeves: '#1B1212', sleeveEnds: '#1B1212', collar: '#A9A9A9', bottomEdge: '#1B1212', number: '#ffffff'
       },
       'Colombia': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Cape Verde': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Curaçao': {
-        torso: '#FF69B4',
-        sleeves: '#FF69B4',
-        sleeveEnds: '#FF69B4',
-        collar: '#F8C8DC',
-        bottomEdge: '#FF69B4',
-        number: '#000000'
+        torso: '#FF69B4', torsoGradient: ['#ffaacc', '#e03080'],
+        sleeves: '#FF69B4', sleeveEnds: '#FF69B4', collar: '#F8C8DC', bottomEdge: '#FF69B4', number: '#000000'
       },
       'Czechia': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Germany': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Ecuador': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Egypt': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Spain': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'France': {
-        torso: '#FF7F50',
-        sleeves: '#FF7F50',
-        sleeveEnds: '#FF7F50',
-        collar: '#FAD5A5',
-        bottomEdge: '#FF7F50',
-        number: '#000000'
+        torso: '#FF7F50', torsoGradient: ['#ffaa80', '#cc4a18'],
+        sleeves: '#FF7F50', sleeveEnds: '#FF7F50', collar: '#FAD5A5', bottomEdge: '#FF7F50', number: '#000000'
       },
       'Ghana': {
-        torso: '#5D3FD3',
-        sleeves: '#5D3FD3',
-        sleeveEnds: '#5D3FD3',
-        collar: '#CBC3E3',
-        bottomEdge: '#5D3FD3',
-        number: '#ffffff'
+        torso: '#5D3FD3', torsoGradient: ['#8a6fe8', '#3a1fa8'],
+        sleeves: '#5D3FD3', sleeveEnds: '#5D3FD3', collar: '#CBC3E3', bottomEdge: '#5D3FD3', number: '#ffffff'
       },
       'Croatia': {
-        torso: '#5D3FD3',
-        sleeves: '#5D3FD3',
-        sleeveEnds: '#5D3FD3',
-        collar: '#CBC3E3',
-        bottomEdge: '#5D3FD3',
-        number: '#ffffff'
+        torso: '#5D3FD3', torsoGradient: ['#8a6fe8', '#3a1fa8'],
+        sleeves: '#5D3FD3', sleeveEnds: '#5D3FD3', collar: '#CBC3E3', bottomEdge: '#5D3FD3', number: '#ffffff'
       },
       'Haiti': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Iraq': {
-        torso: '#EE4B2B',
-        sleeves: '#EE4B2B',
-        sleeveEnds: '#EE4B2B',
-        collar: '#F88379',
-        bottomEdge: '#EE4B2B',
-        number: '#ffffff'
+        torso: '#EE4B2B', torsoGradient: ['#f5826a', '#bb2000'],
+        sleeves: '#EE4B2B', sleeveEnds: '#EE4B2B', collar: '#F88379', bottomEdge: '#EE4B2B', number: '#ffffff'
       },
       'Iran': {
-        torso: '#FF7F50',
-        sleeves: '#FF7F50',
-        sleeveEnds: '#FF7F50',
-        collar: '#FAD5A5',
-        bottomEdge: '#FF7F50',
-        number: '#000000'
+        torso: '#FF7F50', torsoGradient: ['#ffaa80', '#cc4a18'],
+        sleeves: '#FF7F50', sleeveEnds: '#FF7F50', collar: '#FAD5A5', bottomEdge: '#FF7F50', number: '#000000'
       },
       'Jordan': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Japan': {
-        torso: '#EE4B2B',
-        sleeves: '#EE4B2B',
-        sleeveEnds: '#EE4B2B',
-        collar: '#F88379',
-        bottomEdge: '#EE4B2B',
-        number: '#ffffff'
+        torso: '#EE4B2B', torsoGradient: ['#f5826a', '#bb2000'],
+        sleeves: '#EE4B2B', sleeveEnds: '#EE4B2B', collar: '#F88379', bottomEdge: '#EE4B2B', number: '#ffffff'
       },
       'South Korea': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Morocco': {
-        torso: '#5D3FD3',
-        sleeves: '#5D3FD3',
-        sleeveEnds: '#5D3FD3',
-        collar: '#CBC3E3',
-        bottomEdge: '#5D3FD3',
-        number: '#ffffff'
+        torso: '#5D3FD3', torsoGradient: ['#8a6fe8', '#3a1fa8'],
+        sleeves: '#5D3FD3', sleeveEnds: '#5D3FD3', collar: '#CBC3E3', bottomEdge: '#5D3FD3', number: '#ffffff'
       },
       'Mexico': {
-        torso: '#FF69B4',
-        sleeves: '#FF69B4',
-        sleeveEnds: '#FF69B4',
-        collar: '#F8C8DC',
-        bottomEdge: '#FF69B4',
-        number: '#000000'
+        torso: '#FF69B4', torsoGradient: ['#ffaacc', '#e03080'],
+        sleeves: '#FF69B4', sleeveEnds: '#FF69B4', collar: '#F8C8DC', bottomEdge: '#FF69B4', number: '#000000'
       },
       'Netherlands': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Norway': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'New Zealand': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Panama': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Portugal': {
-        torso: '#1B1212',
-        sleeves: '#1B1212',
-        sleeveEnds: '#1B1212',
-        collar: '#A9A9A9',
-        bottomEdge: '#1B1212',
-        number: '#ffffff'
+        torso: '#1B1212', torsoGradient: ['#555555', '#0d0d0d'],
+        sleeves: '#1B1212', sleeveEnds: '#1B1212', collar: '#A9A9A9', bottomEdge: '#1B1212', number: '#ffffff'
       },
       'Paraguay': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Qatar': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Saudi Arabia': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Sweden': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Senegal': {
-        torso: '#EE4B2B',
-        sleeves: '#EE4B2B',
-        sleeveEnds: '#EE4B2B',
-        collar: '#F88379',
-        bottomEdge: '#EE4B2B',
-        number: '#ffffff'
+        torso: '#EE4B2B', torsoGradient: ['#f5826a', '#bb2000'],
+        sleeves: '#EE4B2B', sleeveEnds: '#EE4B2B', collar: '#F88379', bottomEdge: '#EE4B2B', number: '#ffffff'
       },
       'Tunisia': {
-        torso: '#1ccd68',
-        sleeves: '#1ccd68',
-        sleeveEnds: '#1ccd68',
-        collar: '#AFE1AF',
-        bottomEdge: '#1ccd68',
-        number: '#ffffff'
+        torso: '#1ccd68', torsoGradient: ['#4ded90', '#0e9946'],
+        sleeves: '#1ccd68', sleeveEnds: '#1ccd68', collar: '#AFE1AF', bottomEdge: '#1ccd68', number: '#ffffff'
       },
       'Türkiye': {
-        torso: '#1B1212',
-        sleeves: '#1B1212',
-        sleeveEnds: '#1B1212',
-        collar: '#A9A9A9',
-        bottomEdge: '#1B1212',
-        number: '#ffffff'
+        torso: '#1B1212', torsoGradient: ['#555555', '#0d0d0d'],
+        sleeves: '#1B1212', sleeveEnds: '#1B1212', collar: '#A9A9A9', bottomEdge: '#1B1212', number: '#ffffff'
       },
       'USA': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Uruguay': {
-        torso: '#FF7F50',
-        sleeves: '#FF7F50',
-        sleeveEnds: '#FF7F50',
-        collar: '#FAD5A5',
-        bottomEdge: '#FF7F50',
-        number: '#000000'
+        torso: '#FF7F50', torsoGradient: ['#ffaa80', '#cc4a18'],
+        sleeves: '#FF7F50', sleeveEnds: '#FF7F50', collar: '#FAD5A5', bottomEdge: '#FF7F50', number: '#000000'
       },
       'Uzbekistan': {
-        torso: '#1B1212',
-        sleeves: '#1B1212',
-        sleeveEnds: '#1B1212',
-        collar: '#A9A9A9',
-        bottomEdge: '#1B1212',
-        number: '#ffffff'
+        torso: '#1B1212', torsoGradient: ['#555555', '#0d0d0d'],
+        sleeves: '#1B1212', sleeveEnds: '#1B1212', collar: '#A9A9A9', bottomEdge: '#1B1212', number: '#ffffff'
       },
       'South Africa': {
-        torso: '#1B1212',
-        sleeves: '#1B1212',
-        sleeveEnds: '#1B1212',
-        collar: '#A9A9A9',
-        bottomEdge: '#1B1212',
-        number: '#ffffff'
+        torso: '#1B1212', torsoGradient: ['#555555', '#0d0d0d'],
+        sleeves: '#1B1212', sleeveEnds: '#1B1212', collar: '#A9A9A9', bottomEdge: '#1B1212', number: '#ffffff'
       },
       'England': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       },
       'Scotland': {
-        torso: '#E4D00A',
-        sleeves: '#E4D00A',
-        sleeveEnds: '#E4D00A',
-        collar: '#DAA520',
-        bottomEdge: '#E4D00A',
-        number: '#000000'
+        torso: '#E4D00A', torsoGradient: ['#f5e84a', '#b8a000'],
+        sleeves: '#E4D00A', sleeveEnds: '#E4D00A', collar: '#DAA520', bottomEdge: '#E4D00A', number: '#000000'
       }
     };
 
     function goalkeeperKit(country) {
       return goalkeeperKitColours[country] || {
         torso: '#38bdf8',
+        torsoGradient: ['#7dd3fc', '#0284c7'],
         sleeves: '#0f172a',
         sleeveEnds: '#ffffff',
         collar: '#ffffff',
@@ -4988,7 +4790,39 @@
       const torsoClipId = `shirt-torso-${country.replace(/[^a-z0-9]/gi, '').toLowerCase()}-${number}-${Math.random().toString(36).slice(2)}`;
       const torsoPatternId = `${torsoClipId}-pattern`;
       const torsoGradientId = `${torsoClipId}-gradient`;
-      const torsoFill = kit.torsoChecks ? `url(#${torsoPatternId})` : (kit.torsoGradient ? `url(#${torsoGradientId})` : kit.torso);
+      const torsoRadialGradientId = `${torsoClipId}-radial`;
+      const torsoWaveId = `${torsoClipId}-wave`;
+      const torsoWaveClipId = `${torsoClipId}-waveclip`;
+      const torsoFill = kit.torsoChecks ? `url(#${torsoPatternId})` : (kit.torsoRadialGradient ? `url(#${torsoRadialGradientId})` : (kit.torsoGradient ? `url(#${torsoGradientId})` : kit.torso));
+
+      // Generate SVG wave stripes as a series of sinusoidal paths
+      const buildWaveOverlay = (colour, clipId) => {
+        const waveCount = 18;
+        const waveH = 44;
+        const amp = 18;
+        const paths = [];
+        for (let i = 0; i < waveCount; i++) {
+          const y0 = i * waveH;
+          const y1 = y0 + waveH * 0.55;
+          let d = `M 0 ${y0 + amp}`;
+          for (let x = 0; x <= 826; x += 20) {
+            const sineY = y0 + amp + Math.sin((x / 826) * Math.PI * 4) * amp;
+            d += ` L ${x} ${sineY}`;
+          }
+          d += ` L 826 ${y1} L 826 ${y0 + waveH} L 0 ${y0 + waveH} Z`;
+          paths.push(`<path d="${d}" fill="${colour}" opacity="0.18"/>`);
+        }
+        return `<g clip-path="url(#${clipId})">${paths.join('')}</g>`;
+      };
+
+      const torsoWaveClipPath = `<clipPath id="${torsoWaveClipId}"><path d="M5311 7970 c-49 -73 -225 -238 -322 -302 -349 -231 -790 -317 -1229
+-86 -356 63 -674 243 -884 500 -32 39 -62 71 -67 71 -5 0 -138 -91 -296 -203
+-159 -112 -391 -276 -518 -364 -126 -89 -256 -185 -288 -213 -111 -100 -202
+-256 -239 -409 -17 -72 -19 -107 -15 -221 5 -132 8 -147 132 -645 155 -626
+171 -701 185 -846 7 -76 11 -830 13 -2264 l2 -2150 2307 -3 2307 -2 4 2187 c3
+1996 4 2198 20 2298 19 128 74 362 237 1020 59 240 72 309 77 400 12 233 -71
+446 -238 613 -35 34 -167 135 -294 224 -126 88 -252 178 -280 198 -27 21 -158
+113 -290 205 -132 92 -247 174 -256 181 -24 21 -31 17 -68 -36z" transform="scale(0.1) translate(0,-1280)"/></clipPath>`;
 
 
 const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.length === 5
@@ -5007,7 +4841,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
 
 
       return `<svg class="shirt" viewBox="0 0 826 872" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-        ${(kit.torsoChecks || kit.torsoGradient) ? `
+        ${(kit.torsoChecks || kit.torsoGradient || kit.torsoRadialGradient || kit.torsoWave) ? `
         <defs>
           ${kit.torsoChecks ? `<pattern id="${torsoPatternId}" patternUnits="userSpaceOnUse" x="1300" y="0" width="1000" height="1000">
             <rect x="0" y="0" width="500" height="500" fill="#e73e47"/>
@@ -5019,6 +4853,11 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
             <stop offset="0%" stop-color="${kit.torsoGradient[0]}"/>
             <stop offset="100%" stop-color="${kit.torsoGradient[1]}"/>
           </linearGradient>` : ''}
+          ${kit.torsoRadialGradient ? `<radialGradient id="${torsoRadialGradientId}" cx="50%" cy="50%" r="60%" fx="50%" fy="40%">
+            <stop offset="0%" stop-color="${kit.torsoRadialGradient[0]}"/>
+            <stop offset="100%" stop-color="${kit.torsoRadialGradient[1]}"/>
+          </radialGradient>` : ''}
+          ${kit.torsoWave ? torsoWaveClipPath : ''}
         </defs>` : ''}
         <g transform="translate(0,872) scale(0.1,-0.1)" stroke="none">
           <path d="M5547 8505 c-9 -46 -31 -125 -47 -175 -17 -51 -30 -97 -30 -103 0 -7
@@ -5046,6 +4885,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
 446 -238 613 -35 34 -167 135 -294 224 -126 88 -252 178 -280 198 -27 21 -158
 113 -290 205 -132 92 -247 174 -256 181 -24 21 -31 17 -68 -36z" fill="${torsoFill}"/>
           ${torsoStripeOverlay}
+          ${kit.torsoWave ? buildWaveOverlay(kit.torsoWave, torsoWaveClipId) : ''}
           <path d="M91 5088 c-4 -13 -18 -65 -31 -117 -20 -83 -21 -95 -8 -102 9 -5 184
 -120 389 -257 206 -137 415 -275 464 -307 50 -32 95 -62 102 -67 14 -11 130
 179 117 192 -5 4 -112 76 -237 159 -125 83 -348 231 -495 329 -147 97 -273
@@ -5079,8 +4919,12 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
         "M 26.0236 1950.49 L 163.548 1950.43 C 193.856 1950.39 225.447 1949.87 255.653 1950.62 C 255.863 1968.4 255.853 1986.19 255.623 2003.97 L 243.819 2004.02 L 12.8848 2004.11 L 12.9652 1950.8 L 26.0236 1950.49 z",
         "M 1715.92 1950.49 L 1851.64 1950.41 C 1882.8 1950.37 1918.37 1949.47 1949.23 1950.71 C 1949.51 1966.18 1950.21 1987.42 1949.4 2002.62 C 1947.26 2004.7 1947.23 2003.98 1943.25 2004.12 L 1707.08 2004.02 C 1707.04 1992.65 1706.13 1961.21 1707.49 1951.95 C 1709.76 1950.09 1712.76 1950.55 1715.92 1950.49 z"
       ];
+      const gkId = `gk-${country.replace(/[^a-z0-9]/gi, '').toLowerCase()}-${number}-${Math.random().toString(36).slice(2)}`;
+      const gkGradientId = `${gkId}-grad`;
+      const torsoFill = kit.torsoGradient ? `url(#${gkGradientId})` : kit.torso;
+
       const fills = [
-        kit.torso,
+        torsoFill,
         kit.sleeves,
         kit.sleeves,
         kit.bottomEdge,
@@ -5090,6 +4934,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
       ];
 
       return `<svg class="shirt goalkeeper-shirt" viewBox="0 0 1966 2048" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        ${kit.torsoGradient ? `<defs><linearGradient id="${gkGradientId}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${kit.torsoGradient[0]}"/><stop offset="100%" stop-color="${kit.torsoGradient[1]}"/></linearGradient></defs>` : ''}
         ${goalkeeperPaths.map((path, index) => `<path d="${path}" fill="${fills[index] || kit.torso}"/>`).join('')}
         <text x="983" y="1010" text-anchor="middle" dominant-baseline="middle" font-size="520" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${numberColour}" stroke="${country === 'Paraguay' ? 'transparent' : 'rgba(8,17,31,0.18)'}" stroke-width="${country === 'Paraguay' ? '0' : '18'}" paint-order="stroke">${number || 1}</text>
       </svg>`;
@@ -5102,12 +4947,55 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
     }
 
     function populateStats() {
-      const bestRank = Math.min(...teams.map(team => team.rank));
-      const totalPicks = teams.reduce((total, team) => total + Object.keys(team.picks).length, 0);
+      const statPlayers = [
+        {
+          id: 'statCard0',
+          country: 'England', flag: englandFlag, name: 'Kane',
+          number: 9, role: 'FWD',
+          label: '💰 Most expensive',
+          sub: '$10m · xGI 1.18'
+        },
+        {
+          id: 'statCard1',
+          country: 'Japan', flag: '🇯🇵', name: 'Ito',
+          number: 19, role: 'DEF',
+          label: '🛡️ Best defender pick',
+          sub: 'Japan form · vs Netherlands'
+        },
+        {
+          id: 'statCard2',
+          country: 'Iran', flag: '🇮🇷', name: 'Taremi',
+          number: 9, role: 'FWD',
+          label: '⚡ Best bargain',
+          sub: '$6.5m · xGI 0.88'
+        },
+        {
+          id: 'statCard3',
+          country: 'Spain', flag: '🇪🇸', name: 'Yamal',
+          number: 11, role: 'MID',
+          label: '🏆 MD1 captain pick',
+          sub: 'xGI 1.27 · vs Cape Verde'
+        }
+      ];
 
-      document.getElementById('totalTeams').textContent = teams.length;
-      document.getElementById('totalPicks').textContent = totalPicks;
-      document.getElementById('topRank').textContent = bestRank;
+      statPlayers.forEach(p => {
+        const el = document.getElementById(p.id);
+        if (!el) return;
+        const shirt = shirtSvg(p.country, p.number, p.role);
+        el.innerHTML = `
+          <div style="display:flex;align-items:center;gap:12px;min-width:0">
+            <div style="flex:0 0 auto;width:44px;height:44px;display:flex;align-items:center;justify-content:center">${shirt}</div>
+            <div style="min-width:0">
+              <div style="font-size:1.15rem;font-weight:900;letter-spacing:-0.03em;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.flag} ${p.name}</div>
+              <div style="color:var(--muted);font-size:0.78rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.country} · ${p.role}</div>
+            </div>
+          </div>
+          <div>
+            <div style="color:var(--accent);font-weight:800;font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:2px">${p.label}</div>
+            <div style="color:var(--muted);font-size:0.82rem">${p.sub}</div>
+          </div>
+        `;
+      });
     }
 
 
@@ -5117,6 +5005,12 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
       DEF: '$5m',
       GK: '$5m',
       'PENS': '$9m'
+    };
+
+    const playerPrices = {
+      'Kane': '$10m',
+      'Mbappe': '$10m',
+      'Taremi': '$6.5m'
     };
 
     
@@ -5160,7 +5054,7 @@ const shortRole = role => ({
               xG: parseFloat(pick.xG || pick.xGI || '0.56'),
               xA: parseFloat(pick.xA || '0.00'),
               xGC: parseFloat(pick.xGC || '0.82'),
-              price: rolePrices[label] || '$5m'
+              price: playerPrices[pick.name] || rolePrices[label] || '$5m'
             };
           })
       ).filter(player => {
