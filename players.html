@@ -4484,7 +4484,7 @@
         'Senegal': { torso:'#dedde2', sleeves:'#dedde2', sleeveEnds:'#067164', collar:'#067164', bottomEdge:'#067164' },
         'Tunisia': { torso:'#f2332b', sleeves:'#f2332b', sleeveEnds:'#f2332b', collar:'#f2332b', bottomEdge:'#f2332b' },
         'Türkiye': { torso:'#cf030c', sleeves:'#cf030c', sleeveEnds:'#cf030c', collar:'#cf030c', bottomEdge:'#cf030c' },
-        'USA': { torso:'#f0f0f0', sleeves:'#d0d8e8', sleeveEnds:'#1a3a9c', collar:'#1a3a9c', bottomEdge:'#1a3a9c' },
+        'USA': { torso:'#ffffff', torsoHStripes:['#b22234','#ffffff','#b22234','#ffffff','#b22234','#ffffff','#b22234','#ffffff','#b22234'], sleeves:'#b22234', sleeveEnds:'#1a2a5e', collar:'#1a2a5e', bottomEdge:'#ffffff', numberBackground:'#ffffff', number:'#1a2a5e' },
         'Uruguay': { torso:'#c7dafa', sleeves:'#c7dafa', sleeveEnds:'#111827', collar:'#353b51', bottomEdge:'#c7dafa' },
         'Uzbekistan': { torso:'#0454c0', sleeves:'#0454c0', sleeveEnds:'#2c8835', collar:'#2c8835', bottomEdge:'#ee0e2a' },
         'South Africa': { torso:'#f6cf5b', sleeves:'#f6cf5b', sleeveEnds:'#0f926b', collar:'#0f926b', bottomEdge:'#f6cf5b' },
@@ -4838,6 +4838,20 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
           </g>`
         : '';
 
+      const torsoHStripeOverlay = Array.isArray(kit.torsoHStripes) && kit.torsoHStripes.length > 0
+        ? `<clipPath id="${torsoClipId}-h"><path d="M5311 7970 c-49 -73 -225 -238 -322 -302 -349 -231 -790 -317 -1229
+-86 -356 63 -674 243 -884 500 -32 39 -62 71 -67 71 -5 0 -138 -91 -296 -203
+-159 -112 -391 -276 -518 -364 -126 -89 -256 -185 -288 -213 -111 -100 -202
+-256 -239 -409 -17 -72 -19 -107 -15 -221 5 -132 8 -147 132 -645 155 -626
+171 -701 185 -846 7 -76 11 -830 13 -2264 l2 -2150 2307 -3 2307 -2 4 2187 c3
+1996 4 2198 20 2298 19 128 74 362 237 1020 59 240 72 309 77 400 12 233 -71
+446 -238 613 -35 34 -167 135 -294 224 -126 88 -252 178 -280 198 -27 21 -158
+113 -290 205 -132 92 -247 174 -256 181 -24 21 -31 17 -68 -36z"/></clipPath>
+          <g clip-path="url(#${torsoClipId}-h)">
+            ${kit.torsoHStripes.map((colour, index) => `<rect x="1000" y="${780 + index * (7220 / kit.torsoHStripes.length)}" width="6000" height="${7220 / kit.torsoHStripes.length}" fill="${colour}"/>`).join('')}
+          </g>`
+        : '';
+
 
       return `<svg class="shirt" viewBox="0 0 826 872" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
         ${(kit.torsoChecks || kit.torsoGradient || kit.torsoRadialGradient || kit.torsoWave) ? `
@@ -4884,6 +4898,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
 446 -238 613 -35 34 -167 135 -294 224 -126 88 -252 178 -280 198 -27 21 -158
 113 -290 205 -132 92 -247 174 -256 181 -24 21 -31 17 -68 -36z" fill="${torsoFill}"/>
           ${torsoStripeOverlay}
+          ${torsoHStripeOverlay}
           ${kit.torsoWave ? buildWaveOverlay(kit.torsoWave, torsoWaveClipId) : ''}
           <path d="M91 5088 c-4 -13 -18 -65 -31 -117 -20 -83 -21 -95 -8 -102 9 -5 184
 -120 389 -257 206 -137 415 -275 464 -307 50 -32 95 -62 102 -67 14 -11 130
@@ -4901,6 +4916,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
 -34 -14z" fill="${kit.collar}"/>
         </g>
         ${country === 'Croatia' ? '<rect x="273" y="265" width="280" height="220" rx="22" fill="#ffffff" opacity="0.94"/>' : ''}
+        ${kit.numberBackground ? `<rect x="273" y="265" width="280" height="220" rx="22" fill="${kit.numberBackground}" opacity="0.92"/>` : ''}
         <text x="413" y="395" text-anchor="middle" dominant-baseline="middle" font-size="220" font-family="Arial Black, Arial, sans-serif" font-weight="900" fill="${country === 'Croatia' ? '#08111f' : numberColour}" stroke="${country === 'Paraguay' || country === 'Croatia' ? 'transparent' : 'rgba(8,17,31,0.18)'}" stroke-width="${country === 'Paraguay' || country === 'Croatia' ? '0' : '8'}" paint-order="stroke">${number || 10}</text>
       </svg>`;
     }
