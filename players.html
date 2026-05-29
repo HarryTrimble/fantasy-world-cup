@@ -2312,7 +2312,7 @@
         flag: "🇨🇴",
         picks: {
           forward: {
-            name: "Luis Diaz",
+            name: "Luis Díaz",
             why: "Elite forward",
             number: 7,
             club: "Bayern Munich",
@@ -2321,7 +2321,7 @@
             xGC: "1.32"
           },
           midfielder: {
-            name: "James Rodriguez",
+            name: "James Rodríguez",
             why: "Talisman + pens",
             number: 10,
             club: "",
@@ -2348,7 +2348,7 @@
             xGC: "0.45"
           },
           penalty: {
-            name: "James Rodriguez",
+            name: "James Rodríguez",
             why: "Historical pen taker",
             number: 10,
             club: "Minnesota United",
@@ -2486,7 +2486,7 @@
             xGC: "1.32"
           },
           defender: {
-            name: "Krejcí",
+            name: "Krejčí",
             why: "Budget defender",
             number: 5,
             club: "Wolves",
@@ -3300,7 +3300,7 @@
         flag: "🇲🇽",
         picks: {
           forward: {
-            name: "Raul Jimenez",
+            name: "Raúl Jiménez",
             why: "Proven forward + pens",
             number: 9,
             club: "Fulham",
@@ -3336,7 +3336,7 @@
             xGC: "1.32"
           },
           penalty: {
-            name: "Raul Jimenez",
+            name: "Raúl Jiménez",
             why: "Excellent penalty record",
             number: 9,
             club: "Fulham",
@@ -3544,7 +3544,7 @@
             xGC: "1.58"
           },
           penalty: {
-            name: "Ismael Diaz",
+            name: "Ismael Díaz",
             why: "Recent penalty taker",
             number: 10,
             club: "León",
@@ -3924,7 +3924,7 @@
         flag: "🇹🇷",
         picks: {
           forward: {
-            name: "Aktürkoglu",
+            name: "Aktürkoğlu",
             why: "Budget forward",
             number: 7,
             club: "Fenerbahçe",
@@ -3933,7 +3933,7 @@
             xGC: "1.32"
           },
           midfielder: {
-            name: "Guler",
+            name: "Güler",
             why: "Elite midfielder",
             number: 8,
             club: "Real Madrid",
@@ -3942,7 +3942,7 @@
             xGC: "1.32"
           },
           defender: {
-            name: "Kadioglu",
+            name: "Kadıoğlu",
             why: "Attacking wing-back",
             number: 3,
             club: "Brighton",
@@ -3951,7 +3951,7 @@
             xGC: "1.30"
           },
           goalkeeper: {
-            name: "Çakir",
+            name: "Çakır",
             why: "Budget keeper",
             number: 1,
             club: "Galatasaray",
@@ -3960,7 +3960,7 @@
             xGC: "0.76"
           },
           penalty: {
-            name: "Çalhanoglu",
+            name: "Çalhanoğlu",
             why: "Takes penalties when fit",
             number: 22,
             club: "Inter Milan",
@@ -4968,7 +4968,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
           country: 'England', flag: englandFlag, name: 'Kane',
           number: 9, role: 'FWD',
           label: '💰 Most expensive',
-          sub: '$10m · xGI 1.18'
+          sub: '$10.5m · xGI 1.18'
         },
         {
           id: 'statCard1',
@@ -4982,7 +4982,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
           country: 'Iran', flag: '🇮🇷', name: 'Taremi',
           number: 9, role: 'FWD',
           label: '⚡ Best bargain',
-          sub: '$6.5m · xGI 0.88'
+          sub: '$6.1m · xGI 0.88'
         },
         {
           id: 'statCard3',
@@ -5014,6 +5014,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
     }
 
 
+    // Fallback prices used before FIFA API loads (or if it fails)
     const rolePrices = {
       FWD: '$9m',
       MID: '$7.5m',
@@ -5022,11 +5023,89 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
       'PENS': '$9m'
     };
 
-    const playerPrices = {
-      'Kane': '$10m',
-      'Mbappe': '$10m',
-      'Taremi': '$6.5m'
+    // Manual overrides — take priority over the FIFA API
+    // Prices verified against Fantasy Football Scout (fantasyfootballscout.co.uk), May 2026
+    const priceOverrides = {
+      // Confirmed via FFS — API had wrong values
+      'munoz':          '$4.6m',
+      'kane':           '$10.5m',
+      'haaland':        '$10.5m',
+      'mbappe':         '$10.5m',
+      // Spain
+      'oyarzabal':      '$8.1m',
+      'yamal':          '$10.0m',
+      'torres':         '$7.8m',
+      'pedri':          '$8.1m',
+      'williams':       '$7.8m',
+      // Belgium
+      'courtois':       '$4.9m',
+      'debruyne':       '$7.5m',
+      'lukaku':         '$7.4m',
+      'doku':           '$7.5m',
+      'tielemans':      '$6.1m',
+      'trossard':       '$6.6m',
+      'decuyper':       '$4.7m',
+      // England
+      'saka':           '$9.5m',
+      'guehi':          '$5.1m',
+      // Netherlands
+      'gakpo':          '$7.7m',
+      // Portugal
+      'ronaldo':        '$10.0m',
+      // Argentina
+      'alvarez':        '$8.6m',
+      // Colombia
+      'jamesrodriguez': '$6.5m',
+      'luisdiaz':       '$8.1m',
     };
+
+    // Populated from FIFA Fantasy API: play.fifa.com/json/fantasy/players.json
+    // Keys are lowercase last names (and known names) for fuzzy matching
+    let playerPrices = {};
+    let fifaPricesLoaded = false;
+
+    function normaliseName(str) {
+      return (str || '').toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents
+        .replace(/[^a-z0-9]/g, '');                        // strip punctuation
+    }
+
+    function lookupPrice(playerName, role) {
+      const overrideKey = normaliseName(playerName);
+      if (priceOverrides[overrideKey]) return priceOverrides[overrideKey];
+      if (fifaPricesLoaded) {
+        const key = normaliseName(playerName);
+        if (playerPrices[key]) return playerPrices[key];
+        // partial match: check if any FIFA name contains the search key or vice versa
+        for (const [k, v] of Object.entries(playerPrices)) {
+          if (k.includes(key) || key.includes(k)) return v;
+        }
+      }
+      return rolePrices[role] || '$5m';
+    }
+
+    async function loadFifaPrices() {
+      try {
+        const res = await fetch('https://play.fifa.com/json/fantasy/players.json');
+        if (!res.ok) throw new Error('FIFA API error');
+        const data = await res.json();
+        const map = {};
+        data.forEach(p => {
+          const price = `$${p.price}m`;
+          // index by last name, first name, and known name
+          if (p.lastName)  map[normaliseName(p.lastName)]  = price;
+          if (p.firstName) map[normaliseName(p.firstName)] = price;
+          if (p.knownName) map[normaliseName(p.knownName)] = price;
+          // also full name
+          map[normaliseName(`${p.firstName}${p.lastName}`)] = price;
+        });
+        playerPrices = map;
+        fifaPricesLoaded = true;
+        render(); // re-render with real prices
+      } catch (e) {
+        console.warn('FIFA Fantasy prices unavailable, using position defaults.', e);
+      }
+    }
 
     
 const shortRole = role => ({
@@ -5069,7 +5148,7 @@ const shortRole = role => ({
               xG: parseFloat(pick.xG || pick.xGI || '0.56'),
               xA: parseFloat(pick.xA || '0.00'),
               xGC: parseFloat(pick.xGC || '0.82'),
-              price: playerPrices[pick.name] || rolePrices[label] || '$5m'
+              price: lookupPrice(pick.name, label)
             };
           })
       ).filter(player => {
@@ -5181,6 +5260,7 @@ const shortRole = role => ({
 
     populateStats();
     render();
+    loadFifaPrices(); // fetch live prices from FIFA Fantasy API, then re-render
   </script>
 </body>
 </html>
