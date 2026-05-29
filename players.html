@@ -5023,88 +5023,220 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
       'PENS': '$9m'
     };
 
-    // Manual overrides — take priority over the FIFA API
-    // Prices verified against Fantasy Football Scout (fantasyfootballscout.co.uk), May 2026
-    const priceOverrides = {
-      // Confirmed via FFS — API had wrong values
-      'munoz':          '$4.6m',
-      'kane':           '$10.5m',
-      'haaland':        '$10.5m',
-      'mbappe':         '$10.5m',
-      // Spain
-      'oyarzabal':      '$8.1m',
-      'yamal':          '$10.0m',
-      'torres':         '$7.8m',
-      'pedri':          '$8.1m',
-      'williams':       '$7.8m',
-      // Belgium
-      'courtois':       '$4.9m',
-      'debruyne':       '$7.5m',
-      'lukaku':         '$7.4m',
-      'doku':           '$7.5m',
-      'tielemans':      '$6.1m',
-      'trossard':       '$6.6m',
-      'decuyper':       '$4.7m',
-      // England
-      'saka':           '$9.5m',
-      'guehi':          '$5.1m',
-      // Netherlands
-      'gakpo':          '$7.7m',
-      // Portugal
-      'ronaldo':        '$10.0m',
-      // Argentina
-      'alvarez':        '$8.6m',
-      // Colombia
-      'jamesrodriguez': '$6.5m',
-      'luisdiaz':       '$8.1m',
-    };
-
-    // Populated from FIFA Fantasy API: play.fifa.com/json/fantasy/players.json
-    // Keys are lowercase last names (and known names) for fuzzy matching
-    let playerPrices = {};
-    let fifaPricesLoaded = false;
+    // All selected players — price, club, shirt number, xG, xA, xGC
+    // To correct a price just update the price field for that player
+    // All selected players — edit price: to correct values
+    // Name                      | price   | club                    | #  | xG   | xA   | xGC
+    const playerData = {
+      'Alvarez': { price: '$8.6m', club: 'Atlético Madrid', number: 9, xG: '0.36', xA: '0.24', xGC: '1.32' },
+      'Messi': { price: '$10.0m', club: 'Inter Miami', number: 10, xG: '0.78', xA: '0.49', xGC: '1.32' },
+      'Romero': { price: '$4.9m', club: 'Tottenham Hotspur', number: 26, xG: '0.06', xA: '0.06', xGC: '1.36' },
+      'Martinez': { price: '$5.0m', club: 'Aston Villa', number: 23, xG: '0.45', xA: '0.27', xGC: '1.24' },
+      'Arnautovic': { price: '$5.0m', club: 'RB Leipzig', number: 7, xG: '0.63', xA: '0.72', xGC: '1.32' },
+      'Sabitzer': { price: '$6.8m', club: 'Borussia Dortmund', number: 8, xG: '0.06', xA: '0.11', xGC: '1.32' },
+      'Alaba': { price: '$4.6m', club: 'Real Madrid', number: 6, xG: '0.05', xA: '0.02', xGC: '1.29' },
+      'Schlager': { price: '$4.8m', club: 'RB Salzburg', number: 1, xG: '0.45', xA: '0.27', xGC: '1.29' },
+      'Goodwin': { price: '$5.0m', club: 'Adelaide United', number: 11, xG: '0.26', xA: '0.14', xGC: '1.32' },
+      'Metcalfe': { price: '$5.3m', club: 'Middlesbrough', number: 19, xG: '0.10', xA: '0.10', xGC: '1.32' },
+      'Circati': { price: '$3.9m', club: 'Parma', number: 6, xG: '0.04', xA: '0.02', xGC: '1.49' },
+      'Ryan': { price: '$4.1m', club: 'AZ Alkmaar', number: 1, xG: '0.45', xA: '0.27', xGC: '1.54' },
+      'Dzeko': { price: '$6.1m', club: 'Schalke 04', number: 11, xG: '0.60', xA: '0.30', xGC: '1.32' },
+      'Bajraktarevic': { price: '$4.7m', club: 'PSV Eindhoven', number: 20, xG: '0.23', xA: '0.28', xGC: '1.32' },
+      'Dedic': { price: '$4.3m', club: 'Benfica', number: 5, xG: '0.05', xA: '0.17', xGC: '0.87' },
+      'Vasilj': { price: '$4.0m', club: 'FC St. Pauli', number: 1, xG: '0.45', xA: '0.27', xGC: '1.76' },
+      'De Ketelaere': { price: '$5.6m', club: 'Atalanta', number: 17, xG: '0.15', xA: '0.37', xGC: '1.32' },
+      'De Bruyne': { price: '$7.5m', club: 'Napoli', number: 7, xG: '0.34', xA: '0.26', xGC: '1.32' },
+      'Meunier': { price: '$4.8m', club: 'Lille', number: 2, xG: '0.06', xA: '0.26', xGC: '1.02' },
+      'Courtois': { price: '$4.9m', club: 'Real Madrid', number: 1, xG: '0.45', xA: '0.27', xGC: '0.77' },
+      'Vinicius': { price: '$10.0m', club: 'Real Madrid', number: 7, xG: '0.43', xA: '0.18', xGC: '1.32' },
+      'Guimarães': { price: '$7.5m', club: 'Newcastle United', number: 8, xG: '0.21', xA: '0.19', xGC: '1.32' },
+      'Gabriel': { price: '$5.5m', club: 'Arsenal', number: 6, xG: '0.10', xA: '0.06', xGC: '0.72' },
+      'Alisson': { price: '$5.0m', club: 'Liverpool', number: 1, xG: '0.45', xA: '0.27', xGC: '0.92' },
+      'Jonathan David': { price: '$7.0m', club: 'Juventus', number: 10, xG: '0.45', xA: '0.09', xGC: '1.32' },
+      'Buchanan': { price: '$5.5m', club: 'Villarreal', number: 17, xG: '0.10', xA: '0.10', xGC: '1.32' },
+      'Sigur': { price: '$3.5m', club: 'Hajduk Split', number: 3, xG: '0.04', xA: '0.08', xGC: '0.77' },
+      'St. Clair': { price: '$3.8m', club: 'Minnesota United', number: 1, xG: '0.45', xA: '0.27', xGC: '2.00' },
+      'Wissa': { price: '$7.0m', club: 'Newcastle United', number: 20, xG: '0.56', xA: '0.10', xGC: '1.32' },
+      'Bongonda': { price: '$4.5m', club: 'Spartak Moscow', number: 10, xG: '0.00', xA: '0.11', xGC: '1.32' },
+      'Tuanzebe': { price: '$3.7m', club: 'Burnley', number: 5, xG: '0.05', xA: '0.01', xGC: '2.28' },
+      'Mpasi-Nzau': { price: '$3.5m', club: 'Le Havre', number: 1, xG: '0.45', xA: '0.27', xGC: '0.57' },
+      'Ndoye': { price: '$6.5m', club: 'Nottingham Forest', number: 19, xG: '0.08', xA: '0.12', xGC: '1.32' },
+      'Xhaka': { price: '$7.0m', club: 'Sunderland', number: 10, xG: '0.03', xA: '0.11', xGC: '1.32' },
+      'Akanji': { price: '$5.5m', club: 'Inter Milan', number: 5, xG: '0.07', xA: '0.04', xGC: '0.90' },
+      'Kobel': { price: '$5.0m', club: 'Borussia Dortmund', number: 1, xG: '0.45', xA: '0.27', xGC: '1.03' },
+      'Guessand': { price: '$5.0m', club: 'Crystal Palace', number: 9, xG: '0.45', xA: '0.27', xGC: '1.32' },
+      'Kessie': { price: '$6.0m', club: 'Al-Ahli', number: 8, xG: '0.21', xA: '0.21', xGC: '1.32' },
+      'Fofana': { price: '$3.5m', club: 'Rizespor', number: 1, xG: '0.45', xA: '0.27', xGC: '1.56' },
+      'Luis Díaz': { price: '$8.1m', club: 'Bayern Munich', number: 7, xG: '0.55', xA: '0.28', xGC: '1.32' },
+      'Munoz': { price: '$4.6m', club: 'Crystal Palace', number: 2, xG: '0.09', xA: '0.15', xGC: '1.26' },
+      'Ospina': { price: '$4.5m', club: 'Atlético Nacional', number: 1, xG: '0.45', xA: '0.27', xGC: '0.45' },
+      'James Rodríguez': { price: '$6.5m', club: 'Minnesota United', number: 10, xG: '0.10', xA: '0.92', xGC: '1.32' },
+      'Rodrigues': { price: '$4.5m', club: 'Apollon Limassol', number: 10, xG: '0.18', xA: '0.01', xGC: '1.32' },
+      'Lopes Cabral': { price: '$4.5m', club: 'Benfica', number: 19, xG: '0.24', xA: '0.31', xGC: '1.32' },
+      'Moreira': { price: '$3.9m', club: 'Columbus Crew', number: 5, xG: '0.45', xA: '0.27', xGC: '1.21' },
+      'Vozinha': { price: '$3.9m', club: 'Chaves', number: 1, xG: '0.45', xA: '0.27', xGC: '1.16' },
+      'Locadia': { price: '$3.5m', club: 'Miami FC', number: 9, xG: '0.41', xA: '0.06', xGC: '1.32' },
+      'J Bacuna': { price: '$3.5m', club: 'Gaziantep', number: 10, xG: '0.16', xA: '0.09', xGC: '1.32' },
+      'Van Eijma': { price: '$3.5m', club: 'RKC Waalwijk', number: 4, xG: 'League data not available', xA: 'League data not available', xGC: 'League data not available' },
+      'Room': { price: '$3.5m', club: 'Miami FC', number: 1, xG: '0.45', xA: '0.27', xGC: '0.57' },
+      'L Bacuna': { price: '$3.5m', club: 'Iğdır FK', number: 7, xG: '0.27', xA: '0.16', xGC: '1.32' },
+      'Schick': { price: '$7.5m', club: 'Bayer Leverkusen', number: 10, xG: '0.76', xA: '0.13', xGC: '1.32' },
+      'Soucek': { price: '$6.5m', club: 'West Ham United', number: 6, xG: '0.21', xA: '0.02', xGC: '1.32' },
+      'Krejčí': { price: '$5.5m', club: 'Wolves', number: 5, xG: '0.09', xA: '0.06', xGC: '1.58' },
+      'Kovar': { price: '$5.0m', club: 'PSV Eindhoven', number: 1, xG: '0.45', xA: '0.27', xGC: '1.33' },
+      'Havertz': { price: '$8.5m', club: 'Arsenal', number: 9, xG: '0.49', xA: '0.03', xGC: '1.32' },
+      'Wirtz': { price: '$9.5m', club: 'Liverpool', number: 10, xG: '0.24', xA: '0.20', xGC: '1.32' },
+      'Tah': { price: '$5.5m', club: 'Bayern Munich', number: 5, xG: '0.03', xA: '0.08', xGC: '1.18' },
+      'Neuer': { price: '$5.5m', club: 'Bayern Munich', number: 1, xG: '0.97', xA: '0.27', xGC: '1.32' },
+      'Mahrez': { price: '$6.5m', club: 'Al-Ahli SFC', number: 7, xG: '0.14', xA: '0.37', xGC: '1.32' },
+      'Maza': { price: '$5.4m', club: 'Bayer Leverkusen', number: 8, xG: '0.26', xA: '0.22', xGC: '1.32' },
+      'Mandi': { price: '$3.9m', club: 'LOSC Lille', number: 2, xG: '0.04', xA: '0.05', xGC: '1.02' },
+      'Zidane': { price: '$3.8m', club: 'Granada CF', number: 1, xG: '0.45', xA: '0.27', xGC: '1.27' },
+      'Valencia': { price: '$7.0m', club: 'Pachuca', number: 13, xG: '0.45', xA: '0.03', xGC: '1.32' },
+      'Caicedo': { price: '$7.5m', club: 'Chelsea', number: 14, xG: '0.05', xA: '0.08', xGC: '1.32' },
+      'Hincapie': { price: '$5.5m', club: 'Arsenal', number: 3, xG: '0.02', xA: '0.09', xGC: '0.87' },
+      'Galíndez': { price: '$4.5m', club: 'Huracán', number: 1, xG: '0.45', xA: '0.27', xGC: '0.91' },
+      'Marmoush': { price: '$8.5m', club: 'Manchester City', number: 22, xG: '0.34', xA: '0.10', xGC: '1.32' },
+      'Salah': { price: '$10.0m', club: 'Liverpool', number: 10, xG: '0.34', xA: '0.21', xGC: '1.32' },
+      'Fathy': { price: '$4.0m', club: 'Al-Wakrah', number: 3, xG: '0.19', xA: '0.10', xGC: '1.46' },
+      'Shobeir': { price: '$4.5m', club: 'Al Ahly', number: 1, xG: '0.45', xA: '0.27', xGC: '1.10' },
+      'Oyarzabal': { price: '$8.1m', club: 'Real Sociedad', number: 17, xG: '0.51', xA: '0.12', xGC: '1.32' },
+      'Yamal': { price: '$10.0m', club: 'Barcelona', number: 11, xG: '0.51', xA: '0.40', xGC: '1.32' },
+      'Cucurella': { price: '$5.5m', club: 'Chelsea', number: 20, xG: '0.08', xA: '0.08', xGC: '1.35' },
+      'Simon': { price: '$5.5m', club: 'Athletic Club', number: 1, xG: '0.45', xA: '0.27', xGC: '1.46' },
+      'Mbappe': { price: '$10.5m', club: 'Real Madrid', number: 10, xG: '0.85', xA: '0.15', xGC: '1.32' },
+      'Olise': { price: '$8.5m', club: 'Bayern Munich', number: 11, xG: '0.45', xA: '0.67', xGC: '1.32' },
+      'Upamecano': { price: '$5.5m', club: 'Bayern Munich', number: 4, xG: '0.05', xA: '0.08', xGC: '1.19' },
+      'Maignan': { price: '$5.5m', club: 'AC Milan', number: 1, xG: '0.45', xA: '0.27', xGC: '0.93' },
+      'Ayew': { price: '$5.5m', club: 'Leicester City', number: 10, xG: '0.21', xA: '0.09', xGC: '1.32' },
+      'Semenyo': { price: '$5.5m', club: 'Bournemouth', number: 11, xG: '0.32', xA: '0.09', xGC: '1.32' },
+      'Djiku': { price: '$4.0m', club: 'Spartak Moscow', number: 3, xG: '0.45', xA: '0.27', xGC: '0.98' },
+      'Asare': { price: '$3.5m', club: 'Hearts of Oak', number: 1, xG: '0.45', xA: '0.27', xGC: '4' },
+      'Perisic': { price: '$5.5m', club: 'PSV Eindhoven', number: 4, xG: '0.20', xA: '0.32', xGC: '1.32' },
+      'Modric': { price: '$6.5m', club: 'AC Milan', number: 10, xG: '0.05', xA: '0.15', xGC: '1.32' },
+      'Gvardiol': { price: '$5.5m', club: 'Manchester City', number: 5, xG: '0.16', xA: '0.05', xGC: '1.02' },
+      'Livakovic': { price: '$4.5m', club: 'Fenerbahçe', number: 1, xG: '0.45', xA: '0.27', xGC: '0.77' },
+      'Nazon': { price: '$4.5m', club: 'Esteghlal', number: 9, xG: '0.19', xA: '0.19', xGC: '1.32' },
+      'Bellegarde': { price: '$5.0m', club: 'Wolves', number: 7, xG: '0.07', xA: '0.08', xGC: '1.32' },
+      'Adé': { price: '$3.5m', club: 'LDU Quito', number: 4, xG: '0.45', xA: '0.27', xGC: '1.03' },
+      'Placide': { price: '$3.5m', club: 'SC Bastia', number: 1, xG: '0.45', xA: '0.27', xGC: '1.04' },
+      'Hussein': { price: '$3.5m', club: 'Al-Karma', number: 18, xG: '0.86', xA: 'No league data', xGC: '1.32' },
+      'Bayesh': { price: '$3.5m', club: 'Al-Dhafra', number: 8, xG: '0.06', xA: '0.07', xGC: '1.32' },
+      'Sulaka': { price: '$3.5m', club: 'Fulham', number: 5, xG: '0.01', xA: '0.04', xGC: '0.75' },
+      'Basil': { price: '$3.5m', club: 'Al Shorta', number: 1, xG: '0.45', xA: '0.27', xGC: '2.60' },
+      'Taremi': { price: '$6.1m', club: 'Olympiacos', number: 9, xG: '0.68', xA: '0.20', xGC: '1.32' },
+      'Ghoddos': { price: '$4.5m', club: 'Al Ittihad Kalba', number: 14, xG: '0.26', xA: '0.23', xGC: '1.32' },
+      'Khalilzadeh': { price: '$3.5m', club: 'Tractor SC', number: 3, xG: '0.11', xA: '0.11', xGC: '0.67' },
+      'Beiranvand': { price: '$3.5m', club: 'Tractor SC', number: 1, xG: '0.45', xA: '0.27', xGC: '0.47' },
+      'Tamari': { price: '$5.0m', club: 'Rennes', number: 10, xG: '0.21', xA: '0.17', xGC: '1.32' },
+      'Al Mardi': { price: '$3.5m', club: 'Dibba Al Fujairah', number: 13, xG: '0.40', xA: '0.20', xGC: '1.32' },
+      'Nasib': { price: '$3.5m', club: 'Al-Zawraa', number: 5, xG: '0.00', xA: '0.00', xGC: '2.63' },
+      'Abulaila': { price: '$3.5m', club: 'Al-Hussein SC', number: 1, xG: '0.45', xA: '0.27', xGC: '1.20' },
+      'Ueda': { price: '$7.0m', club: 'Feyenoord', number: 9, xG: '0.67', xA: '0.06', xGC: '1.32' },
+      'Kubo': { price: '$7.5m', club: 'Real Sociedad', number: 7, xG: '0.14', xA: '0.21', xGC: '1.32' },
+      'Ito': { price: '$5.0m', club: 'Bayern Munich', number: 19, xG: '0.45', xA: '0.27', xGC: '1.67' },
+      'Suzuki': { price: '$4.5m', club: 'Parma', number: 1, xG: '0.45', xA: '0.27', xGC: '1.20' },
+      'Son': { price: '$7.5m', club: 'Los Angeles FC', number: 7, xG: '0.24', xA: '0.28', xGC: '1.32' },
+      'Kant-In Lee': { price: '$6.5m', club: 'Paris Saint-Germain', number: 17, xG: '0.16', xA: '0.33', xGC: '1.32' },
+      'Min-Jae Kim': { price: '$5.0m', club: 'Bayern Munich', number: 3, xG: '0.08', xA: '0.08', xGC: '1.35' },
+      'Sueng-Gyu Kim': { price: '$4.0m', club: 'FC Tokyo', number: 1, xG: '0.45', xA: '0.27', xGC: '0.94' },
+      'Ziyech': { price: '$6.0m', club: 'Wydad AC', number: 7, xG: '0.42', xA: '0.21', xGC: '1.32' },
+      'Brahim Diaz': { price: '$6.0m', club: 'Real Madrid', number: 10, xG: '0.09', xA: '0.18', xGC: '1.32' },
+      'Hakimi': { price: '$6.5m', club: 'Paris Saint-Germain', number: 2, xG: '0.16', xA: '0.15', xGC: '0.92' },
+      'Bounou': { price: '$4.5m', club: 'Al-Hilal', number: 1, xG: '0.45', xA: '0.27', xGC: '0.83' },
+      'Raúl Jiménez': { price: '$7.0m', club: 'Fulham', number: 9, xG: '0.45', xA: '0.27', xGC: '1.32' },
+      'Álvarez': { price: '$5.0m', club: 'Fenerbahçe', number: 14, xG: '0.08', xA: '0.04', xGC: '1.32' },
+      'Montes': { price: '$5.0m', club: 'Lokomotiv Moscow', number: 3, xG: '0.16', xA: '0.08', xGC: '1.43' },
+      'Rangel': { price: '$3.5m', club: 'Guadalajara', number: 1, xG: '0.45', xA: '0.27', xGC: '1.32' },
+      'Malen': { price: '$7.5m', club: 'Aston Villa', number: 9, xG: '0.57', xA: '0.05', xGC: '1.32' },
+      'Gakpo': { price: '$7.7m', club: 'Liverpool', number: 11, xG: '0.28', xA: '0.16', xGC: '1.32' },
+      'Dumfries': { price: '$6.0m', club: 'Inter Milan', number: 2, xG: '0.23', xA: '0.06', xGC: '0.99' },
+      'Verbruggen': { price: '$5.0m', club: 'Fulham', number: 1, xG: '0.45', xA: '0.27', xGC: '1.16' },
+      'Haaland': { price: '$10.5m', club: 'Manchester City', number: 9, xG: '0.79', xA: '0.07', xGC: '1.32' },
+      'Ødegaard': { price: '$9.0m', club: 'Arsenal', number: 10, xG: '0.07', xA: '0.25', xGC: '1.32' },
+      'Ryerson': { price: '$5.5m', club: 'Borussia Dortmund', number: 2, xG: '0.04', xA: '0.40', xGC: '1.32' },
+      'Nyland': { price: '$4.5m', club: 'Sevilla', number: 1, xG: '0.45', xA: '0.27', xGC: '1.75' },
+      'Wood': { price: '$7.0m', club: 'Nottingham Forest', number: 9, xG: '0.45', xA: '0.02', xGC: '1.32' },
+      'Stamenic': { price: '$5.5m', club: 'Swansea City', number: 11, xG: '0.09', xA: '0.03', xGC: '1.32' },
+      'Bindon': { price: '$3.5m', club: 'Sheffield United', number: 4, xG: '0.07', xA: '0.02', xGC: '1.19' },
+      'Crocombe': { price: '$3.5m', club: 'Millwall', number: 1, xG: '0.45', xA: '0.27', xGC: '1.09' },
+      'Ismael Díaz': { price: '$6.5m', club: 'León', number: 10, xG: '0.56', xA: '0.05', xGC: '1.32' },
+      'Carrasquilla': { price: '$6.0m', club: 'UNAM', number: 8, xG: '0.09', xA: '0.77', xGC: '1.32' },
+      'Amir Murillo': { price: '$5.0m', club: 'Beşiktaş', number: 2, xG: '0.10', xA: '0.09', xGC: '1.13' },
+      'Orlando Mosquera': { price: '$3.5m', club: 'Al-Fayha', number: 1, xG: '0.45', xA: '0.27', xGC: '1.58' },
+      'Ronaldo': { price: '$10.0m', club: 'Al-Nassr', number: 7, xG: '0.93', xA: '0.09', xGC: '1.32' },
+      'Bruno': { price: '$9.0m', club: 'Manchester United', number: 8, xG: '0.33', xA: '0.37', xGC: '1.32' },
+      'Mendes': { price: '$6.0m', club: 'Paris Saint-Germain', number: 19, xG: '0.31', xA: '0.26', xGC: '0.98' },
+      'Diogo Costa': { price: '$5.5m', club: 'Porto', number: 99, xG: '0.45', xA: '0.27', xGC: '0.40' },
+      'Enciso': { price: '$7.0m', club: 'Strasbourg', number: 19, xG: '0.37', xA: '0.23', xGC: '1.32' },
+      'Almirón': { price: '$7.5m', club: 'Atlanta United', number: 10, xG: '0.26', xA: '0.22', xGC: '1.32' },
+      'Gómez': { price: '$5.0m', club: 'Palmeiras', number: 6, xG: '0.05', xA: '0.07', xGC: '0.93' },
+      'Fernández': { price: '$4.5m', club: 'Cerro Porteño', number: 1, xG: '0.45', xA: '0.27', xGC: '1.00' },
+      'Al Mannai': { price: '$4.5m', club: 'Al-Shamal', number: 11, xG: '0.32', xA: '0.10', xGC: '1.32' },
+      'Afif': { price: '$8.0m', club: 'Al Sadd', number: 10, xG: '0.65', xA: '0.55', xGC: '1.32' },
+      'Abunada': { price: '$4.5m', club: 'Al-Rayyan', number: 1, xG: '0.45', xA: '0.27', xGC: '1.32' },
+      'Al-Buraikan': { price: '$7.0m', club: 'Al-Ahli', number: 9, xG: '0.14', xA: '0.14', xGC: '1.32' },
+      'Salem Al-Dawsari': { price: '$7.5m', club: 'Al-Hilal', number: 10, xG: '0.44', xA: '0.44', xGC: '1.32' },
+      'Al Tambakti': { price: '$5.0m', club: 'Al-Hilal', number: 4, xG: '0.05', xA: '0.03', xGC: '0.77' },
+      'Alaqidi': { price: '$3.5m', club: 'Al-Nassr', number: 1, xG: '0.45', xA: '0.27', xGC: '1.13' },
+      'Gyokeres': { price: '$10.0m', club: 'Arsenal', number: 9, xG: '0.50', xA: '0.07', xGC: '1.32' },
+      'Ayari': { price: '$6.0m', club: 'Brighton', number: 19, xG: '0.13', xA: '0.05', xGC: '1.32' },
+      'Lindelöf': { price: '$5.5m', club: 'Aston Villa', number: 3, xG: '0.03', xA: '0.01', xGC: '1.52' },
+      'Johansson': { price: '$3.5m', club: 'Stoke City', number: 1, xG: '0.45', xA: '0.27', xGC: '1.00' },
+      'Mane': { price: '$9.0m', club: 'Al-Nassr', number: 10, xG: '0.47', xA: '0.24', xGC: '1.32' },
+      'Ndiaye': { price: '$7.5m', club: 'Everton', number: 13, xG: '0.22', xA: '0.15', xGC: '1.32' },
+      'Diouf': { price: '$5.5m', club: 'West Ham United', number: 2, xG: '0.02', xA: '0.09', xGC: '1.46' },
+      'Mendy': { price: '$5.0m', club: 'Al-Ahli', number: 1, xG: '0.45', xA: '0.27', xGC: '0.68' },
+      'Achouri': { price: '$6.0m', club: 'FC København', number: 9, xG: '0.24', xA: '0.23', xGC: '1.32' },
+      'Hannibal Mejbri': { price: '$7.0m', club: 'Burnley', number: 10, xG: '0.05', xA: '0.14', xGC: '1.32' },
+      'Ali Abdi': { price: '$5.5m', club: 'OGC Nice', number: 4, xG: '0.19', xA: '0.06', xGC: '1.52' },
+      'Dahmen': { price: '$5.0m', club: 'Sfaxien', number: 1, xG: '0.45', xA: '0.27', xGC: '1.00' },
+      'Aktürkoğlu': { price: '$7.5m', club: 'Fenerbahçe', number: 7, xG: '0.28', xA: '0.22', xGC: '1.32' },
+      'Güler': { price: '$8.5m', club: 'Real Madrid', number: 8, xG: '0.20', xA: '0.32', xGC: '1.32' },
+      'Kadıoğlu': { price: '$6.0m', club: 'Brighton', number: 3, xG: '0.06', xA: '0.08', xGC: '1.30' },
+      'Çakır': { price: '$4.5m', club: 'Galatasaray', number: 1, xG: '0.45', xA: '0.27', xGC: '0.76' },
+      'Çalhanoğlu': { price: '$8.5m', club: 'Inter Milan', number: 22, xG: '0.31', xA: '0.19', xGC: '1.32' },
+      'Haji Wright': { price: '$6.5m', club: 'Coventry City', number: 11, xG: '0.64', xA: '0.05', xGC: '1.32' },
+      'McKennie': { price: '$6.5m', club: 'Juventus', number: 6, xG: '0.25', xA: '0.19', xGC: '1.32' },
+      'Richards': { price: '$5.5m', club: 'Crystal Palace', number: 3, xG: '0.08', xA: '0.04', xGC: '1.27' },
+      'Freese': { price: '$4.5m', club: 'New York City FC', number: 1, xG: '0.45', xA: '0.27', xGC: '1.38' },
+      'Pulisic': { price: '$9.0m', club: 'AC Milan', number: 10, xG: '0.44', xA: '0.24', xGC: '1.32' },
+      'Darwin Núñez': { price: '$8.5m', club: 'Al-Hilal', number: 9, xG: '0.82', xA: '0.17', xGC: '1.32' },
+      'Valverde': { price: '$8.5m', club: 'Real Madrid', number: 15, xG: '0.10', xA: '0.16', xGC: '1.32' },
+      'Araujo': { price: '$6.0m', club: 'Barcelona', number: 4, xG: '0.12', xA: '0.12', xGC: '1.32' },
+      'Rochet': { price: '$5.0m', club: 'Internacional', number: 1, xG: '0.45', xA: '0.27', xGC: '1.00' },
+      'Shomurodov': { price: '$4.5m', club: 'İstanbul Başakşehir', number: 9, xG: '0.47', xA: '0.10', xGC: '1.32' },
+      'Fayzullayev': { price: '$4.5m', club: 'İstanbul Başakşehir', number: 10, xG: '0.33', xA: '0.28', xGC: '1.32' },
+      'Khusanov': { price: '$4.5m', club: 'Manchester City', number: 5, xG: '0.04', xA: '0.02', xGC: '1.26' },
+      'Yusupov': { price: '$3.5m', club: 'Navbahor Namangan', number: 1, xG: '0.45', xA: '0.27', xGC: '0.64' },
+      'Shukurov': { price: '$3.5m', club: 'Baniyas', number: 7, xG: '0.05', xA: '0.26', xGC: '1.32' },
+      'Foster': { price: '$5.0m', club: 'Burnley', number: 9, xG: '0.21', xA: '0.03', xGC: '1.32' },
+      'Appollis': { price: '$5.0m', club: 'Orlando Pirates', number: 10, xG: '0.36', xA: '0.22', xGC: '1.32' },
+      'Mbokazi': { price: '$3.5m', club: 'Orlando Pirates', number: 4, xG: '0.09', xA: '0.01', xGC: '1.41' },
+      'Williams': { price: '$3.5m', club: 'Mamelodi Sundowns', number: 1, xG: '0.45', xA: '0.27', xGC: '0.72' },
+      'Kane': { price: '$10.5m', club: 'Bayern Munich', number: 9, xG: '1.02', xA: '0.16', xGC: '1.32' },
+      'Saka': { price: '$9.5m', club: 'Arsenal', number: 7, xG: '0.31', xA: '0.29', xGC: '1.32' },
+      'Guehi': { price: '$5.1m', club: 'Manchester City', number: 6, xG: '0.12', xA: '0.07', xGC: '1.24' },
+      'Pickford': { price: '$5.5m', club: 'Everton', number: 1, xG: '0.45', xA: '0.27', xGC: '1.19' },
+      'Adams': { price: '$6.5m', club: 'Torino', number: 10, xG: '0.26', xA: '0.10', xGC: '1.32' },
+      'McTominay': { price: '$7.5m', club: 'Napoli', number: 4, xG: '0.35', xA: '0.05', xGC: '1.32' },
+      'Robertson': { price: '$6.5m', club: 'Liverpool', number: 3, xG: '0.09', xA: '0.09', xGC: '1.34' },
+      'Gordon': { price: '$3.5m', club: 'Hearts', number: 1, xG: '0.45', xA: '0.27', xGC: '0.80' },
+    };;
 
     function normaliseName(str) {
       return (str || '').toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents
-        .replace(/[^a-z0-9]/g, '');                        // strip punctuation
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '');
     }
 
     function lookupPrice(playerName, role) {
-      const overrideKey = normaliseName(playerName);
-      if (priceOverrides[overrideKey]) return priceOverrides[overrideKey];
-      if (fifaPricesLoaded) {
-        const key = normaliseName(playerName);
-        if (playerPrices[key]) return playerPrices[key];
-        // partial match: check if any FIFA name contains the search key or vice versa
-        for (const [k, v] of Object.entries(playerPrices)) {
-          if (k.includes(key) || key.includes(k)) return v;
-        }
+      if (playerData[playerName]) return playerData[playerName].price;
+      const key = normaliseName(playerName);
+      for (const [k, v] of Object.entries(playerData)) {
+        if (normaliseName(k) === key) return v.price;
       }
       return rolePrices[role] || '$5m';
-    }
-
-    async function loadFifaPrices() {
-      try {
-        const res = await fetch('https://play.fifa.com/json/fantasy/players.json');
-        if (!res.ok) throw new Error('FIFA API error');
-        const data = await res.json();
-        const map = {};
-        data.forEach(p => {
-          const price = `$${p.price}m`;
-          // index by last name, first name, and known name
-          if (p.lastName)  map[normaliseName(p.lastName)]  = price;
-          if (p.firstName) map[normaliseName(p.firstName)] = price;
-          if (p.knownName) map[normaliseName(p.knownName)] = price;
-          // also full name
-          map[normaliseName(`${p.firstName}${p.lastName}`)] = price;
-        });
-        playerPrices = map;
-        fifaPricesLoaded = true;
-        render(); // re-render with real prices
-      } catch (e) {
-        console.warn('FIFA Fantasy prices unavailable, using position defaults.', e);
-      }
     }
 
     
@@ -5260,7 +5392,7 @@ const shortRole = role => ({
 
     populateStats();
     render();
-    loadFifaPrices(); // fetch live prices from FIFA Fantasy API, then re-render
+
   </script>
 </body>
 </html>
