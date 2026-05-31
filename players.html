@@ -1520,7 +1520,7 @@
     <section class="controls" aria-label="Player filters">
       <input id="searchInput" type="search" placeholder="Search country or player..." />
       <select id="groupFilter"><option value="">All groups</option></select>
-      <select id="roleFilter"><option value="">All roles</option><option>FWD</option><option>MID</option><option>DEF</option><option>GK</option><option>PENS</option></select>
+      <select id="roleFilter"><option value="">All roles</option><option>FWD</option><option>MID</option><option>DEF</option><option>GK</option><option value="PENS">Pen takers</option></select>
       <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option>
               <option value="price">Sort by price</option><option value="xg">Sort by expected goals (xG)</option><option value="xa">Sort by expected assists (xA)</option><option value="xgc">Sort by expected goals conceded (xGC)</option></select>
     </section>
@@ -4604,6 +4604,12 @@
       return `
         <table class="player-info-table" aria-label="${player.name} details">
           <tbody>
+            ${player.penaltyTaker ? `
+            <tr>
+              <th scope="row">Penalty taker</th>
+              <td>${player.penaltyWhy ? player.penaltyWhy + ' ' : ''}🎯</td>
+            </tr>
+            ` : ''}
             ${player.role === 'GK' ? '' : `
             <tr>
               <th scope="row">xG per 90</th>
@@ -4612,7 +4618,7 @@
 
             <tr>
               <th scope="row">xA per 90</th>
-              <td>${formatStat(player.xA, '0.27')} 🎯</td>
+              <td>${formatStat(player.xA, '0.27')} 🅰️</td>
             </tr>
             `}
             ${player.role === 'FWD' || player.role === 'MID' || player.role === 'PENS' ? '' : `
@@ -5260,8 +5266,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
       FWD: '$9m',
       MID: '$7.5m',
       DEF: '$5m',
-      GK: '$5m',
-      'PENS': '$9m'
+      GK: '$5m'
     };
 
 
@@ -5270,8 +5275,7 @@ const shortRole = role => ({
   'Forward': 'FWD',
   'Midfielder': 'MID',
   'Defender': 'DEF',
-  'Goalkeeper': 'GK',
-  'Penalty taker': 'PENS'
+  'Goalkeeper': 'GK'
 }[role] || role);
 
 
@@ -5285,15 +5289,18 @@ const shortRole = role => ({
         ['FWD', 'forward'],
         ['MID', 'midfielder'],
         ['DEF', 'defender'],
-        ['GK', 'goalkeeper'],
-        ['PENS', 'penalty']
+        ['GK', 'goalkeeper']
       ];
 
       let rows = teams.flatMap(team =>
         roleRows
-          .filter(([label]) => !role || label === role)
+          .filter(([label]) => role !== 'PENS' ? (!role || label === role) : true)
           .map(([label, key]) => {
             const pick = normalisePick(team.picks[key], key);
+            const penPick = team.picks.penalty;
+            const penName = penPick ? (Array.isArray(penPick) ? penPick[0] : penPick.name) : null;
+            const penWhy = penPick ? (Array.isArray(penPick) ? penPick[1] : penPick.why) : null;
+            const isPenTaker = penName && penName === pick.name;
             return {
               team,
               role: label,
@@ -5306,13 +5313,16 @@ const shortRole = role => ({
               xG: parseFloat(pick.xG || pick.xGI || '0.56'),
               xA: parseFloat(pick.xA || '0.00'),
               xGC: parseFloat(pick.xGC || '0.82'),
-              price: (pick.price || rolePrices[label] || '$5m').replace(/\.0m$/, 'm')
+              price: (pick.price || rolePrices[label] || '$5m').replace(/\.0m$/, 'm'),
+              penaltyTaker: isPenTaker,
+              penaltyWhy: isPenTaker ? penWhy : null
             };
           })
       ).filter(player => {
         const searchable = `${player.name} ${player.why} ${player.team.country} ${shortRole(player.role)}`.toLowerCase();
         return (!group || player.team.group === group) &&
-          (!query || searchable.includes(query));
+          (!query || searchable.includes(query)) &&
+          (!role || (role === 'PENS' ? player.penaltyTaker : player.role === role));
       });
 
       rows.sort((a, b) => {
