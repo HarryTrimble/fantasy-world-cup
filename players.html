@@ -3914,7 +3914,7 @@
             price: "$3.5m"
           },
           penalty: {
-            name: "Afif",
+            name: "Akram Afif",
             why: "34/39 career (87%) — excellent record",
             number: 10,
             club: "Al Sadd",
@@ -5391,6 +5391,21 @@ const shortRole = role => ({
       });
 
       rows.sort((a, b) => {
+        // When filtering by penalty takers, always sort best to worst conversion rate
+        // weighted by sample size — players with <10 penalties get their rate discounted
+        if (role === 'PENS') {
+          const penScore = p => {
+            const m = (p.penaltyWhy || '').match(/(\d+)\/(\d+)/);
+            if (!m) return -1;
+            const scored = parseInt(m[1]), taken = parseInt(m[2]);
+            const rate = scored / taken;
+            // Weight: full rate if >=10 taken, scaled down proportionally below 10
+            const weight = Math.min(taken, 10) / 10;
+            return rate * weight;
+          };
+          return penScore(b) - penScore(a) || a.name.localeCompare(b.name);
+        }
+
         if (sort === 'rank') return a.team.rank - b.team.rank || a.name.localeCompare(b.name);
         
         if (sort === 'price') {
