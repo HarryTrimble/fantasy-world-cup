@@ -1504,7 +1504,7 @@
       </nav>
       <div class="eyebrow">World Cup Fantasy Football</div>
       <h1>Players to target</h1>
-      <p class="subtitle">One pick per position, including penalty takers. Picks are provisional and weighted toward likely starters, attacking output, clean-sheet history, penalties and set pieces.</p>
+      <p class="subtitle">One pick per position. Penalty takers are shown in the full player profile. Picks are provisional and weighted toward likely starters, attacking output, clean-sheet history, penalties and set pieces.</p>
       </div>
 
       <section class="stats-grid" aria-label="Player stats">
@@ -1520,7 +1520,7 @@
     <section class="controls" aria-label="Player filters">
       <input id="searchInput" type="search" placeholder="Search country or player..." />
       <select id="groupFilter"><option value="">All groups</option></select>
-      <select id="roleFilter"><option value="">All roles</option><option>FWD</option><option>MID</option><option>DEF</option><option>GK</option><option value="PENS">Pen takers</option></select>
+      <select id="roleFilter"><option value="">All roles</option><option value="FWD">Forwards</option><option value="MID">Midfielders</option><option value="DEF">Defenders</option><option value="GK">Goalkeepers</option><option value="PENS">Penalty takers</option></select>
       <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option>
               <option value="price">Sort by price</option><option value="xg">Sort by expected goals (xG)</option><option value="xa">Sort by expected assists (xA)</option><option value="xgc">Sort by expected goals conceded (xGC)</option></select>
     </section>
@@ -1833,7 +1833,7 @@
           },
           penalty: {
             name: "Messi",
-            why: "Nailed pen taker",
+            why: "113/145 career (78%) — average by elite standards",
             number: 10,
             club: "Inter Miami",
             xG: "0.78",
@@ -1890,7 +1890,7 @@
           },
           penalty: {
             name: "Sabitzer",
-            why: "Likely penalty taker",
+            why: "7/7 career (100%) — perfect record",
             number: 8,
             club: "Borussia Dortmund",
             xG: "0.06",
@@ -1945,9 +1945,19 @@
             xGC: "1.54",
             price: "$4.1m"
           },
+          midfielder2: {
+            name: "Hrustic",
+            why: "Likely penalty taker with Goodwin absent",
+            number: 10,
+            club: "Heracles Almelo",
+            xG: "0.10",
+            xA: "0.15",
+            xGC: "1.32",
+            price: "$5.0m"
+          },
           penalty: {
-            name: "Goodwin",
-            why: "Likely penalty taker",
+            name: "Hrustic",
+            why: "0/1 career (0%) — Goodwin (13/16, 81%) absent injured",
             number: 11,
             club: "Adelaide United",
             xG: "0.26",
@@ -2004,7 +2014,7 @@
           },
           penalty: {
             name: "Dzeko",
-            why: "Nailed penalty taker",
+            why: "18/30 career (60%) — below average record",
             number: 11,
             club: "Schalke 04",
             xG: "0.60",
@@ -2061,7 +2071,7 @@
           },
           penalty: {
             name: "De Bruyne",
-            why: "Likely penalty taker",
+            why: "15/17 career (88%) — excellent record",
             number: 7,
             club: "Napoli",
             xG: "0.34",
@@ -2118,7 +2128,7 @@
           },
           penalty: {
             name: "Vinicius",
-            why: "Likely penalty taker",
+            why: "6/9 career (67%) — worst regular pen taker at Real Madrid this century",
             number: 7,
             club: "Real Madrid",
             xG: "0.21",
@@ -2175,7 +2185,7 @@
           },
           penalty: {
             name: "David",
-            why: "Nailed pen taker",
+            why: "28/34 career (82%) — missed high-profile Panenka vs Lecce Jan 2026",
             number: 10,
             club: "Juventus",
             xG: "0.45",
@@ -2232,7 +2242,7 @@
           },
           penalty: {
             name: "Wissa",
-            why: "No nailed on pens",
+            why: "12/14 career (86%) — strong record",
             number: 20,
             club: "Newcastle United",
             xG: "0.56",
@@ -2289,7 +2299,7 @@
           },
           penalty: {
             name: "Xhaka",
-            why: "Nailed pen taker",
+            why: "2/2 career (100%) — very small sample; missed in Euro 2016 shootout",
             number: 10,
             club: "Sunderland",
             xG: "0.03",
@@ -2316,7 +2326,7 @@
           },
           midfielder: {
             name: "Kessie",
-            why: "Typical penalty taker",
+            why: "27/34 career (79%) — solid record",
             number: 8,
             club: "Al-Ahli",
             xG: "0.21",
@@ -2346,7 +2356,7 @@
           },
           penalty: {
             name: "Kessie",
-            why: "Typical penalty taker",
+            why: "27/34 career (79%) — solid record",
             number: 8,
             club: "Al-Ahli",
             xG: "0.45",
@@ -2401,9 +2411,19 @@
             xGC: "0.45",
             price: "$4m"
           },
+          midfielder2: {
+            name: "James Rodríguez",
+            why: "Creative talisman + pens",
+            number: 10,
+            club: "León",
+            xG: "0.25",
+            xA: "0.35",
+            xGC: "1.32",
+            price: "$6.0m"
+          },
           penalty: {
             name: "James Rodríguez",
-            why: "Historical pen taker",
+            why: "11/13 career (85%) — Colombia's primary taker",
             number: 10,
             club: "Minnesota United",
             xG: "0.10",
@@ -2460,7 +2480,7 @@
           },
           penalty: {
             name: "Garry Rodrigues",
-            why: "Recent penalty keeper",
+            why: "5/6 career (83%) — reliable record",
             number: 10,
             club: "Apollon Limassol",
             xG: "0.18",
@@ -2515,9 +2535,19 @@
             xGC: "0.57",
             price: "$3.9m"
           },
+          midfielder2: {
+            name: "Leandro Bacuna",
+            why: "Creative midfielder + pens",
+            number: 8,
+            club: "Iğdır FK",
+            xG: "0.10",
+            xA: "0.15",
+            xGC: "1.32",
+            price: "$4.0m"
+          },
           penalty: {
             name: "Leandro Bacuna",
-            why: "Regular",
+            why: "11/14 career (79%) — solid record",
             number: 7,
             club: "Iğdır FK",
             xG: "0.27",
@@ -2574,7 +2604,7 @@
           },
           penalty: {
             name: "Schick",
-            why: "Nailed pen taker",
+            why: "5/8 career (63%) — below average record",
             number: 10,
             club: "Bayer Leverkusen",
             xG: "0.76",
@@ -2631,7 +2661,7 @@
           },
           penalty: {
             name: "Havertz",
-            why: "Likely pen taker",
+            why: "12/13 career (92%) — outstanding record",
             number: 9,
             club: "Arsenal",
             xG: "0.49",
@@ -2688,7 +2718,7 @@
           },
           penalty: {
             name: "Mahrez",
-            why: "Nailed pen taker",
+            why: "25/36 career (69%) — patchy record, regular misser",
             number: 7,
             club: "Al-Ahli SFC",
             xG: "0.14",
@@ -2745,7 +2775,7 @@
           },
           penalty: {
             name: "Enner Valencia",
-            why: "Nailed pen taker",
+            why: "32/45 career (71%) — Ecuador's long-serving taker",
             number: 13,
             club: "Pachuca",
             xG: "0.45",
@@ -2802,7 +2832,7 @@
           },
           penalty: {
             name: "Salah",
-            why: "Nailed pen taker",
+            why: "59/73 career (81%) — recent shootout struggles",
             number: 10,
             club: "Liverpool",
             xG: "0.34",
@@ -2859,7 +2889,7 @@
           },
           penalty: {
             name: "Yamal",
-            why: "Nailed pen taker",
+            why: "10/11 career (91%) — outstanding record",
             number: 11,
             club: "Barcelona",
             xG: "0.51",
@@ -2916,7 +2946,7 @@
           },
           penalty: {
             name: "Mbappe",
-            why: "Nailed pen taker",
+            why: "~50/63 career (79%) — shaky spell at Real Madrid in 2024-25",
             number: 10,
             club: "Real Madrid",
             xG: "0.85",
@@ -2973,7 +3003,7 @@
           },
           penalty: {
             name: "Ayew",
-            why: "Captain on pens",
+            why: "11/11 career (100%) — missed first career pen vs Charlton Feb 2026",
             number: 10,
             club: "Leicester City",
             xG: "0.21",
@@ -3030,7 +3060,7 @@
           },
           penalty: {
             name: "Modric",
-            why: "Captain on pens",
+            why: "10/15 career (67%) — not a specialist",
             number: 10,
             club: "AC Milan",
             xG: "0.05",
@@ -3047,7 +3077,7 @@
         picks: {
           forward: {
             name: "Nazon",
-            why: "Talisman + pens",
+            why: "6/6 career (100%) — perfect record",
             number: 9,
             club: "Esteghlal",
             xG: "0.19",
@@ -3087,7 +3117,7 @@
           },
           penalty: {
             name: "Nazon",
-            why: "Talisman + pens",
+            why: "6/6 career (100%) — perfect record",
             number: 9,
             club: "Esteghlal",
             xG: "0.18",
@@ -3104,7 +3134,7 @@
         picks: {
           forward: {
             name: "Aymen Hussein",
-            why: "Talisman + pens",
+            why: "6/6 career (100%) — perfect record, small sample",
             number: 18,
             club: "Al-Karma",
             xG: "0.86",
@@ -3144,7 +3174,7 @@
           },
           penalty: {
             name: "Aymen Hussein",
-            why: "Talisman + pens",
+            why: "6/6 career (100%) — perfect record, small sample",
             number: 18,
             club: "Al-Karma",
             xG: "0.86",
@@ -3161,7 +3191,7 @@
         picks: {
           forward: {
             name: "Taremi",
-            why: "Talisman + pens",
+            why: "52/59 career (88%) — outstanding record at Porto & Iran",
             number: 9,
             club: "Olympiacos",
             xG: "0.68",
@@ -3201,7 +3231,7 @@
           },
           penalty: {
             name: "Taremi",
-            why: "Talisman + pens",
+            why: "52/59 career (88%) — outstanding record at Porto & Iran",
             number: 9,
             club: "Olympiacos",
             xG: "0.68",
@@ -3258,7 +3288,7 @@
           },
           penalty: {
             name: "Tamari",
-            why: "Recent penalty taker",
+            why: "6/9 career (67%) — Jordan's talisman",
             number: 10,
             club: "Rennes",
             xG: "0.21",
@@ -3275,7 +3305,7 @@
         picks: {
           forward: {
             name: "Ueda",
-            why: "FWD on pens",
+            why: "8/11 career (73%) — Japan's first-choice taker",
             number: 9,
             club: "Feyenoord",
             xG: "0.67",
@@ -3315,7 +3345,7 @@
           },
           penalty: {
             name: "Ueda",
-            why: "FWD on pens",
+            why: "8/11 career (73%) — Japan's first-choice taker",
             number: 9,
             club: "Feyenoord",
             xG: "0.45",
@@ -3332,7 +3362,7 @@
         picks: {
           forward: {
             name: "Son Heung-Min",
-            why: "Talisman + pens",
+            why: "9/14 career (64%) — one of the weaker records among top players",
             number: 7,
             club: "Los Angeles FC",
             xG: "0.24",
@@ -3372,7 +3402,7 @@
           },
           penalty: {
             name: "Son Heung-Min",
-            why: "Talisman + pens",
+            why: "9/14 career (64%) — one of the weaker records among top players",
             number: 7,
             club: "Los Angeles FC",
             xG: "0.45",
@@ -3429,7 +3459,7 @@
           },
           penalty: {
             name: "Diaz",
-            why: "Took penalty in AFCON final",
+            why: "0/1 career (0%) — only one career penalty, missed it",
             number: 10,
             club: "Real Madrid",
             xG: "0.09",
@@ -3486,7 +3516,7 @@
           },
           penalty: {
             name: "Jiménez",
-            why: "Excellent penalty record",
+            why: "45/47 career (96%) — one of the best records in the game",
             number: 9,
             club: "Fulham",
             xG: "0.45",
@@ -3543,7 +3573,7 @@
           },
           penalty: {
             name: "Gakpo",
-            why: "Recent penalty taker",
+            why: "~8/10 career (80%) — confident, small sample",
             number: 11,
             club: "Liverpool",
             xG: "0.28",
@@ -3600,7 +3630,7 @@
           },
           penalty: {
             name: "Haaland",
-            why: "Nailed penalty taker",
+            why: "52/62 career (84%) — elite record",
             number: 9,
             club: "Manchester City",
             xG: "0.79",
@@ -3657,7 +3687,7 @@
           },
           penalty: {
             name: "Wood",
-            why: "Good penalty record at club and international level",
+            why: "26/27 career (96%) — hasn't missed in a decade",
             number: 9,
             club: "Nottingham Forest",
             xG: "0.45",
@@ -3714,7 +3744,7 @@
           },
           penalty: {
             name: "Díaz",
-            why: "Recent penalty taker",
+            why: "4/6 career (67%) — Sergio Díaz, below average record",
             number: 10,
             club: "León",
             xG: "0.45",
@@ -3771,7 +3801,7 @@
           },
           penalty: {
             name: "Ronaldo",
-            why: "Historic penaltu taker",
+            why: "180/215 career (84%) — most penalties scored ever",
             number: 7,
             club: "Al-Nassr",
             xG: "0.93",
@@ -3788,7 +3818,7 @@
         picks: {
           forward: {
             name: "Enciso",
-            why: "Creative star + pens",
+            why: "3/3 career (100%) — small sample",
             number: 19,
             club: "Strasbourg",
             xG: "0.37",
@@ -3828,7 +3858,7 @@
           },
           penalty: {
             name: "Enciso",
-            why: "Creative star + pens",
+            why: "3/3 career (100%) — small sample",
             number: 19,
             club: "Strasbourg",
             xG: "0.37",
@@ -3885,7 +3915,7 @@
           },
           penalty: {
             name: "Afif",
-            why: "Nailed penalty taker",
+            why: "34/39 career (87%) — excellent record",
             number: 10,
             club: "Al Sadd",
             xG: "0.65",
@@ -3942,7 +3972,7 @@
           },
           penalty: {
             name: "Salem Al-Dawsari",
-            why: "Nailed penalty taker",
+            why: "20/28 career (71%) — patchy, once missed two in one game",
             number: 10,
             club: "Al-Hilal",
             xG: "0.44",
@@ -3999,7 +4029,7 @@
           },
           penalty: {
             name: "Gyokeres",
-            why: "Great penalty record",
+            why: "26/30 career (87%) — reliable at Sporting & Sweden",
             number: 9,
             club: "Arsenal",
             xG: "0.50",
@@ -4056,7 +4086,7 @@
           },
           penalty: {
             name: "Mane",
-            why: "Nailed penalty taker",
+            why: "12/19 career (63%) — poor record, multiple AFCON misses",
             number: 10,
             club: "Al-Nassr",
             xG: "0.47",
@@ -4073,7 +4103,7 @@
         picks: {
           forward: {
             name: "Achouri",
-            why: "Budget FWD possibly pens",
+            why: "2/2 career (100%) — small sample; shares duties with Gharbi",
             number: 9,
             club: "FC København",
             xG: "0.24",
@@ -4113,7 +4143,7 @@
           },
           penalty: {
             name: "Achouri",
-            why: "Budget FWD possibly pens",
+            why: "2/2 career (100%) — small sample; shares duties with Gharbi",
             number: 9,
             club: "FC København",
             xG: "0.24",
@@ -4168,9 +4198,19 @@
             xGC: "0.76",
             price: "$4.2m"
           },
+          midfielder2: {
+            name: "Çalhanoğlu",
+            why: "Midfield engine + pens",
+            number: 20,
+            club: "Inter Milan",
+            xG: "0.30",
+            xA: "0.25",
+            xGC: "1.32",
+            price: "$8.0m"
+          },
           penalty: {
             name: "Çalhanoğlu",
-            why: "Takes penalties when fit",
+            why: "53/60 career (88%) — one of the best in the world",
             number: 22,
             club: "Inter Milan",
             xG: "0.31",
@@ -4225,9 +4265,19 @@
             xGC: "1.38",
             price: "$4.2m"
           },
+          forward2: {
+            name: "Pulisic",
+            why: "USA captain + pens",
+            number: 10,
+            club: "AC Milan",
+            xG: "0.45",
+            xA: "0.25",
+            xGC: "1.32",
+            price: "$9.0m"
+          },
           penalty: {
             name: "Pulisic",
-            why: "On penalties when not injured",
+            why: "13/15 career (87%) — only 2 career misses",
             number: 10,
             club: "AC Milan",
             xG: "0.44",
@@ -4284,7 +4334,7 @@
           },
           penalty: {
             name: "Valverde",
-            why: "Recent penalty taker",
+            why: "3/4 career (75%) — rarely takes penalties",
             number: 15,
             club: "Real Madrid",
             xG: "0.10",
@@ -4339,9 +4389,19 @@
             xGC: "0.64",
             price: "$3.9m"
           },
+          midfielder2: {
+            name: "Masharipov",
+            why: "Creative winger + pens",
+            number: 7,
+            club: "Baniyas",
+            xG: "0.20",
+            xA: "0.25",
+            xGC: "1.32",
+            price: "$4.0m"
+          },
           penalty: {
-            name: "Shukurov",
-            why: "Recent penalty taker",
+            name: "Masharipov",
+            why: "2/2 career (100%) — small sample",
             number: 7,
             club: "Baniyas",
             xG: "0.05",
@@ -4397,8 +4457,8 @@
             price: "$4.5m"
           },
           penalty: {
-            name: "Appollis",
-            why: "Took pens at AFCON",
+            name: "Foster",
+            why: "2/4 career (50%) — poor record",
             number: 10,
             club: "Orlando Pirates",
             xG: "0.36",
@@ -4455,7 +4515,7 @@
           },
           penalty: {
             name: "Kane",
-            why: "Excellent penalty record",
+            why: "95/113 career (84%) — on a 30-game scoring run since Qatar 2022",
             number: 9,
             club: "Bayern Munich",
             xG: "1.02",
@@ -4512,7 +4572,7 @@
           },
           penalty: {
             name: "McTominay",
-            why: "Recent penalty taker",
+            why: "1/2 career (50%) — small sample",
             number: 4,
             club: "Napoli",
             xG: "0.35",
@@ -4607,7 +4667,7 @@
             ${player.penaltyTaker ? `
             <tr>
               <th scope="row">Penalty taker</th>
-              <td>${player.penaltyWhy ? player.penaltyWhy + ' ' : ''}🎯</td>
+              <td>${player.penaltyWhy ? player.penaltyWhy + ' 🎯' : '🎯'}</td>
             </tr>
             ` : ''}
             ${player.role === 'GK' ? '' : `
@@ -4814,7 +4874,7 @@
         return `${defendingStats}<span class="player-meta-separator">•</span>${attackingStats}`;
       }
 
-      if (role === 'FWD' || role === 'MID' || role === 'PENS') {
+      if (role === 'FWD' || role === 'MID') {
         return attackingStats;
       }
 
@@ -5249,7 +5309,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
             <div style="flex:0 0 auto;width:44px;height:44px;display:flex;align-items:center;justify-content:center">${shirt}</div>
             <div style="min-width:0">
               <div style="font-size:1.15rem;font-weight:900;letter-spacing:-0.03em;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.flag} ${p.name}</div>
-              <div style="color:var(--muted);font-size:0.78rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.country} · ${p.role}</div>
+              <div style="color:var(--muted);font-size:0.78rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.country} · ${shortRole(p.role)}</div>
             </div>
           </div>
           <div>
@@ -5266,7 +5326,7 @@ const torsoStripeOverlay = Array.isArray(kit.torsoStripes) && kit.torsoStripes.l
       FWD: '$9m',
       MID: '$7.5m',
       DEF: '$5m',
-      GK: '$5m'
+      GK: '$5m',
     };
 
 
@@ -5275,7 +5335,7 @@ const shortRole = role => ({
   'Forward': 'FWD',
   'Midfielder': 'MID',
   'Defender': 'DEF',
-  'Goalkeeper': 'GK'
+  'Goalkeeper': 'GK',
 }[role] || role);
 
 
@@ -5287,14 +5347,19 @@ const shortRole = role => ({
 
       const roleRows = [
         ['FWD', 'forward'],
+        ['FWD', 'forward2'],
         ['MID', 'midfielder'],
+        ['MID', 'midfielder2'],
         ['DEF', 'defender'],
-        ['GK', 'goalkeeper']
+        ['GK', 'goalkeeper'],
       ];
 
       let rows = teams.flatMap(team =>
         roleRows
-          .filter(([label]) => role !== 'PENS' ? (!role || label === role) : true)
+          .filter(([label, key]) => {
+            if (!team.picks[key]) return false;
+            return role !== 'PENS' ? (!role || label === role) : true;
+          })
           .map(([label, key]) => {
             const pick = normalisePick(team.picks[key], key);
             const penPick = team.picks.penalty;
