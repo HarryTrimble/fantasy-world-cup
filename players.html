@@ -1519,7 +1519,7 @@
   <main>
     <section class="controls" aria-label="Player filters">
       <input id="searchInput" type="search" placeholder="Search country or player..." />
-      <select id="groupFilter"><option value="">All groups</option></select>
+      <select id="groupFilter"><option value="">Fixture difficulty</option><option value="md1">Matchday 1</option><option value="md2">Matchday 2</option><option value="md3">Matchday 3</option><option value="md123">Matchdays 1–3</option><option value="md12">Matchdays 1–2</option><option value="md23">Matchdays 2–3</option></select>
       <select id="roleFilter"><option value="">All roles</option><option value="FWD">Forwards</option><option value="MID">Midfielders</option><option value="DEF">Defenders</option><option value="GK">Goalkeepers</option><option value="PENS">Penalty takers</option></select>
       <select id="sortSelect"><option value="group">Sort by group</option><option value="rank">Sort by FIFA rank</option><option value="country">Sort by country</option>
               <option value="price">Sort by price</option><option value="xg">Sort by expected goals (xG)</option><option value="xa">Sort by expected assists (xA)</option><option value="xgc">Sort by expected goals conceded (xGC)</option></select>
@@ -3318,8 +3318,8 @@
             why: "Attacking winger",
             number: 7,
             club: "Genk",
-            xG: "0.08",
-            xA: "0.10",
+            xG: "0.19",
+            xA: "0.28",
             xGC: "1.32",
             price: "$5m"
           },
@@ -3328,8 +3328,8 @@
             why: "Budget defender",
             number: 19,
             club: "Bayern Munich",
-            xG: "0.45",
-            xA: "0.27",
+            xG: "0.08",
+            xA: "0.10",
             xGC: "1.67",
             price: "$3.9m"
           },
@@ -4737,7 +4737,7 @@
     let currentPlayers = [];
 
 
-    [...new Set(teams.map(t => t.group))].sort().forEach(group => groupFilter.add(new Option(`Group ${group}`, group)));
+    // Fixture difficulty dropdown - options are static
 
     function countryKit(country) {
       const kits = {
@@ -5341,9 +5341,24 @@ const shortRole = role => ({
 
     function render() {
       const query = searchInput.value.toLowerCase();
-      const group = groupFilter.value;
+      const fixtureDifficulty = groupFilter.value; // md1, md2, md3, md12, md23, md123
+      const group = null;
       const role = roleFilter.value;
       const sort = sortSelect.value;
+
+      // Calculate fixture difficulty score for a team given selected matchdays
+      // Higher score = easier fixtures (bigger positive rank gap = weaker opponents)
+      function fixtureDiffScore(team) {
+        if (!fixtureDifficulty || !team.fixtures?.length) return 0;
+        const mdFilter = {
+          md1: [1], md2: [2], md3: [3],
+          md12: [1,2], md23: [2,3], md123: [1,2,3]
+        }[fixtureDifficulty] || [];
+        const relevant = team.fixtures.filter(g => mdFilter.includes(g.matchday));
+        if (!relevant.length) return 0;
+        const totalGap = relevant.reduce((sum, g) => sum + (g.opponentRank - team.rank), 0);
+        return totalGap / relevant.length;
+      }
 
       const roleRows = [
         ['FWD', 'forward'],
@@ -5391,6 +5406,12 @@ const shortRole = role => ({
       });
 
       rows.sort((a, b) => {
+        // When a fixture difficulty matchday is selected, sort easiest fixtures first
+        if (fixtureDifficulty && fixtureDifficulty !== '') {
+          const diff = fixtureDiffScore(b.team) - fixtureDiffScore(a.team);
+          if (diff !== 0) return diff;
+        }
+
         // When filtering by penalty takers, always sort best to worst conversion rate
         // weighted by sample size — players with <10 penalties get their rate discounted
         if (role === 'PENS') {
