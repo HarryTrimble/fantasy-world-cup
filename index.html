@@ -1379,9 +1379,7 @@
           const scoreHtml = getScoreHtml(f.team1, f.team2, f.date);
           const rf1 = f.flag1 === '🏴' ? (f.team1 === 'England' ? englandFlag : scotlandFlag) : f.flag1;
           const rf2 = f.flag2 === '🏴' ? (f.team2 === 'England' ? englandFlag : scotlandFlag) : f.flag2;
-          const odds1 = oddsChip(winPctFor(f.team1, f.team2));
-          const odds2 = oddsChip(winPctFor(f.team2, f.team1));
-          return `<tr class="fixture-row"><td class="fixture" data-label="Fixture"><span class="team">${rf1} ${f.team1}${odds1}</span> <span class="versus">v</span> <span class="team">${odds2 ? odds2 + ' ' : ''}${f.team2} ${rf2}</span></td><td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Final Score" class="score-cell">${scoreHtml}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td></tr>`;
+          return `<tr class="fixture-row"><td class="fixture" data-label="Fixture"><span class="team">${rf1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${rf2}</span></td><td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Final Score" class="score-cell">${scoreHtml}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td></tr>`;
         }));
       }
 
