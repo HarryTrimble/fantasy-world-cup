@@ -203,6 +203,7 @@
 
     .table-card { overflow: hidden; }
     .knockout-card { display: none; margin-top: 28px; }
+    .bracket-card { display: none; }
 
     .table-topbar {
       padding: 18px 20px;
@@ -617,6 +618,13 @@
       <div class="table-wrap"><table><thead><tr><th>Fixture</th><th>Date</th><th>Time (BST)</th><th>Final Score</th><th>FIFA Ranks</th><th>Gap</th><th>Group</th><th>MD</th><th>City</th><th>Temp</th></tr></thead><tbody id="fixtureBody"></tbody></table></div>
       <div class="no-results" id="noResults">No fixtures match those filters.</div>
     </section>
+    <section class="table-card bracket-card" id="knockoutBracket" aria-label="Knockout bracket">
+      <div class="table-topbar"><div class="table-title">Knockout bracket</div><div class="count">Round of 32 → Final</div></div>
+      <button class="bracket-nav prev" id="bracketPrev" aria-label="Previous round">‹</button>
+      <button class="bracket-nav next" id="bracketNext" aria-label="Next round">›</button>
+      <div class="bracket-scroll" id="bracketScroll"><div class="bracket" id="bracketContainer"></div></div>
+      <div class="bracket-dots" id="bracketDots"></div>
+    </section>
   </main>
 
   <footer>Built for fantasy planning: ranking gaps highlight potential captaincy and clean-sheet angles.</footer>
@@ -631,6 +639,231 @@
     }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
     .score-tbd { color: var(--muted); font-weight: 500; }
+    .odds-chip {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 7px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 900;
+      background: rgba(89,167,255,.14);
+      color: #1763c7;
+      border: 1px solid rgba(89,167,255,.3);
+      vertical-align: 1px;
+    }
+    .odds-chip.odds-fav {
+      background: rgba(64,224,160,.14);
+      color: #0b7a4a;
+      border-color: rgba(64,224,160,.34);
+    }
+    .odds-chip.odds-out {
+      background: rgba(255,159,67,.13);
+      color: #985410;
+      border-color: rgba(255,159,67,.3);
+    }
+    .b-team .odds-chip { margin-left: 0; font-size: .78rem; }
+    .b-pct { font-weight: 900; font-size: .98rem; flex: 0 0 auto; }
+    /* progress-to-next-round strip */
+    .b-progress { padding: 10px 15px 12px; border-top: 1px solid var(--border); }
+    .b-prog-head {
+      display: flex; justify-content: space-between;
+      font-size: .68rem; font-weight: 800; letter-spacing: .04em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+    }
+    .b-prog-pcts { display: flex; justify-content: space-between; font-size: .92rem; font-weight: 900; margin-bottom: 6px; }
+    .b-prog-pcts .a { color: #0b7a4a; }
+    .b-prog-pcts .b { color: #1763c7; }
+    .b-prog-bar { height: 8px; border-radius: 999px; overflow: hidden; display: flex; background: var(--border); }
+    .b-prog-bar .seg-a { background: linear-gradient(90deg,#43d39a,#2fb985); }
+    .b-prog-bar .seg-b { background: linear-gradient(90deg,#6fb0ff,#4b8de6); }
+    .b-progress.tbd .b-prog-pcts { color: var(--muted); }
+    .b-progress.tbd .b-prog-bar { opacity: .4; }
+
+    /* ─── Knockout bracket ─── */
+    .bracket-card { position: relative; }
+    .bracket-scroll {
+      overflow: auto;
+      max-height: 76vh;
+      padding: 34px 24px 40px;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: 24px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .b-col { scroll-snap-align: start; }
+    .bracket-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card, rgba(20,28,44,.92));
+      color: var(--accent);
+      font-size: 1.4rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.28);
+      transition: opacity .15s, transform .15s;
+    }
+    .bracket-nav:hover { transform: translateY(-50%) scale(1.07); }
+    .bracket-nav:disabled { opacity: .3; cursor: default; transform: translateY(-50%); }
+    .bracket-nav.prev { left: 10px; }
+    .bracket-nav.next { right: 10px; }
+    .bracket-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 4px 0 18px;
+    }
+    .bracket-dots button {
+      width: 9px; height: 9px;
+      padding: 0;
+      border-radius: 999px;
+      border: none;
+      background: var(--border);
+      cursor: pointer;
+      transition: background .15s, transform .15s;
+    }
+    .bracket-dots button.active { background: var(--accent); transform: scale(1.3); }
+    .bracket {
+      display: flex;
+      min-width: 1850px;
+      align-items: stretch;
+      --line: var(--accent);
+    }
+    .b-col {
+      flex: 1 1 0;
+      min-width: 350px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .b-col-title {
+      height: 52px;
+      flex: 0 0 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: #036b91;
+      left: 0; right: 0;
+    }
+    .b-col-title.gold { color: var(--accent-gold, #d8a60a); }
+    .b-col-body { flex: 1; display: flex; flex-direction: column; padding-top: 54px; }
+    .b-pair {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .b-slot {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      padding: 24px 34px;
+      min-height: 220px;
+    }
+    /* connector stubs */
+    .out-right > .b-col-body .b-slot::after,
+    .out-left  > .b-col-body .b-slot::before,
+    .in-left   > .b-col-body .b-slot::before,
+    .in-right  > .b-col-body .b-slot::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 30px;
+      height: 2px;
+      background: var(--line);
+      opacity: .55;
+    }
+    .out-right > .b-col-body .b-slot::after,
+    .in-right  > .b-col-body .b-slot::after { right: 0; }
+    .out-left  > .b-col-body .b-slot::before,
+    .in-left   > .b-col-body .b-slot::before { left: 0; }
+    /* vertical join between the two matches of a pair */
+    .b-pair.join-right::after,
+    .b-pair.join-left::after {
+      content: '';
+      position: absolute;
+      top: 25%;
+      height: 50%;
+      width: 2px;
+      background: var(--line);
+      opacity: .55;
+    }
+    .b-pair.join-right::after { right: 0; }
+    .b-pair.join-left::after  { left: 0; }
+
+    .b-match {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--card, linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04)));
+      box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+      overflow: visible;
+    }
+    .b-team {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 22px;
+      font-weight: 800;
+      font-size: 1.12rem;
+      white-space: nowrap;
+    }
+    .b-team + .b-team { border-top: 1px solid var(--border); }
+    .b-team .src { color: var(--muted); font-weight: 700; font-size: .88rem; }
+    .b-info {
+      padding: 12px 20px 14px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .85rem;
+      line-height: 1.5;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .b-num {
+      position: absolute;
+      top: -12px;
+      left: 14px;
+      z-index: 1;
+      font-size: .76rem;
+      font-weight: 900;
+      padding: 4px 11px;
+      border-radius: 999px;
+      min-width: 0;
+    }
+    .b-match.final {
+      border-width: 2px;
+      border-color: var(--accent-gold, #d8a60a);
+      box-shadow: 0 10px 28px rgba(216,166,10,0.25);
+    }
+    .b-match.third { margin-top: 30px; opacity: .85; }
+    .b-third-label {
+      margin-top: 38px;
+      text-align: center;
+      font-weight: 900;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+    }
+    .b-third-label + .b-match.third { margin-top: 8px; }
   </style>
 
   <script>
@@ -693,6 +926,74 @@
     }
 
     loadScores();
+  </script>
+
+  <script>
+    // ─── Live winning odds (served via your Cloudflare Worker proxy) ─────────
+    // The Worker holds the API key server-side and caches the response for all
+    // visitors, so the key is never exposed and traffic doesn't burn credits.
+    // Replace this with your deployed Worker URL (see odds-proxy-worker.js).
+    const ODDS_URL = 'https://wc2026-odds.harryroberttrimble.workers.dev/';
+
+    // Keyed by normalised "teamA|teamB" (sorted): { [teamName]: winPct, draw: pct }
+    window._oddsMap = {};
+    // Keyed by kickoff timestamp (ms UTC) for knockout placeholder matching:
+    // { home, away, probs }
+    window._oddsByTime = {};
+
+    function impliedProbs(event) {
+      // Average implied probabilities across all bookmakers, then normalise
+      // to remove the overround.
+      const sums = {}; let books = 0;
+      event.bookmakers.forEach(bk => {
+        const m = bk.markets.find(m => m.key === 'h2h');
+        if (!m) return;
+        books++;
+        m.outcomes.forEach(o => { sums[o.name] = (sums[o.name] || 0) + 1 / o.price; });
+      });
+      if (!books) return null;
+      const total = Object.values(sums).reduce((a, b) => a + b, 0);
+      const probs = {};
+      Object.keys(sums).forEach(name => { probs[name] = sums[name] / total; });
+      return probs;
+    }
+
+    async function loadOdds() {
+      try {
+        const res = await fetch(ODDS_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const events = await res.json();
+        window._oddsMap = {};
+        window._oddsByTime = {};
+        events.forEach(ev => {
+          const probs = impliedProbs(ev);
+          if (!probs) return;
+          const key = [normName(ev.home_team), normName(ev.away_team)].sort().join('|');
+          window._oddsMap[key] = probs;
+          window._oddsByTime[Date.parse(ev.commence_time)] = {
+            home: ev.home_team, away: ev.away_team, probs
+          };
+        });
+        if (typeof renderGroupFixtures === 'function') renderGroupFixtures();
+      } catch (e) { console.warn('Odds fetch failed:', e); }
+    }
+
+    function winPctFor(teamName, opponentName) {
+      const key = [normName(teamName), normName(opponentName)].sort().join('|');
+      const probs = window._oddsMap[key];
+      if (!probs) return null;
+      const entry = Object.keys(probs).find(n => normName(n) === normName(teamName));
+      return entry ? Math.round(probs[entry] * 100) : null;
+    }
+
+    function oddsChip(pct) {
+      if (pct === null || pct === undefined) return '';
+      const cls = pct >= 55 ? 'odds-fav' : pct <= 25 ? 'odds-out' : '';
+      return `<span class="odds-chip ${cls}">${pct}%</span>`;
+    }
+
+    loadOdds();
+    setInterval(loadOdds, 2 * 60 * 60 * 1000);
   </script>
 
   <script>
@@ -819,12 +1120,246 @@
     const fixtureViewSelect = document.getElementById('fixtureViewSelect');
 
     [...new Set(fixtures.map(f => f.group))].sort().forEach(group => groupFilter.add(new Option(`Group ${group}`, group)));
+    const groupFixturesCard = document.getElementById('groupFixtures');
+    const bracketCard = document.getElementById('knockoutBracket');
+    const bracketContainer = document.getElementById('bracketContainer');
+
+    // Knockout kickoff (BST date/time strings) → UTC timestamp, for matching
+    // against The Odds API commence_time. Builds a map once; entries whose
+    // kickoff time clashes with another fixture are dropped (can't be matched
+    // unambiguously without venue data).
+    const koTimeMap = (() => {
+      const months = { June: 5, July: 6 };
+      const counts = {}, map = {};
+      knockoutFixtures.forEach(f => {
+        const [mon, day] = f[1].split(' ');
+        const [h, min] = f[2].split(':').map(Number);
+        // Times are BST (UTC+1)
+        const ts = Date.UTC(2026, months[mon], +day, h - 1, min);
+        counts[ts] = (counts[ts] || 0) + 1;
+        map[f[4]] = ts;
+      });
+      Object.keys(map).forEach(num => { if (counts[map[num]] > 1) delete map[num]; });
+      return map;
+    })();
+
+    function liveKnockoutInfo(f) {
+      const ts = koTimeMap[f[4]];
+      return ts !== undefined ? window._oddsByTime[ts] : undefined;
+    }
+
+    function bracketTeamRow(part) {
+      part = part.trim();
+      const w = part.match(/^W(\d+)$/);
+      const l = part.match(/^L(\d+)$/);
+      if (w) return `<div class="b-team"><span>Winner</span><span class="src">Match ${w[1]}</span></div>`;
+      if (l) return `<div class="b-team"><span>Loser</span><span class="src">Match ${l[1]}</span></div>`;
+      if (part === '3rd') return `<div class="b-team"><span>Best 3rd place</span><span class="src">TBD</span></div>`;
+      const g = part.match(/^([A-L])([12])$/);
+      if (g) return `<div class="b-team"><span>Group ${g[1]} ${g[2] === '1' ? 'winner' : 'runner-up'}</span><span class="src">${g[1]}${g[2]}</span></div>`;
+      return `<div class="b-team"><span>${part}</span></div>`;
+    }
+
+    function shortSide(part) {
+      part = part.trim();
+      const w = part.match(/^W(\d+)$/); if (w) return 'M' + w[1] + ' winner';
+      if (part === '3rd') return 'Best 3rd';
+      return part;
+    }
+
+    // Chance each side advances: a knockout has no draw, so split the 90-min
+    // draw probability evenly and renormalise the two sides to 100%.
+    function progressPair(probs, n1, n2) {
+      const get = n => {
+        const k = Object.keys(probs).find(x => normName(x) === normName(n));
+        return k ? probs[k] : 0;
+      };
+      const draw = probs['Draw'] || probs['draw'] || 0;
+      let a = get(n1) + draw / 2, b = get(n2) + draw / 2;
+      const t = a + b; if (!t) return null;
+      return [Math.round(a / t * 100), Math.round(b / t * 100)];
+    }
+
+    function flagFor(name) {
+      const f = fixtures.find(x => normName(x.team1) === normName(name) || normName(x.team2) === normName(name));
+      if (!f) return '';
+      const isT1 = normName(f.team1) === normName(name);
+      const flag = isT1 ? f.flag1 : f.flag2;
+      return flag === '🏴' ? (name === 'England' ? englandFlag : scotlandFlag) : flag;
+    }
+
+    // Colour a progression % by how strongly it favours the team, with
+    // thresholds tuned to the realistic knockout spread (~15–85%, most ties
+    // landing in the 35–65 band).
+    function oddsColor(pct) {
+      if (pct >= 70) return '#0b7a4a'; // strong favourite (mismatch) — green
+      if (pct >= 55) return '#2e7d32'; // clear favourite — green
+      if (pct >= 45) return '#4a5568'; // toss-up — neutral slate
+      if (pct >= 30) return '#985410'; // underdog — amber
+      return '#c0271d';                // long shot — red
+    }
+
+    function bracketMatchHtml(f, extraClass) {
+      const [name, date, time, , num, city] = f;
+      const live = liveKnockoutInfo(f);
+      let teams, pair = null;
+      if (live) {
+        pair = progressPair(live.probs, live.home, live.away);
+        const sides = [live.home, live.away];
+        teams = sides.map((t, i) => {
+          const pct = pair ? (i === 0 ? pair[0] : pair[1]) : null;
+          let color = '';
+          if (pct !== null && pair) {
+            const isTop = pair[i] > pair[1 - i];
+            color = ` style="color:${isTop ? '#1763c7' : '#4a5568'}"`;
+          }
+          return `<div class="b-team"><span>${flagFor(t)} ${t}</span>${pct !== null ? `<span class="b-pct"${color}>${pct}%</span>` : ''}</div>`;
+        }).join('');
+      } else {
+        const parts = name.split(' v ');
+        teams = parts.map(bracketTeamRow).join('');
+      }
+
+      return `<div class="b-match ${extraClass || ''}">
+        ${teams}
+        <div class="b-info"><span>${date} · ${time}</span><span>${city}</span></div>
+      </div>`;
+    }
+
+    function renderBracket() {
+      const byNum = {};
+      knockoutFixtures.forEach(f => { byNum[f[4]] = f; });
+
+      const feedersOf = f => (f[0].match(/W(\d+)/g) || []).map(s => +s.slice(1));
+
+      // Build round lists for one half of the draw, ordered so each
+      // match sits next to the matches that feed it.
+      function half(sfNum) {
+        const rounds = [[byNum[sfNum]]]; // SF
+        while (true) {
+          const prev = rounds[rounds.length - 1];
+          const next = [];
+          prev.forEach(m => feedersOf(m).forEach(n => next.push(byNum[n])));
+          if (!next.length) break;
+          rounds.push(next);
+        }
+        return rounds.reverse(); // [R32, R16, QF, SF]
+      }
+
+      const finalMatch = knockoutFixtures.find(f => f[3] === 'Final');
+      const thirdMatch = knockoutFixtures.find(f => f[3] === '3P');
+      const [sfA, sfB] = feedersOf(finalMatch);
+      const leftRounds = half(sfA);
+      const rightRounds = half(sfB);
+      const titles = ['Round of 32', 'Round of 16', 'Quarter-finals', 'Semi-finals'];
+
+      function column(matches, title, classes, joinSide) {
+        let bodyHtml;
+        const slots = matches.map(m => `<div class="b-slot">${bracketMatchHtml(m)}</div>`);
+        if (matches.length >= 2) {
+          bodyHtml = '';
+          for (let i = 0; i < slots.length; i += 2) {
+            bodyHtml += `<div class="b-pair ${joinSide}">${slots[i]}${slots[i + 1]}</div>`;
+          }
+        } else {
+          bodyHtml = `<div class="b-pair">${slots.join('')}</div>`;
+        }
+        return `<div class="b-col ${classes}"><div class="b-col-title">${title}</div><div class="b-col-body">${bodyHtml}</div></div>`;
+      }
+
+      let html = '';
+      // Combine both halves into each round so the whole bracket flows
+      // left → right, with every connector pointing rightward.
+      leftRounds.forEach((matches, i) => {
+        const combined = matches.concat(rightRounds[i]);
+        const classes = (i === 0 ? '' : 'in-left ') + 'out-right';
+        html += column(combined, titles[i], classes, 'join-right');
+      });
+      // Final + third place
+      html += `<div class="b-col in-left"><div class="b-col-title gold">Final · July 19</div><div class="b-col-body"><div class="b-pair"><div class="b-slot">
+        ${bracketMatchHtml(finalMatch, 'final')}
+        <div class="b-third-label">Third place · ${thirdMatch[1]}</div>
+        ${bracketMatchHtml(thirdMatch, 'third')}
+      </div></div></div></div>`;
+
+      bracketContainer.innerHTML = html;
+      setupBracketCarousel();
+      requestAnimationFrame(alignRoundTitles);
+    }
+
+    function alignRoundTitles() {
+      const gap = 14; // px between label and the first card in its round
+      const cols = Array.from(bracketContainer.querySelectorAll('.b-col'));
+      // Pass 1: take every title out of flow so the card layout settles.
+      cols.forEach(col => {
+        const title = col.querySelector('.b-col-title');
+        if (title) { title.style.position = 'absolute'; title.style.top = '0'; }
+      });
+      void bracketContainer.offsetHeight; // force reflow
+      // Pass 2: measure each first card and place its label a fixed gap above.
+      cols.forEach(col => {
+        const title = col.querySelector('.b-col-title');
+        const firstCard = col.querySelector('.b-match');
+        if (!title || !firstCard) return;
+        const cardTop = firstCard.getBoundingClientRect().top - col.getBoundingClientRect().top;
+        title.style.top = Math.max(0, cardTop - gap - title.offsetHeight) + 'px';
+      });
+    }
+    window.addEventListener('resize', () => requestAnimationFrame(alignRoundTitles));
+
+    function setupBracketCarousel() {
+      const scroll = document.getElementById('bracketScroll');
+      const prev = document.getElementById('bracketPrev');
+      const next = document.getElementById('bracketNext');
+      const dotsWrap = document.getElementById('bracketDots');
+      const cols = Array.from(bracketContainer.querySelectorAll('.b-col'));
+      if (!cols.length) return;
+      const pad = 24; // matches scroll-padding-left
+
+      const targetFor = i => Math.max(0, cols[i].offsetLeft - pad);
+      const currentIndex = () => {
+        const x = scroll.scrollLeft;
+        let best = 0, dist = Infinity;
+        cols.forEach((c, i) => {
+          const d = Math.abs((c.offsetLeft - pad) - x);
+          if (d < dist) { dist = d; best = i; }
+        });
+        return best;
+      };
+
+      dotsWrap.innerHTML = cols.map((_, i) => `<button aria-label="Round ${i + 1}"></button>`).join('');
+      const dots = Array.from(dotsWrap.children);
+      dots.forEach((d, i) => d.addEventListener('click', () => scroll.scrollTo({ left: targetFor(i), behavior: 'smooth' })));
+
+      function update() {
+        const i = currentIndex();
+        dots.forEach((d, j) => d.classList.toggle('active', j === i));
+        prev.disabled = scroll.scrollLeft <= 2;
+        next.disabled = scroll.scrollLeft >= scroll.scrollWidth - scroll.clientWidth - 2;
+      }
+      prev.onclick = () => scroll.scrollTo({ left: targetFor(Math.max(0, currentIndex() - 1)), behavior: 'smooth' });
+      next.onclick = () => scroll.scrollTo({ left: targetFor(Math.min(cols.length - 1, currentIndex() + 1)), behavior: 'smooth' });
+      scroll.onscroll = () => { window.requestAnimationFrame(update); };
+      scroll.scrollLeft = 0;
+      update();
+    }
+
     function renderGroupFixtures() {
       const query = searchInput.value.toLowerCase();
       const group = groupFilter.value;
       const matchday = matchdayFilter.value;
       const sort = sortSelect.value;
       const fixtureView = fixtureViewSelect.value;
+
+      if (fixtureView === 'knockout') {
+        groupFixturesCard.style.display = 'none';
+        bracketCard.style.display = 'block';
+        renderBracket();
+        visibleCount.textContent = knockoutFixtures.length;
+        return;
+      }
+      groupFixturesCard.style.display = '';
+      bracketCard.style.display = 'none';
 
       let rows = [];
 
@@ -844,7 +1379,9 @@
           const scoreHtml = getScoreHtml(f.team1, f.team2, f.date);
           const rf1 = f.flag1 === '🏴' ? (f.team1 === 'England' ? englandFlag : scotlandFlag) : f.flag1;
           const rf2 = f.flag2 === '🏴' ? (f.team2 === 'England' ? englandFlag : scotlandFlag) : f.flag2;
-          return `<tr class="fixture-row"><td class="fixture" data-label="Fixture"><span class="team">${rf1} ${f.team1}</span> <span class="versus">v</span> <span class="team">${f.team2} ${rf2}</span></td><td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Final Score" class="score-cell">${scoreHtml}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td></tr>`;
+          const odds1 = oddsChip(winPctFor(f.team1, f.team2));
+          const odds2 = oddsChip(winPctFor(f.team2, f.team1));
+          return `<tr class="fixture-row"><td class="fixture" data-label="Fixture"><span class="team">${rf1} ${f.team1}${odds1}</span> <span class="versus">v</span> <span class="team">${odds2 ? odds2 + ' ' : ''}${f.team2} ${rf2}</span></td><td data-label="Date">${f.date}</td><td data-label="Time">${f.time}</td><td data-label="Final Score" class="score-cell">${scoreHtml}</td><td data-label="Ranks">${f.rank1} vs ${f.rank2}</td><td data-label="Gap" class="rank-gap ${gapClass}">${f.gap}</td><td data-label="Group"><span class="pill">${f.group}</span></td><td data-label="Matchday"><span class="pill matchday">${f.matchday}</span></td><td data-label="City">${f.city}</td><td data-label="Temp" class="${tempClass}">${f.temp}°C</td></tr>`;
         }));
       }
 
