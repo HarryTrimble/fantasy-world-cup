@@ -686,12 +686,14 @@
       overflow: auto;
       max-height: 76vh;
       padding: 34px 24px 40px;
-      scroll-snap-type: x mandatory;
-      scroll-padding-left: 24px;
+      scroll-snap-type: both proximity;
+      scroll-padding: 16px 24px;
       scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      touch-action: none;
       -webkit-overflow-scrolling: touch;
     }
-    .b-col { scroll-snap-align: start; }
+    .b-card-label { scroll-snap-align: start; }
     .bracket-nav {
       position: absolute;
       top: 50%;
@@ -746,20 +748,18 @@
       position: relative;
     }
     .b-col-title {
-      height: 52px;
-      flex: 0 0 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: .8rem;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: #036b91;
-      left: 0; right: 0;
+      display: none;
     }
-    .b-col-title.gold { color: var(--accent-gold, #d8a60a); }
-    .b-col-body { flex: 1; display: flex; flex-direction: column; padding-top: 54px; }
+    .b-card-label {
+      font-weight: 900;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #036b91;
+      margin-bottom: 8px;
+      white-space: nowrap;
+    }
+    .b-col-body { flex: 1; display: flex; flex-direction: column; }
     .b-pair {
       flex: 1;
       display: flex;
@@ -809,7 +809,7 @@
     .b-match {
       position: relative;
       border: 1px solid var(--border);
-      border-radius: 18px;
+      border-radius: 8px;
       background: var(--card, linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04)));
       box-shadow: 0 6px 18px rgba(0,0,0,0.16);
       overflow: visible;
@@ -853,7 +853,10 @@
       border-color: var(--accent-gold, #d8a60a);
       box-shadow: 0 10px 28px rgba(216,166,10,0.25);
     }
-    .b-match.third { margin-top: 30px; opacity: .85; }
+    .final-slot { justify-content: center; }
+    .final-wrap { position: relative; width: 100%; }
+    .third-wrap { position: absolute; top: 100%; left: 0; right: 0; margin-top: 34px; }
+    .b-match.third { opacity: .85; }
     .b-third-label {
       margin-top: 38px;
       text-align: center;
@@ -1076,22 +1079,22 @@
     ].map((row, index) => ({ index, day: row[0], date: row[1], time: row[2], city: row[3], temp: row[4], group: row[5], matchday: row[6], flag1: row[7], team1: row[8], team2: row[9], flag2: row[10], rank1: row[11], rank2: row[12], gap: row[13] }));
 
     const knockoutFixtures = [
-      ['A2 v B2','June 28','20:00','R32',73,'Los Angeles'],
-      ['C1 v F2','June 29','18:00','R32',76,'Houston'],
-      ['E1 v 3rd','June 29','21:30','R32',74,'Boston'],
-      ['F1 v C2','June 30','02:00','R32',75,'Monterrey'],
-      ['E2 v I2','June 30','18:00','R32',78,'Dallas'],
-      ['I1 v 3rd','June 30','22:00','R32',77,'New York'],
-      ['A1 v 3rd','July 1','02:00','R32',79,'Mexico City'],
-      ['L1 v 3rd','July 1','17:00','R32',80,'Atlanta'],
-      ['G1 v 3rd','July 1','21:00','R32',82,'Seattle'],
-      ['D1 v 3rd','July 2','01:00','R32',81,'San Francisco'],
-      ['H1 v J2','July 2','20:00','R32',84,'Los Angeles'],
-      ['K2 v L2','July 3','00:00','R32',83,'Toronto'],
-      ['B1 v 3rd','July 3','04:00','R32',85,'Vancouver'],
-      ['D2 v G2','July 3','19:00','R32',88,'Dallas'],
-      ['J1 v H2','July 3','23:00','R32',86,'Miami'],
-      ['K1 v 3rd','July 4','02:30','R32',87,'Kansas City'],
+      ['2A v 2B','June 28','20:00','R32',73,'Los Angeles'],
+      ['1C v 2F','June 29','18:00','R32',76,'Houston'],
+      ['1E v 3ABCDF','June 29','21:30','R32',74,'Boston'],
+      ['1F v 2C','June 30','02:00','R32',75,'Monterrey'],
+      ['2E v 2I','June 30','18:00','R32',78,'Dallas'],
+      ['1I v 3CDFGH','June 30','22:00','R32',77,'New York'],
+      ['1A v 3CEFHI','July 1','02:00','R32',79,'Mexico City'],
+      ['1L v 3EHIJK','July 1','17:00','R32',80,'Atlanta'],
+      ['1G v 3AEHIJ','July 1','21:00','R32',82,'Seattle'],
+      ['1D v 3BEFIJ','July 2','01:00','R32',81,'San Francisco'],
+      ['1H v 2J','July 2','20:00','R32',84,'Los Angeles'],
+      ['2K v 2L','July 3','00:00','R32',83,'Toronto'],
+      ['1B v 3EFGIJ','July 3','04:00','R32',85,'Vancouver'],
+      ['2D v 2G','July 3','19:00','R32',88,'Dallas'],
+      ['1J v 2H','July 3','23:00','R32',86,'Miami'],
+      ['1K v 3DEIJL','July 4','02:30','R32',87,'Kansas City'],
       ['W73 v W75','July 4','18:00','R16',90,'Houston'],
       ['W74 v W77','July 4','22:00','R16',89,'Philadelphia'],
       ['W76 v W78','July 5','21:00','R16',91,'New York'],
@@ -1148,22 +1151,27 @@
       return ts !== undefined ? window._oddsByTime[ts] : undefined;
     }
 
+    // Map each knockout match number to a short round code, e.g. R32: 1,
+    // R16: 3, Q3, S2. Populated by renderBracket once the rounds are known.
+    let koMatchCode = {};
+
     function bracketTeamRow(part) {
       part = part.trim();
       const w = part.match(/^W(\d+)$/);
       const l = part.match(/^L(\d+)$/);
-      if (w) return `<div class="b-team"><span>Winner</span><span class="src">Match ${w[1]}</span></div>`;
-      if (l) return `<div class="b-team"><span>Loser</span><span class="src">Match ${l[1]}</span></div>`;
-      if (part === '3rd') return `<div class="b-team"><span>Best 3rd place</span><span class="src">TBD</span></div>`;
-      const g = part.match(/^([A-L])([12])$/);
-      if (g) return `<div class="b-team"><span>Group ${g[1]} ${g[2] === '1' ? 'winner' : 'runner-up'}</span><span class="src">${g[1]}${g[2]}</span></div>`;
+      if (w) return `<div class="b-team"><span>${koMatchCode[w[1]] || ('Match ' + w[1])} winner</span></div>`;
+      if (l) return `<div class="b-team"><span>${koMatchCode[l[1]] || ('Match ' + l[1])} loser</span></div>`;
+      const third = part.match(/^3([A-L]{2,})$/);
+      if (third) return `<div class="b-team"><span>3rd: group ${third[1].split('').join('/')}</span><span class="src">3${third[1]}</span></div>`;
+      const g = part.match(/^([12])([A-L])$/);
+      if (g) return `<div class="b-team"><span>Group ${g[2]} ${g[1] === '1' ? 'winner' : 'runner-up'}</span><span class="src">${g[1]}${g[2]}</span></div>`;
       return `<div class="b-team"><span>${part}</span></div>`;
     }
 
     function shortSide(part) {
       part = part.trim();
       const w = part.match(/^W(\d+)$/); if (w) return 'M' + w[1] + ' winner';
-      if (part === '3rd') return 'Best 3rd';
+      if (/^3[A-L]{2,}$/.test(part)) return part;
       return part;
     }
 
@@ -1199,7 +1207,7 @@
       return '#c0271d';                // long shot — red
     }
 
-    function bracketMatchHtml(f, extraClass) {
+    function bracketMatchHtml(f, extraClass, label) {
       const [name, date, time, , num, city] = f;
       const live = liveKnockoutInfo(f);
       let teams, pair = null;
@@ -1220,7 +1228,8 @@
         teams = parts.map(bracketTeamRow).join('');
       }
 
-      return `<div class="b-match ${extraClass || ''}">
+      const labelHtml = label ? `<div class="b-card-label">${label}</div>` : '';
+      return `${labelHtml}<div class="b-match ${extraClass || ''}">
         ${teams}
         <div class="b-info"><span>${date} · ${time}</span><span>${city}</span></div>
       </div>`;
@@ -1251,11 +1260,29 @@
       const [sfA, sfB] = feedersOf(finalMatch);
       const leftRounds = half(sfA);
       const rightRounds = half(sfB);
-      const titles = ['Round of 32', 'Round of 16', 'Quarter-finals', 'Semi-finals'];
+      const roundNames = ['Round of 32', 'Round of 16', 'Quarter-final', 'Semi-final'];
 
-      function column(matches, title, classes, joinSide) {
+      // Short code per match: R32/R16 keep the colon form, QF/SF use Q/S.
+      const shortRound = ['R32', 'R16', 'Q', 'S'];
+      koMatchCode = {};
+      leftRounds.forEach((matches, i) => {
+        matches.concat(rightRounds[i]).forEach((m, j) => {
+          koMatchCode[m[4]] = i <= 1 ? `${shortRound[i]}: ${j + 1}` : `${shortRound[i]}${j + 1}`;
+        });
+      });
+
+      function matchLabel(roundName, index) {
+        if (roundName === 'Quarter-final' || roundName === 'Semi-final') {
+          return `${roundName} ${index + 1}`;
+        }
+        return `${roundName}: Match ${index + 1}`;
+      }
+
+      function column(matches, roundName, classes, joinSide) {
         let bodyHtml;
-        const slots = matches.map(m => `<div class="b-slot">${bracketMatchHtml(m)}</div>`);
+        const slots = matches.map((m, i) =>
+          `<div class="b-slot">${bracketMatchHtml(m, '', matchLabel(roundName, i))}</div>`
+        );
         if (matches.length >= 2) {
           bodyHtml = '';
           for (let i = 0; i < slots.length; i += 2) {
@@ -1264,48 +1291,28 @@
         } else {
           bodyHtml = `<div class="b-pair">${slots.join('')}</div>`;
         }
-        return `<div class="b-col ${classes}"><div class="b-col-title">${title}</div><div class="b-col-body">${bodyHtml}</div></div>`;
+        return `<div class="b-col ${classes}"><div class="b-col-body">${bodyHtml}</div></div>`;
       }
 
       let html = '';
-      // Combine both halves into each round so the whole bracket flows
-      // left → right, with every connector pointing rightward.
       leftRounds.forEach((matches, i) => {
         const combined = matches.concat(rightRounds[i]);
         const classes = (i === 0 ? '' : 'in-left ') + 'out-right';
-        html += column(combined, titles[i], classes, 'join-right');
+        html += column(combined, roundNames[i], classes, 'join-right');
       });
-      // Final + third place
-      html += `<div class="b-col in-left"><div class="b-col-title gold">Final · July 19</div><div class="b-col-body"><div class="b-pair"><div class="b-slot">
-        ${bracketMatchHtml(finalMatch, 'final')}
-        <div class="b-third-label">Third place · ${thirdMatch[1]}</div>
-        ${bracketMatchHtml(thirdMatch, 'third')}
+      // Final + third place. The Final is the only centered element so it lines
+      // up with the incoming connector (at the column's vertical midpoint); the
+      // play-off hangs directly beneath it without shifting that alignment.
+      html += `<div class="b-col in-left final-col"><div class="b-col-body"><div class="b-pair"><div class="b-slot final-slot">
+        <div class="final-wrap">
+          ${bracketMatchHtml(finalMatch, 'final', 'Final')}
+          <div class="third-wrap">${bracketMatchHtml(thirdMatch, 'third', 'Third place')}</div>
+        </div>
       </div></div></div></div>`;
 
       bracketContainer.innerHTML = html;
       setupBracketCarousel();
-      requestAnimationFrame(alignRoundTitles);
     }
-
-    function alignRoundTitles() {
-      const gap = 14; // px between label and the first card in its round
-      const cols = Array.from(bracketContainer.querySelectorAll('.b-col'));
-      // Pass 1: take every title out of flow so the card layout settles.
-      cols.forEach(col => {
-        const title = col.querySelector('.b-col-title');
-        if (title) { title.style.position = 'absolute'; title.style.top = '0'; }
-      });
-      void bracketContainer.offsetHeight; // force reflow
-      // Pass 2: measure each first card and place its label a fixed gap above.
-      cols.forEach(col => {
-        const title = col.querySelector('.b-col-title');
-        const firstCard = col.querySelector('.b-match');
-        if (!title || !firstCard) return;
-        const cardTop = firstCard.getBoundingClientRect().top - col.getBoundingClientRect().top;
-        title.style.top = Math.max(0, cardTop - gap - title.offsetHeight) + 'px';
-      });
-    }
-    window.addEventListener('resize', () => requestAnimationFrame(alignRoundTitles));
 
     function setupBracketCarousel() {
       const scroll = document.getElementById('bracketScroll');
@@ -1313,35 +1320,112 @@
       const next = document.getElementById('bracketNext');
       const dotsWrap = document.getElementById('bracketDots');
       const cols = Array.from(bracketContainer.querySelectorAll('.b-col'));
-      if (!cols.length) return;
-      const pad = 24; // matches scroll-padding-left
+      const cards = Array.from(bracketContainer.querySelectorAll('.b-match'));
+      if (!cards.length) return;
+      const PAD_L = 24, PAD_T = 16;
+      let index = 0;
 
-      const targetFor = i => Math.max(0, cols[i].offsetLeft - pad);
-      const currentIndex = () => {
-        const x = scroll.scrollLeft;
-        let best = 0, dist = Infinity;
-        cols.forEach((c, i) => {
-          const d = Math.abs((c.offsetLeft - pad) - x);
-          if (d < dist) { dist = d; best = i; }
-        });
-        return best;
+      // Each card's label (sits just above it) is the visual anchor we bring
+      // into the top-left of the viewport.
+      const anchorOf = card => {
+        const l = card.previousElementSibling;
+        return (l && l.classList && l.classList.contains('b-card-label')) ? l : card;
       };
+      const colOf = card => cols.findIndex(c => c.contains(card));
 
+      // One dot per round; clicking jumps to that round's first card.
       dotsWrap.innerHTML = cols.map((_, i) => `<button aria-label="Round ${i + 1}"></button>`).join('');
       const dots = Array.from(dotsWrap.children);
-      dots.forEach((d, i) => d.addEventListener('click', () => scroll.scrollTo({ left: targetFor(i), behavior: 'smooth' })));
+      dots.forEach((d, i) => d.addEventListener('click', () => {
+        const first = cards.findIndex(c => cols[i].contains(c));
+        if (first >= 0) goTo(first);
+      }));
 
-      function update() {
-        const i = currentIndex();
-        dots.forEach((d, j) => d.classList.toggle('active', j === i));
-        prev.disabled = scroll.scrollLeft <= 2;
-        next.disabled = scroll.scrollLeft >= scroll.scrollWidth - scroll.clientWidth - 2;
+      function updateIndicators() {
+        const col = colOf(cards[index]);
+        dots.forEach((d, j) => d.classList.toggle('active', j === col));
+        prev.disabled = col <= 0;
+        next.disabled = col >= cols.length - 1;
       }
-      prev.onclick = () => scroll.scrollTo({ left: targetFor(Math.max(0, currentIndex() - 1)), behavior: 'smooth' });
-      next.onclick = () => scroll.scrollTo({ left: targetFor(Math.min(cols.length - 1, currentIndex() + 1)), behavior: 'smooth' });
-      scroll.onscroll = () => { window.requestAnimationFrame(update); };
-      scroll.scrollLeft = 0;
-      update();
+
+      function goTo(i, smooth = true) {
+        index = Math.max(0, Math.min(cards.length - 1, i));
+        const card = cards[index];
+        const top = anchorOf(card);
+        const wrap = scroll.getBoundingClientRect();
+        const tr = top.getBoundingClientRect();
+        const lr = card.getBoundingClientRect();
+        const left = scroll.scrollLeft + (lr.left - wrap.left) - PAD_L;
+        const topY = scroll.scrollTop + (tr.top - wrap.top) - PAD_T;
+        scroll.scrollTo({ left: Math.max(0, left), top: Math.max(0, topY), behavior: smooth ? 'smooth' : 'auto' });
+        updateIndicators();
+      }
+
+      // Move across rounds: jump to the adjacent column, landing on the card
+      // closest to the current vertical position so it feels like moving sideways.
+      function goCol(dir) {
+        const cur = colOf(cards[index]);
+        const target = Math.max(0, Math.min(cols.length - 1, cur + dir));
+        if (target === cur) return;
+        const cy = cards[index].getBoundingClientRect().top;
+        const inCol = cards.filter(c => cols[target].contains(c));
+        let best = inCol[0], bd = Infinity;
+        inCol.forEach(c => {
+          const d = Math.abs(c.getBoundingClientRect().top - cy);
+          if (d < bd) { bd = d; best = c; }
+        });
+        goTo(cards.indexOf(best));
+      }
+
+      // Side arrows step across rounds.
+      prev.onclick = () => goCol(-1);
+      next.onclick = () => goCol(1);
+
+      // Swipe: horizontal → across rounds; vertical → card-to-card (wraps to
+      // the next round once a column runs out).
+      let sx = 0, sy = 0, dx = 0, dy = 0, axis = null, active = false;
+      scroll.addEventListener('touchstart', e => {
+        const t = e.touches[0]; sx = t.clientX; sy = t.clientY;
+        dx = dy = 0; axis = null; active = true;
+      }, { passive: true });
+      scroll.addEventListener('touchmove', e => {
+        if (!active) return;
+        const t = e.touches[0]; dx = t.clientX - sx; dy = t.clientY - sy;
+        if (!axis && (Math.abs(dx) > 8 || Math.abs(dy) > 8))
+          axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      }, { passive: true });
+      scroll.addEventListener('touchend', () => {
+        if (!active) return; active = false;
+        const TH = 30;
+        if (axis === 'x' && Math.abs(dx) > TH) goCol(dx < 0 ? 1 : -1);
+        else if (axis === 'y' && Math.abs(dy) > TH) goTo(index + (dy < 0 ? 1 : -1));
+      });
+
+      // Wheel / trackpad: horizontal scroll changes round, vertical steps cards.
+      let wlock = false;
+      scroll.addEventListener('wheel', e => {
+        e.preventDefault();
+        if (wlock) return;
+        const horiz = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+        const d = horiz ? e.deltaX : e.deltaY;
+        if (Math.abs(d) < 4) return;
+        wlock = true; setTimeout(() => { wlock = false; }, 420);
+        if (horiz) goCol(d > 0 ? 1 : -1);
+        else goTo(index + (d > 0 ? 1 : -1));
+      }, { passive: false });
+
+      // Arrow keys when the bracket is focused: left/right across, up/down cards.
+      scroll.tabIndex = 0;
+      scroll.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); goCol(1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); goCol(-1); }
+        else if (e.key === 'ArrowDown') { e.preventDefault(); goTo(index + 1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); goTo(index - 1); }
+      });
+
+      scroll.scrollLeft = 0; scroll.scrollTop = 0;
+      index = 0;
+      updateIndicators();
     }
 
     function renderGroupFixtures() {
