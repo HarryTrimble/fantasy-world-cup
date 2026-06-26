@@ -826,6 +826,7 @@
     }
     .b-team + .b-team { border-top: 1px solid var(--border); }
     .b-team .src { color: var(--muted); font-weight: 700; font-size: .88rem; }
+    .b-team .b-rank { font-weight: 500; font-size: .82rem; color: var(--muted); }
     .b-info {
       padding: 12px 20px 14px;
       border-top: 1px solid var(--border);
@@ -1239,7 +1240,7 @@
             color = ` style="color:${isTop ? '#1763c7' : '#4a5568'}"`;
           }
           const rk = rankFor(t);
-          return `<div class="b-team"><span>${flagFor(t)} ${displayName(t)}${rk ? ` (${rk})` : ''}</span>${pct !== null ? `<span class="b-pct"${color}>${pct}%</span>` : ''}</div>`;
+          return `<div class="b-team"><span>${flagFor(t)} ${displayName(t)}${rk ? ` <span class="b-rank">(${rk})</span>` : ''}</span>${pct !== null ? `<span class="b-pct"${color}>${pct}%</span>` : ''}</div>`;
         }).join('');
       } else {
         const parts = name.split(' v ');
