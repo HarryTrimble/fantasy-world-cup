@@ -885,6 +885,16 @@
       return map[s] || s;
     }
 
+    // Shorten long official names for display (matching still uses normName).
+    function displayName(n) {
+      const map = {
+        'Bosnia and Herzegovina': 'Bosnia',
+        'Bosnia & Herzegovina': 'Bosnia',
+        'Bosnia-Herzegovina': 'Bosnia',
+      };
+      return map[(n || '').trim()] || n;
+    }
+
     window._scoreMap = {};
     window._scoresLoaded = false;
 
@@ -1197,6 +1207,12 @@
       return flag === '🏴' ? (name === 'England' ? englandFlag : scotlandFlag) : flag;
     }
 
+    function rankFor(name) {
+      const f = fixtures.find(x => normName(x.team1) === normName(name) || normName(x.team2) === normName(name));
+      if (!f) return '';
+      return normName(f.team1) === normName(name) ? f.rank1 : f.rank2;
+    }
+
     // Colour a progression % by how strongly it favours the team, with
     // thresholds tuned to the realistic knockout spread (~15–85%, most ties
     // landing in the 35–65 band).
@@ -1222,7 +1238,8 @@
             const isTop = pair[i] > pair[1 - i];
             color = ` style="color:${isTop ? '#1763c7' : '#4a5568'}"`;
           }
-          return `<div class="b-team"><span>${flagFor(t)} ${t}</span>${pct !== null ? `<span class="b-pct"${color}>${pct}%</span>` : ''}</div>`;
+          const rk = rankFor(t);
+          return `<div class="b-team"><span>${flagFor(t)} ${displayName(t)}${rk ? ` (${rk})` : ''}</span>${pct !== null ? `<span class="b-pct"${color}>${pct}%</span>` : ''}</div>`;
         }).join('');
       } else {
         const parts = name.split(' v ');
