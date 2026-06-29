@@ -924,6 +924,24 @@
       return { s1, s2, p1, p2 };
     }
 
+    // Split one CSV line, respecting double-quoted fields (so a comma inside
+    // a result cell like "1-1, 4-3 pens" doesn't shift the columns) and
+    // stripping any trailing carriage return from CRLF feeds.
+    function parseCsvLine(line) {
+      const out = []; let cur = '', q = false;
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (q) {
+          if (c === '"') { if (line[i + 1] === '"') { cur += '"'; i++; } else q = false; }
+          else cur += c;
+        } else if (c === '"') { q = true; }
+        else if (c === ',') { out.push(cur); cur = ''; }
+        else if (c !== '\r') { cur += c; }
+      }
+      out.push(cur);
+      return out.map(s => s.trim());
+    }
+
     async function loadScores() {
       try {
         const res = await fetch(SCORES_CSV_URL);
@@ -931,12 +949,10 @@
         const text = await res.text();
         const lines = text.trim().split('\n').slice(1); // skip header row
         lines.forEach(line => {
-          const cols = line.split(',');
+          const cols = parseCsvLine(line);
           if (cols.length < 3) return;
-          const team1 = cols[0].trim().replace(/^"|"$/g, '');
-          const team2 = cols[1].trim().replace(/^"|"$/g, '');
-          const score = cols[2].trim().replace(/^"|"$/g, '');
-          const penCol = cols.length > 3 ? cols[3].trim().replace(/^"|"$/g, '') : '';
+          const team1 = cols[0], team2 = cols[1], score = cols[2];
+          const penCol = cols.length > 3 ? cols[3] : '';
           const parsed = parseScore(score, penCol);
           if (!parsed) return;
           const a = normName(team1);
@@ -946,7 +962,23 @@
         });
         window._scoresLoaded = true;
         if (typeof renderGroupFixtures === 'function') renderGroupFixtures();
+        if (typeof debugKnockoutScores === 'function') debugKnockoutScores();
       } catch(e) { console.warn('Score fetch failed:', e); }
+    }
+
+    // Dev diagnostic: for any knockout tie whose teams have resolved, warn if
+    // no score row matched — printing the exact normalised key searched, so a
+    // sheet typo or missing row is obvious in the console.
+    function debugKnockoutScores() {
+      if (typeof knockoutFixtures === 'undefined') return;
+      knockoutFixtures.forEach(f => {
+        const t = koTeamsFor(f);
+        if (t && !getScore(t.home, t.away)) {
+          console.warn('[WC] No score for', t.home, 'v', t.away,
+            '— searched key:', [normName(t.home), normName(t.away)].sort().join('|'));
+        }
+      });
+      console.info('[WC]', Object.keys(window._scoreMap).length, 'result rows loaded.');
     }
 
     // Refresh once per hour
@@ -1219,11 +1251,11 @@
         return koTeamsByNum[f[4]];
       }
       if (koTeamsByNum[f[4]]) return koTeamsByNum[f[4]];
-      // Fall back to standings: only when BOTH sides resolve to one team.
+      // Fall back to results: only when BOTH sides resolve to one team.
       const parts = f[0].split(' v ');
-      const h = resolveSideToken(parts[0], f[4]);
-      const a = resolveSideToken(parts[1], f[4]);
-      return (h && h.name && a && a.name) ? { home: h.name, away: a.name } : null;
+      const h = resolveTeamName(parts[0], f);
+      const a = resolveTeamName(parts[1], f);
+      return (h && a) ? { home: h, away: a } : null;
     }
 
     // ─── Live group standings (derived from the score feed) ─────────────────
@@ -1360,18 +1392,54 @@
       return null;
     }
 
+    const koFixtureByNum = num => knockoutFixtures.find(f => +f[4] === +num);
+
+    // Resolve one slot token to a concrete team name, or null if still unknown.
+    // Handles group tokens (1A/2B/best-third) and winner/loser tokens (W73/L101),
+    // recursing through earlier knockout matches whose results are in.
+    function resolveTeamName(tok, f) {
+      tok = (tok || '').trim();
+      const st = resolveSideToken(tok, f && f[4]);
+      if (st && st.name) return st.name;
+      let m;
+      if ((m = tok.match(/^W(\d+)$/))) { const o = koOutcome(+m[1]); return o ? o.winner : null; }
+      if ((m = tok.match(/^L(\d+)$/))) { const o = koOutcome(+m[1]); return o ? o.loser : null; }
+      return null;
+    }
+
+    // Decide a played knockout match → { winner, loser }, or null if both teams
+    // aren't yet known or no result has been entered. Penalties break a draw.
+    function koOutcome(num) {
+      const f = koFixtureByNum(num);
+      if (!f) return null;
+      const parts = f[0].split(' v ');
+      const home = resolveTeamName(parts[0], f);
+      const away = resolveTeamName(parts[1], f);
+      if (!home || !away) return null;
+      const sc = getScore(home, away);
+      if (!sc) return null;
+      let homeWins;
+      if (sc.p1 != null) homeWins = sc.p1 > sc.p2;
+      else if (sc.s1 !== sc.s2) homeWins = sc.s1 > sc.s2;
+      else return null; // level with no shootout recorded
+      return homeWins ? { winner: home, loser: away } : { winner: away, loser: home };
+    }
+
     // Map each knockout match number to a short round code, e.g. R32: 1,
     // R16: 3, Q3, S2. Populated by renderBracket once the rounds are known.
     let koMatchCode = {};
 
     function bracketTeamRow(part, f) {
       part = part.trim();
-      // Prefer a live-resolved team or narrowed third candidates.
-      const r = f ? resolveSideToken(part, f[4]) : null;
-      if (r && r.name) {
-        const rk = rankFor(r.name);
-        return `<div class="b-team"><span>${flagFor(r.name)} ${displayName(r.name)}${rk ? ` <span class="b-rank">(${rk})</span>` : ''}</span></div>`;
+      // Concrete team if we can resolve it — a group position, or a decided
+      // feeder match (so a known side shows even while its opponent is pending).
+      const name = f ? resolveTeamName(part, f) : null;
+      if (name) {
+        const rk = rankFor(name);
+        return `<div class="b-team"><span>${flagFor(name)} ${displayName(name)}${rk ? ` <span class="b-rank">(${rk})</span>` : ''}</span></div>`;
       }
+      // Narrowed third-place candidates.
+      const r = f ? resolveSideToken(part, f[4]) : null;
       if (r && r.candidates) {
         return `<div class="b-team"><span>3rd: ${r.candidates.map(displayName).join(' / ')}</span><span class="src">${part}</span></div>`;
       }
@@ -1720,8 +1788,9 @@
             scoreHtml = getScoreHtml(t.home, t.away);
           } else {
             const lab = f[0].split(' v ').map(p => {
+              const name = resolveTeamName(p.trim(), f);
+              if (name) return `<span class="team">${flagFor(name)} ${displayName(name)}</span>`;
               const r = resolveSideToken(p.trim(), f[4]);
-              if (r && r.name) return `<span class="team">${flagFor(r.name)} ${displayName(r.name)}</span>`;
               if (r && r.candidates) return `<span class="team">3rd: ${r.candidates.map(displayName).join('/')}</span>`;
               return p.trim();
             });
