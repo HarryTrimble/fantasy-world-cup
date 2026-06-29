@@ -667,6 +667,8 @@
     .b-goal { font-weight: 950; font-size: 1.2rem; flex: 0 0 auto; color: var(--muted); letter-spacing: -.02em; }
     .b-goal.win { color: #0b7a4a; }
     .b-goal.loss { color: var(--muted); opacity: .65; }
+    .b-pens { font-size: .68rem; font-weight: 800; margin-left: 3px; vertical-align: 2px; opacity: .85; }
+    .score-pens { font-size: .82rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
     /* progress-to-next-round strip */
     .b-progress { padding: 10px 15px 12px; border-top: 1px solid var(--border); }
     .b-prog-head {
@@ -902,6 +904,26 @@
     window._scoreMap = {};
     window._scoresLoaded = false;
 
+    // Parse a result cell into { s1, s2, p1, p2 }. Tolerates hyphen/en/em
+    // dashes and reads a penalty shootout from a second "N-N" in the cell
+    // (e.g. "1-1 (4-3 pens)") or from an optional separate penalties column.
+    function parseScore(raw, penRaw) {
+      const norm = s => (s || '').replace(/[–—]/g, '-');
+      const pairs = (norm(raw).match(/\d+\s*-\s*\d+/g) || [])
+        .map(p => p.split('-').map(n => parseInt(n.trim(), 10)));
+      if (!pairs.length) return null;
+      const [s1, s2] = pairs[0];
+      if (isNaN(s1) || isNaN(s2)) return null;
+      let p1 = null, p2 = null;
+      if (pairs[1]) { [p1, p2] = pairs[1]; }
+      else if (penRaw) {
+        const pp = (norm(penRaw).match(/\d+\s*-\s*\d+/) || [null])[0];
+        if (pp) [p1, p2] = pp.split('-').map(n => parseInt(n.trim(), 10));
+      }
+      if (p1 == null || isNaN(p1) || isNaN(p2)) { p1 = null; p2 = null; }
+      return { s1, s2, p1, p2 };
+    }
+
     async function loadScores() {
       try {
         const res = await fetch(SCORES_CSV_URL);
@@ -914,13 +936,13 @@
           const team1 = cols[0].trim().replace(/^"|"$/g, '');
           const team2 = cols[1].trim().replace(/^"|"$/g, '');
           const score = cols[2].trim().replace(/^"|"$/g, '');
-          if (!score || !score.includes('-')) return;
-          const [s1, s2] = score.split('-').map(s => parseInt(s.trim(), 10));
-          if (isNaN(s1) || isNaN(s2)) return;
+          const penCol = cols.length > 3 ? cols[3].trim().replace(/^"|"$/g, '') : '';
+          const parsed = parseScore(score, penCol);
+          if (!parsed) return;
           const a = normName(team1);
           const b = normName(team2);
           const key = [a, b].sort().join('|');
-          window._scoreMap[key] = { s1, s2, teamA: a, teamB: b };
+          window._scoreMap[key] = { ...parsed, teamA: a, teamB: b };
         });
         window._scoresLoaded = true;
         if (typeof renderGroupFixtures === 'function') renderGroupFixtures();
@@ -939,13 +961,17 @@
       const key = [a, b].sort().join('|');
       const e   = window._scoreMap[key];
       if (!e) return null;
-      return a === e.teamA ? { s1: e.s1, s2: e.s2 } : { s1: e.s2, s2: e.s1 };
+      return a === e.teamA
+        ? { s1: e.s1, s2: e.s2, p1: e.p1, p2: e.p2 }
+        : { s1: e.s2, s2: e.s1, p1: e.p2, p2: e.p1 };
     }
 
     function getScoreHtml(team1, team2) {
       const sc = getScore(team1, team2);
       if (!sc) return '<span class="score-tbd">—</span>';
-      return `<span class="score-result">${sc.s1} ‐ ${sc.s2}</span>`;
+      let html = `<span class="score-result">${sc.s1} ‐ ${sc.s2}</span>`;
+      if (sc.p1 != null) html += ` <span class="score-pens">(${sc.p1}‐${sc.p2} pens)</span>`;
+      return html;
     }
 
     loadScores();
@@ -1420,8 +1446,15 @@
           if (sc) {
             const goals = i === 0 ? sc.s1 : sc.s2;
             const other = i === 0 ? sc.s2 : sc.s1;
-            const winCls = goals > other ? ' win' : goals < other ? ' loss' : '';
-            trail = `<span class="b-goal${winCls}">${goals}</span>`;
+            const pens = sc.p1 != null ? (i === 0 ? sc.p1 : sc.p2) : null;
+            const otherPens = sc.p1 != null ? (i === 0 ? sc.p2 : sc.p1) : null;
+            // On penalties the regulation goals are level, so the shootout
+            // decides the winner highlight.
+            const winCls = pens != null
+              ? (pens > otherPens ? ' win' : ' loss')
+              : (goals > other ? ' win' : goals < other ? ' loss' : '');
+            const penTag = pens != null ? `<span class="b-pens">(${pens})</span>` : '';
+            trail = `<span class="b-goal${winCls}">${goals}${penTag}</span>`;
           } else if (pair) {
             const pct = i === 0 ? pair[0] : pair[1];
             const isTop = pair[i] > pair[1 - i];
@@ -1437,7 +1470,7 @@
       const labelHtml = label ? `<div class="b-card-label">${label}</div>` : '';
       return `${labelHtml}<div class="b-match ${extraClass || ''}">
         ${teams}
-        <div class="b-info"><span>${date} · ${time}${sc ? ' · FT' : ''}</span><span>${city}</span></div>
+        <div class="b-info"><span>${date} · ${time}${sc ? (sc.p1 != null ? ' · pens' : ' · FT') : ''}</span><span>${city}</span></div>
       </div>`;
     }
 
