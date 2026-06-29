@@ -1412,17 +1412,18 @@
     function koOutcome(num) {
       const f = koFixtureByNum(num);
       if (!f) return null;
-      const parts = f[0].split(' v ');
-      const home = resolveTeamName(parts[0], f);
-      const away = resolveTeamName(parts[1], f);
-      if (!home || !away) return null;
-      const sc = getScore(home, away);
+      // Resolve the feeder's teams the same way the bracket card does
+      // (odds → cache → standings/recursive results), so any match the card
+      // can show, we can also decide a winner for.
+      const t = koTeamsFor(f);
+      if (!t) return null;
+      const sc = getScore(t.home, t.away);
       if (!sc) return null;
       let homeWins;
       if (sc.p1 != null) homeWins = sc.p1 > sc.p2;
       else if (sc.s1 !== sc.s2) homeWins = sc.s1 > sc.s2;
       else return null; // level with no shootout recorded
-      return homeWins ? { winner: home, loser: away } : { winner: away, loser: home };
+      return homeWins ? { winner: t.home, loser: t.away } : { winner: t.away, loser: t.home };
     }
 
     // Map each knockout match number to a short round code, e.g. R32: 1,
