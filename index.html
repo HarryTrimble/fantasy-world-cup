@@ -664,6 +664,9 @@
     }
     .b-team .odds-chip { margin-left: 0; font-size: .78rem; }
     .b-pct { font-weight: 900; font-size: .98rem; flex: 0 0 auto; }
+    .b-goal { font-weight: 950; font-size: 1.2rem; flex: 0 0 auto; color: var(--muted); letter-spacing: -.02em; }
+    .b-goal.win { color: #0b7a4a; }
+    .b-goal.loss { color: var(--muted); opacity: .65; }
     /* progress-to-next-round strip */
     .b-progress { padding: 10px 15px 12px; border-top: 1px solid var(--border); }
     .b-prog-head {
@@ -928,16 +931,21 @@
     loadScores();
     setInterval(loadScores, 60 * 60 * 1000);
 
-    function getScoreHtml(team1, team2) {
-      if (!window._scoresLoaded) return '<span class="score-tbd">—</span>';
+    // Returns the score oriented to (team1, team2) order, or null if no result.
+    function getScore(team1, team2) {
+      if (!window._scoresLoaded) return null;
       const a   = normName(team1);
       const b   = normName(team2);
       const key = [a, b].sort().join('|');
       const e   = window._scoreMap[key];
-      if (!e) return '<span class="score-tbd">—</span>';
-      const s1  = a === e.teamA ? e.s1 : e.s2;
-      const s2  = a === e.teamA ? e.s2 : e.s1;
-      return `<span class="score-result">${s1} ‐ ${s2}</span>`;
+      if (!e) return null;
+      return a === e.teamA ? { s1: e.s1, s2: e.s2 } : { s1: e.s2, s2: e.s1 };
+    }
+
+    function getScoreHtml(team1, team2) {
+      const sc = getScore(team1, team2);
+      if (!sc) return '<span class="score-tbd">—</span>';
+      return `<span class="score-result">${sc.s1} ‐ ${sc.s2}</span>`;
     }
 
     loadScores();
@@ -1163,12 +1171,184 @@
       return ts !== undefined ? window._oddsByTime[ts] : undefined;
     }
 
+    // The Odds API drops an event once it kicks off, so a knockout matchup
+    // can only be resolved from live odds *before* the match. Persist each
+    // resolved pairing (by match number) so it still renders — with its
+    // final score — after the odds feed has dropped the fixture.
+    let koTeamsByNum = {};
+    try { koTeamsByNum = JSON.parse(localStorage.getItem('wc26_ko_teams') || '{}') || {}; } catch (e) {}
+    function saveKoTeams() { try { localStorage.setItem('wc26_ko_teams', JSON.stringify(koTeamsByNum)); } catch (e) {} }
+
+    // Resolve a knockout fixture's actual teams: live odds first, then the
+    // persisted cache, then live group standings derived from the score feed.
+    // Returns { home, away } or null if either side is still unknown.
+    function koTeamsFor(f) {
+      const live = liveKnockoutInfo(f);
+      if (live) {
+        const prev = koTeamsByNum[f[4]];
+        if (!prev || prev.home !== live.home || prev.away !== live.away) {
+          koTeamsByNum[f[4]] = { home: live.home, away: live.away };
+          saveKoTeams();
+        }
+        return koTeamsByNum[f[4]];
+      }
+      if (koTeamsByNum[f[4]]) return koTeamsByNum[f[4]];
+      // Fall back to standings: only when BOTH sides resolve to one team.
+      const parts = f[0].split(' v ');
+      const h = resolveSideToken(parts[0], f[4]);
+      const a = resolveSideToken(parts[1], f[4]);
+      return (h && h.name && a && a.name) ? { home: h.name, away: a.name } : null;
+    }
+
+    // ─── Live group standings (derived from the score feed) ─────────────────
+    // Lets knockout placeholders (2A, 1F, best-third slots) resolve to real
+    // teams once results are in, even when the odds feed has dropped a fixture.
+    function groupComplete(g) {
+      return fixtures.filter(f => f.group === g).every(f => getScore(f.team1, f.team2));
+    }
+
+    function h2h(t1, t2) {
+      const sc = getScore(t1, t2); // oriented to (t1, t2)
+      if (!sc) return null;
+      return {
+        apts: sc.s1 > sc.s2 ? 3 : sc.s1 === sc.s2 ? 1 : 0,
+        bpts: sc.s2 > sc.s1 ? 3 : sc.s1 === sc.s2 ? 1 : 0,
+        agd: sc.s1 - sc.s2, bgd: sc.s2 - sc.s1, agf: sc.s1, bgf: sc.s2
+      };
+    }
+
+    function computeStandings() {
+      const groups = {};
+      fixtures.forEach(fx => {
+        groups[fx.group] = groups[fx.group] || {};
+        [fx.team1, fx.team2].forEach(t => {
+          groups[fx.group][t] = groups[fx.group][t] ||
+            { team: t, group: fx.group, pts: 0, gf: 0, ga: 0, gd: 0, played: 0 };
+        });
+      });
+      fixtures.forEach(fx => {
+        const sc = getScore(fx.team1, fx.team2);
+        if (!sc) return;
+        const A = groups[fx.group][fx.team1], B = groups[fx.group][fx.team2];
+        A.gf += sc.s1; A.ga += sc.s2; B.gf += sc.s2; B.ga += sc.s1;
+        A.played++; B.played++;
+        if (sc.s1 > sc.s2) A.pts += 3;
+        else if (sc.s1 < sc.s2) B.pts += 3;
+        else { A.pts++; B.pts++; }
+      });
+      const tables = {};
+      Object.keys(groups).forEach(g => {
+        const arr = Object.values(groups[g]);
+        arr.forEach(s => s.gd = s.gf - s.ga);
+        // FIFA order: points, goal difference, goals scored, then head-to-head.
+        arr.sort((a, b) => {
+          if (b.pts !== a.pts) return b.pts - a.pts;
+          if (b.gd !== a.gd) return b.gd - a.gd;
+          if (b.gf !== a.gf) return b.gf - a.gf;
+          const h = h2h(a.team, b.team);
+          if (h) {
+            if (h.bpts !== h.apts) return h.bpts - h.apts;
+            if (h.bgd !== h.agd) return h.bgd - h.agd;
+            if (h.bgf !== h.agf) return h.bgf - h.agf;
+          }
+          return a.team.localeCompare(b.team);
+        });
+        tables[g] = arr;
+      });
+      return tables;
+    }
+
+    function computeThirds(tables) {
+      const thirds = [];
+      Object.keys(tables).forEach(g => {
+        if (groupComplete(g) && tables[g][2]) thirds.push(tables[g][2]);
+      });
+      thirds.sort((a, b) =>
+        b.pts - a.pts || b.gd - a.gd || b.gf - a.gf || a.team.localeCompare(b.team));
+      const qualifiedGroups = new Set(thirds.slice(0, 8).map(t => t.group));
+      const thirdOf = {};
+      thirds.forEach(t => { thirdOf[t.group] = t.team; });
+      return { qualifiedGroups, thirdOf };
+    }
+
+    // Assign best-third slots by forced-move propagation. FIFA's full Annex C
+    // mapping isn't reproduced; instead any slot whose candidate list contains
+    // exactly one qualifying group (after propagation) is resolved — those
+    // assignments are forced and therefore always correct. Genuinely ambiguous
+    // slots are left for the candidate-team display.
+    function resolveThirdSlots(ti) {
+      const slots = {};
+      knockoutFixtures.forEach(f => {
+        const part = f[0].split(' v ').map(p => p.trim()).find(p => /^3[A-L]{2,}$/.test(p));
+        if (part) slots[f[4]] = part.slice(1).split('').filter(g => ti.qualifiedGroups.has(g));
+      });
+      const assign = {}, used = new Set();
+      let changed = true;
+      while (changed) {
+        changed = false;
+        Object.keys(slots).forEach(num => {
+          if (assign[num]) return;
+          const rem = slots[num].filter(g => !used.has(g));
+          if (rem.length === 1) { assign[num] = rem[0]; used.add(rem[0]); changed = true; }
+        });
+        const groupSlots = {};
+        Object.keys(slots).forEach(num => {
+          if (assign[num]) return;
+          slots[num].filter(g => !used.has(g)).forEach(g => (groupSlots[g] = groupSlots[g] || []).push(num));
+        });
+        Object.keys(groupSlots).forEach(g => {
+          if (used.has(g) || groupSlots[g].length !== 1) return;
+          const num = groupSlots[g][0];
+          if (!assign[num]) { assign[num] = g; used.add(g); changed = true; }
+        });
+      }
+      const out = {};
+      Object.keys(slots).forEach(num => {
+        out[num] = assign[num]
+          ? { team: ti.thirdOf[assign[num]] }
+          : { candidates: slots[num].map(g => ti.thirdOf[g]) };
+      });
+      return out;
+    }
+
+    function recomputeKO() {
+      if (!window._scoresLoaded) return;
+      window._gtables = computeStandings();
+      window._thirdSlots = resolveThirdSlots(computeThirds(window._gtables));
+    }
+
+    // Resolve one placeholder token (e.g. "2A", "1F", "3EFGIJ") to a team,
+    // a candidate set, or null. fNum is the knockout match number (for thirds).
+    function resolveSideToken(tok, fNum) {
+      tok = (tok || '').trim();
+      let m;
+      if ((m = tok.match(/^([12])([A-L])$/))) {
+        const tbl = window._gtables && window._gtables[m[2]];
+        return (tbl && groupComplete(m[2])) ? { name: tbl[m[1] === '1' ? 0 : 1].team } : null;
+      }
+      if (/^3[A-L]{2,}$/.test(tok)) {
+        const r = window._thirdSlots && window._thirdSlots[fNum];
+        if (r && r.team) return { name: r.team };
+        if (r && r.candidates && r.candidates.length) return { candidates: r.candidates };
+      }
+      return null;
+    }
+
     // Map each knockout match number to a short round code, e.g. R32: 1,
     // R16: 3, Q3, S2. Populated by renderBracket once the rounds are known.
     let koMatchCode = {};
 
-    function bracketTeamRow(part) {
+    function bracketTeamRow(part, f) {
       part = part.trim();
+      // Prefer a live-resolved team or narrowed third candidates.
+      const r = f ? resolveSideToken(part, f[4]) : null;
+      if (r && r.name) {
+        const rk = rankFor(r.name);
+        return `<div class="b-team"><span>${flagFor(r.name)} ${displayName(r.name)}${rk ? ` <span class="b-rank">(${rk})</span>` : ''}</span></div>`;
+      }
+      if (r && r.candidates) {
+        return `<div class="b-team"><span>3rd: ${r.candidates.map(displayName).join(' / ')}</span><span class="src">${part}</span></div>`;
+      }
       const w = part.match(/^W(\d+)$/);
       const l = part.match(/^L(\d+)$/);
       if (w) return `<div class="b-team"><span>${koMatchCode[w[1]] || ('Match ' + w[1])} winner</span></div>`;
@@ -1228,29 +1408,36 @@
     function bracketMatchHtml(f, extraClass, label) {
       const [name, date, time, , num, city] = f;
       const live = liveKnockoutInfo(f);
-      let teams, pair = null;
-      if (live) {
-        pair = progressPair(live.probs, live.home, live.away);
-        const sides = [live.home, live.away];
+      const info = koTeamsFor(f);
+      let teams, sc = null;
+      if (info) {
+        const sides = [info.home, info.away];
+        sc = getScore(info.home, info.away);
+        const pair = live ? progressPair(live.probs, live.home, live.away) : null;
         teams = sides.map((t, i) => {
-          const pct = pair ? (i === 0 ? pair[0] : pair[1]) : null;
-          let color = '';
-          if (pct !== null && pair) {
-            const isTop = pair[i] > pair[1 - i];
-            color = ` style="color:${isTop ? '#1763c7' : '#4a5568'}"`;
-          }
           const rk = rankFor(t);
-          return `<div class="b-team"><span>${flagFor(t)} ${displayName(t)}${rk ? ` <span class="b-rank">(${rk})</span>` : ''}</span>${pct !== null ? `<span class="b-pct"${color}>${pct}%</span>` : ''}</div>`;
+          let trail = '';
+          if (sc) {
+            const goals = i === 0 ? sc.s1 : sc.s2;
+            const other = i === 0 ? sc.s2 : sc.s1;
+            const winCls = goals > other ? ' win' : goals < other ? ' loss' : '';
+            trail = `<span class="b-goal${winCls}">${goals}</span>`;
+          } else if (pair) {
+            const pct = i === 0 ? pair[0] : pair[1];
+            const isTop = pair[i] > pair[1 - i];
+            trail = `<span class="b-pct" style="color:${isTop ? '#1763c7' : '#4a5568'}">${pct}%</span>`;
+          }
+          return `<div class="b-team"><span>${flagFor(t)} ${displayName(t)}${rk ? ` <span class="b-rank">(${rk})</span>` : ''}</span>${trail}</div>`;
         }).join('');
       } else {
         const parts = name.split(' v ');
-        teams = parts.map(bracketTeamRow).join('');
+        teams = parts.map(p => bracketTeamRow(p, f)).join('');
       }
 
       const labelHtml = label ? `<div class="b-card-label">${label}</div>` : '';
       return `${labelHtml}<div class="b-match ${extraClass || ''}">
         ${teams}
-        <div class="b-info"><span>${date} · ${time}</span><span>${city}</span></div>
+        <div class="b-info"><span>${date} · ${time}${sc ? ' · FT' : ''}</span><span>${city}</span></div>
       </div>`;
     }
 
@@ -1448,6 +1635,7 @@
     }
 
     function renderGroupFixtures() {
+      recomputeKO();
       const query = searchInput.value.toLowerCase();
       const group = groupFilter.value;
       const matchday = matchdayFilter.value;
@@ -1491,7 +1679,22 @@
           const searchable = `${f[0]} ${f[2]} ${f[3]} ${f[4]} ${f[5]}`.toLowerCase();
           return !query || searchable.includes(query);
         }).map(f => {
-          return `<tr class="fixture-row knockout-row"><td class="fixture" data-label="Fixture">${f[0]}</td><td data-label="Date">${f[1]}</td><td data-label="Time">${f[2]}</td><td data-label="Final Score" class="score-cell">—</td><td data-label="Ranks">—</td><td data-label="Gap">—</td><td data-label="Group"><span class="pill">KO</span></td><td data-label="Matchday"><span class="pill matchday">${f[3]}</span></td><td data-label="City">${f[5]}</td><td data-label="Temp">—</td></tr>`;
+          const t = koTeamsFor(f);
+          let fixtureLabel, scoreHtml = '<span class="score-tbd">—</span>';
+          if (t) {
+            const tf1 = flagFor(t.home), tf2 = flagFor(t.away);
+            fixtureLabel = `<span class="team">${tf1} ${displayName(t.home)}</span> <span class="versus">v</span> <span class="team">${displayName(t.away)} ${tf2}</span>`;
+            scoreHtml = getScoreHtml(t.home, t.away);
+          } else {
+            const lab = f[0].split(' v ').map(p => {
+              const r = resolveSideToken(p.trim(), f[4]);
+              if (r && r.name) return `<span class="team">${flagFor(r.name)} ${displayName(r.name)}</span>`;
+              if (r && r.candidates) return `<span class="team">3rd: ${r.candidates.map(displayName).join('/')}</span>`;
+              return p.trim();
+            });
+            fixtureLabel = `${lab[0]} <span class="versus">v</span> ${lab[1]}`;
+          }
+          return `<tr class="fixture-row knockout-row"><td class="fixture" data-label="Fixture">${fixtureLabel}</td><td data-label="Date">${f[1]}</td><td data-label="Time">${f[2]}</td><td data-label="Final Score" class="score-cell">${scoreHtml}</td><td data-label="Ranks">—</td><td data-label="Gap">—</td><td data-label="Group"><span class="pill">KO</span></td><td data-label="Matchday"><span class="pill matchday">${f[3]}</span></td><td data-label="City">${f[5]}</td><td data-label="Temp">—</td></tr>`;
         });
 
         rows.push(...knockoutRows);
