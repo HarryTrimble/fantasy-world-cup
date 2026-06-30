@@ -825,10 +825,10 @@
       padding: 18px 22px;
       font-weight: 800;
       font-size: 1.12rem;
-      white-space: nowrap;
     }
+    .b-team > span:first-child { min-width: 0; overflow-wrap: anywhere; }
     .b-team + .b-team { border-top: 1px solid var(--border); }
-    .b-team .src { color: var(--muted); font-weight: 700; font-size: .88rem; }
+    .b-team .src { color: var(--muted); font-weight: 700; font-size: .88rem; flex: 0 0 auto; }
     .b-team .b-rank { font-weight: 500; font-size: .82rem; color: var(--muted); }
     .b-info {
       padding: 12px 20px 14px;
@@ -1333,12 +1333,23 @@
     // assignments are forced and therefore always correct. Genuinely ambiguous
     // slots are left for the candidate-team display.
     function resolveThirdSlots(ti) {
-      const slots = {};
+      const slots = {}, knownSide = {};
       knockoutFixtures.forEach(f => {
-        const part = f[0].split(' v ').map(p => p.trim()).find(p => /^3[A-L]{2,}$/.test(p));
-        if (part) slots[f[4]] = part.slice(1).split('').filter(g => ti.qualifiedGroups.has(g));
+        const parts = f[0].split(' v ').map(p => p.trim());
+        const ix = parts.findIndex(p => /^3[A-L]{2,}$/.test(p));
+        if (ix < 0) return;
+        slots[f[4]] = parts[ix].slice(1).split('').filter(g => ti.qualifiedGroups.has(g));
+        const other = resolveSideToken(parts[1 - ix], f[4]); // the non-third side (a group winner)
+        knownSide[f[4]] = other && other.name ? other.name : null;
       });
       const assign = {}, used = new Set();
+      // Result-based pinning: if the known side has a recorded result against one
+      // of the candidate thirds, that's the team — works regardless of odds/cache.
+      Object.keys(slots).forEach(num => {
+        if (!knownSide[num]) return;
+        const hit = slots[num].find(g => !used.has(g) && getScore(knownSide[num], ti.thirdOf[g]));
+        if (hit) { assign[num] = hit; used.add(hit); }
+      });
       let changed = true;
       while (changed) {
         changed = false;
