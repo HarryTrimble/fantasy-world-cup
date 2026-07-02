@@ -1227,6 +1227,19 @@
       return ts !== undefined ? window._oddsByTime[ts] : undefined;
     }
 
+    // Odds for a knockout fixture. Once both teams are known, match by team
+    // name (robust — two ties can share a kickoff time, which the time-keyed
+    // map can't disambiguate). Fall back to the time map while still a
+    // placeholder. `info` is { home, away } from koTeamsFor, or null.
+    function knockoutOdds(f, info) {
+      if (info) {
+        const key = [normName(info.home), normName(info.away)].sort().join('|');
+        const probs = window._oddsMap[key];
+        if (probs) return { home: info.home, away: info.away, probs };
+      }
+      return liveKnockoutInfo(f);
+    }
+
     // The Odds API drops an event once it kicks off, so a knockout matchup
     // can only be resolved from live odds *before* the match. Persist each
     // resolved pairing (by match number) so it still renders — with its
@@ -1511,8 +1524,8 @@
 
     function bracketMatchHtml(f, extraClass, label) {
       const [name, date, time, , num, city] = f;
-      const live = liveKnockoutInfo(f);
       const info = koTeamsFor(f);
+      const live = knockoutOdds(f, info);
       let teams, sc = null;
       if (info) {
         const sides = [info.home, info.away];
